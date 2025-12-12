@@ -7,6 +7,8 @@ import aggregatesData from '../data/aggregates.json'
 import { downloadSchoolPdf } from '../pdf/downloadSinglePdf'
 import { downloadAllPdfs } from '../pdf/downloadAllPdfs'
 import { loadPdfMake } from '../pdf/loadPdfMake'
+import { pdfMakeToBlob } from '../pdf/pdfMakeToBlob'
+import { saveAs } from 'file-saver'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getLabel } from '../i18n/labels'
 import { LanguageToggle } from '../components/LanguageToggle'
@@ -119,6 +121,7 @@ function Dashboard() {
       console.error('PDF_ERROR', error)
       alert('PDF generation error. Check console.')
     } finally {
+      // CRITICAL: Always reset UI state
       setDownloadingPdf(null)
     }
   }
@@ -135,6 +138,7 @@ function Dashboard() {
       console.error('BULK_PDF_ERROR', error)
       alert('Bulk PDF download error. Check console.')
     } finally {
+      // CRITICAL: Always reset UI state
       setDownloadingAll(false)
       setDownloadProgress(null)
     }
@@ -147,12 +151,18 @@ function Dashboard() {
       const pdfMake = await loadPdfMake()
       
       console.log('📄 Creating test PDF with both fonts...')
-      pdfMake.createPdf({
+      const docDefinition = {
         content: [
           { text: "PDF test OK", font: "Roboto" },
           { text: "हिंदी परीक्षण सफल", font: "NotoSansDevanagari" }
         ]
-      }).download("test.pdf")
+      }
+      
+      console.log('🔄 Generating blob...')
+      const blob = await pdfMakeToBlob(pdfMake, docDefinition, 30000)
+      
+      console.log('💾 Downloading...')
+      saveAs(blob, "test.pdf")
       
       console.log('✅ PDF test successful!')
     } catch (error) {
@@ -180,7 +190,7 @@ function Dashboard() {
             style={{ minWidth: '180px' }}
           >
             {downloadingAll && downloadProgress
-              ? `Downloading ${downloadProgress.current}/${downloadProgress.total}...`
+              ? `Generating ${downloadProgress.current} / ${downloadProgress.total}`
               : downloadingAll
               ? 'Preparing...'
               : 'Download All PDFs'}

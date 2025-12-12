@@ -5,6 +5,7 @@
 
 import { loadPdfMake } from './loadPdfMake'
 import { buildSchoolReportPdf } from './buildSchoolReportPdf'
+import { pdfMakeToBlob } from './pdfMakeToBlob'
 import { PdfLang } from './translations'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
@@ -81,31 +82,33 @@ export async function downloadAllPdfs(
         lang,
       })
 
-      // Generate PDF blob
-      const blob = await new Promise<Blob>((resolve, reject) => {
-        pdfMake.createPdf(docDefinition).getBlob((result: Blob) => {
-          if (result) {
-            resolve(result)
-          } else {
-            reject(new Error('Failed to generate PDF blob'))
-          }
-        })
-      })
+      // Generate PDF blob with timeout
+      const blob = await pdfMakeToBlob(pdfMake, docDefinition, 30000)
 
       // Add to zip
       const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${lang}.pdf`
       zip.file(filename, blob)
     } catch (error) {
-      console.error(`Failed to generate PDF for ${school.school_code}:`, error)
+      console.error('BULK_PDF_FAIL', school.school_code, error)
       failures.push(`${school.school_code} (${school.school_name})`)
     }
   }
 
   // Generate and download zip
   try {
+    console.log('📦 Generating ZIP file...')
     const zipBlob = await zip.generateAsync({ type: 'blob' })
-    const zipFilename = `jodhpur_reports_${lang}_${new Date().toISOString().split('T')[0]}.zip`
-    saveAs(zipBlob, zipFilename)
+    
+    console.log('💾 Downloading ZIP...')
+    const zipFilename = `jodhpur_reports_${lang}.zip`
+    
+    try {
+      saveAs(zipBlob, zipFilename)
+      console.log('✅ ZIP download initiated')
+    } catch (saveError) {
+      console.error('saveAs failed:', saveError)
+      throw new Error('Failed to save ZIP file')
+    }
 
     // Show summary
     if (failures.length > 0) {
@@ -116,7 +119,7 @@ export async function downloadAllPdfs(
       alert(`Successfully downloaded all ${schools.length} school PDFs!`)
     }
   } catch (error) {
-    console.error('Failed to create ZIP file:', error)
+    console.error('ZIP generation/save failed:', error)
     alert('Failed to create ZIP file. Check console for details.')
     throw error
   }
