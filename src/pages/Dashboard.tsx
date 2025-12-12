@@ -112,8 +112,8 @@ function Dashboard() {
     try {
       await downloadSchoolPdf(school_code, language)
     } catch (error) {
-      alert('Failed to generate PDF. Please try again.')
-      console.error(error)
+      console.error('PDF_ERROR', error)
+      alert('PDF generation error. Check console.')
     } finally {
       setDownloadingPdf(null)
     }

@@ -1,7 +1,25 @@
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer'
 import { School, ScoreRow, Aggregates } from '../types'
-import { Language, getLabel } from '../i18n/labels'
-import { getCompetencyLabel } from '../i18n/competencies'
+import { Language, labels } from '../i18n/labels'
+import { competencyLabels } from '../i18n/competencies'
+
+// Safe translation helper - never crashes
+function t(lang: Language, key: string): string {
+  try {
+    return labels[lang]?.[key as keyof typeof labels.en] || labels.en[key as keyof typeof labels.en] || ''
+  } catch {
+    return ''
+  }
+}
+
+// Safe competency translation helper
+function tc(lang: Language, competencyName: string): string {
+  try {
+    return competencyLabels[lang]?.[competencyName] || competencyLabels.en[competencyName] || competencyName || ''
+  } catch {
+    return competencyName || ''
+  }
+}
 
 // Register font for Hindi support
 Font.register({
@@ -174,29 +192,38 @@ export function SchoolReportPdf({ school, scoreRows, aggregates, language }: Sch
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        {/* Fail-safe: ensure at least one Text node */}
+        <View style={{ position: 'absolute', opacity: 0 }}>
+          <Text> </Text>
+        </View>
+        
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>{getLabel(language, 'reportTitle')}</Text>
-          <Text style={styles.subtitle}>{school.school_name}</Text>
-          <Text style={styles.subtitle}>{getLabel(language, 'schoolCode')}: {school.school_code}</Text>
+          <Text style={styles.title}>{String(t(language, 'reportTitle'))}</Text>
+          <Text style={styles.subtitle}>{String(school.school_name || '')}</Text>
+          <Text style={styles.subtitle}>
+            <Text>{String(t(language, 'schoolCode'))}</Text>
+            <Text>: </Text>
+            <Text>{String(school.school_code || '')}</Text>
+          </Text>
         </View>
 
         {/* Subject-wise Average Scores */}
         <View style={styles.section} wrap={false}>
-          <Text style={styles.sectionTitle}>{getLabel(language, 'subjectwiseAverages')}</Text>
+          <Text style={styles.sectionTitle}>{String(t(language, 'subjectwiseAverages'))}</Text>
           <View style={styles.table}>
             {/* Header */}
             <View style={[styles.tableRow, styles.tableHeader]}>
-              <Text style={[styles.tableCell, { width: '50%' }]}>{getLabel(language, 'subject')}</Text>
-              <Text style={[styles.tableCellLast, { width: '50%' }]}>{getLabel(language, 'averageScore')}</Text>
+              <Text style={[styles.tableCell, { width: '50%' }]}>{String(t(language, 'subject'))}</Text>
+              <Text style={[styles.tableCellLast, { width: '50%' }]}>{String(t(language, 'averageScore'))}</Text>
             </View>
             {/* Overall */}
             <View style={styles.tableRow}>
-              <Text style={[styles.tableCell, { width: '50%' }]}>{getLabel(language, 'overallAverage')}</Text>
+              <Text style={[styles.tableCell, { width: '50%' }]}>{String(t(language, 'overallAverage'))}</Text>
               <Text style={[styles.tableCellLast, { width: '50%' }]}>
-                {aggregates?.overall_avg !== null && aggregates?.overall_avg !== undefined && typeof aggregates.overall_avg === 'number'
+                {String(aggregates?.overall_avg !== null && aggregates?.overall_avg !== undefined && typeof aggregates.overall_avg === 'number'
                   ? aggregates.overall_avg.toFixed(1) 
-                  : '-'}
+                  : '-')}
               </Text>
             </View>
             {/* Subjects */}
@@ -205,8 +232,8 @@ export function SchoolReportPdf({ school, scoreRows, aggregates, language }: Sch
               const subjectLabel = subjectKey === 'socialscience' ? 'socialScience' : subjectKey
               return (
                 <View key={subject} style={styles.tableRow}>
-                  <Text style={[styles.tableCell, { width: '50%' }]}>{getLabel(language, subjectLabel as any)}</Text>
-                  <Text style={[styles.tableCellLast, { width: '50%' }]}>{getSubjectAverage(subject)}</Text>
+                  <Text style={[styles.tableCell, { width: '50%' }]}>{String(t(language, subjectLabel as any))}</Text>
+                  <Text style={[styles.tableCellLast, { width: '50%' }]}>{String(getSubjectAverage(subject))}</Text>
                 </View>
               )
             })}
@@ -215,9 +242,16 @@ export function SchoolReportPdf({ school, scoreRows, aggregates, language }: Sch
 
         {/* Competency Priority Distribution by Grade */}
         <View style={styles.section} wrap={false}>
-          <Text style={styles.sectionTitle}>{getLabel(language, 'priorityDistribution')}</Text>
+          <Text style={styles.sectionTitle}>{String(t(language, 'priorityDistribution'))}</Text>
           <Text style={styles.legend}>
-            H = {getLabel(language, 'highPriority')}  |  M = {getLabel(language, 'mediumPriority')}  |  L = {getLabel(language, 'lowPriority')}  |  - = {getLabel(language, 'noData')}
+            <Text>H = </Text>
+            <Text>{String(t(language, 'highPriority'))}</Text>
+            <Text>  |  M = </Text>
+            <Text>{String(t(language, 'mediumPriority'))}</Text>
+            <Text>  |  L = </Text>
+            <Text>{String(t(language, 'lowPriority'))}</Text>
+            <Text>  |  - = </Text>
+            <Text>{String(t(language, 'noData'))}</Text>
           </Text>
 
           {/* Table 1: English and Mathematics */}
@@ -226,15 +260,15 @@ export function SchoolReportPdf({ school, scoreRows, aggregates, language }: Sch
             <View style={[styles.tableRow, styles.tableHeader]}>
               <View style={{ flex: COL_GRADE }} />
               <View style={{ flex: COL_HML * 3, alignItems: 'center' }}>
-                <Text style={styles.tableCell}>{getLabel(language, 'english')}</Text>
+                <Text style={styles.tableCell}>{String(t(language, 'english'))}</Text>
               </View>
               <View style={{ flex: COL_HML * 3, alignItems: 'center' }}>
-                <Text style={styles.tableCellLast}>{getLabel(language, 'mathematics')}</Text>
+                <Text style={styles.tableCellLast}>{String(t(language, 'mathematics'))}</Text>
               </View>
             </View>
             {/* Header Row 2: H/M/L labels */}
             <View style={[styles.tableRow, styles.tableHeader]}>
-              <Text style={[styles.tableCell, { flex: COL_GRADE }]}>{getLabel(language, 'grade')}</Text>
+              <Text style={[styles.tableCell, { flex: COL_GRADE }]}>{String(t(language, 'grade'))}</Text>
               <Text style={[styles.tableCell, { flex: COL_HML }]}>H</Text>
               <Text style={[styles.tableCell, { flex: COL_HML }]}>M</Text>
               <Text style={[styles.tableCell, { flex: COL_HML }]}>L</Text>
@@ -248,24 +282,24 @@ export function SchoolReportPdf({ school, scoreRows, aggregates, language }: Sch
               const math = getPriorityCounts(grade, 'Mathematics')
               return (
                 <View key={grade} style={styles.tableRow}>
-                  <Text style={[styles.tableCell, { flex: COL_GRADE }]}>{grade}</Text>
+                  <Text style={[styles.tableCell, { flex: COL_GRADE }]}>{String(grade)}</Text>
                   <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityHigh]}>
-                    {english.hasData ? english.high : '-'}
+                    {String(english.hasData ? english.high : '-')}
                   </Text>
                   <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityMedium]}>
-                    {english.hasData ? english.medium : '-'}
+                    {String(english.hasData ? english.medium : '-')}
                   </Text>
                   <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityLow]}>
-                    {english.hasData ? english.low : '-'}
+                    {String(english.hasData ? english.low : '-')}
                   </Text>
                   <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityHigh]}>
-                    {math.hasData ? math.high : '-'}
+                    {String(math.hasData ? math.high : '-')}
                   </Text>
                   <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityMedium]}>
-                    {math.hasData ? math.medium : '-'}
+                    {String(math.hasData ? math.medium : '-')}
                   </Text>
                   <Text style={[styles.tableCellLast, { flex: COL_HML }, styles.priorityLow]}>
-                    {math.hasData ? math.low : '-'}
+                    {String(math.hasData ? math.low : '-')}
                   </Text>
                 </View>
               )
@@ -278,15 +312,15 @@ export function SchoolReportPdf({ school, scoreRows, aggregates, language }: Sch
             <View style={[styles.tableRow, styles.tableHeader]}>
               <View style={{ flex: COL_GRADE }} />
               <View style={{ flex: COL_HML * 3, alignItems: 'center' }}>
-                <Text style={styles.tableCell}>{getLabel(language, 'science')}</Text>
+                <Text style={styles.tableCell}>{String(t(language, 'science'))}</Text>
               </View>
               <View style={{ flex: COL_HML * 3, alignItems: 'center' }}>
-                <Text style={styles.tableCellLast}>{getLabel(language, 'socialScience')}</Text>
+                <Text style={styles.tableCellLast}>{String(t(language, 'socialScience'))}</Text>
               </View>
             </View>
             {/* Header Row 2: H/M/L labels */}
             <View style={[styles.tableRow, styles.tableHeader]}>
-              <Text style={[styles.tableCell, { flex: COL_GRADE }]}>{getLabel(language, 'grade')}</Text>
+              <Text style={[styles.tableCell, { flex: COL_GRADE }]}>{String(t(language, 'grade'))}</Text>
               <Text style={[styles.tableCell, { flex: COL_HML }]}>H</Text>
               <Text style={[styles.tableCell, { flex: COL_HML }]}>M</Text>
               <Text style={[styles.tableCell, { flex: COL_HML }]}>L</Text>
@@ -300,24 +334,24 @@ export function SchoolReportPdf({ school, scoreRows, aggregates, language }: Sch
               const socialScience = getPriorityCounts(grade, 'Social Science')
               return (
                 <View key={grade} style={styles.tableRow}>
-                  <Text style={[styles.tableCell, { flex: COL_GRADE }]}>{grade}</Text>
+                  <Text style={[styles.tableCell, { flex: COL_GRADE }]}>{String(grade)}</Text>
                   <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityHigh]}>
-                    {science.hasData ? science.high : '-'}
+                    {String(science.hasData ? science.high : '-')}
                   </Text>
                   <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityMedium]}>
-                    {science.hasData ? science.medium : '-'}
+                    {String(science.hasData ? science.medium : '-')}
                   </Text>
                   <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityLow]}>
-                    {science.hasData ? science.low : '-'}
+                    {String(science.hasData ? science.low : '-')}
                   </Text>
                   <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityHigh]}>
-                    {socialScience.hasData ? socialScience.high : '-'}
+                    {String(socialScience.hasData ? socialScience.high : '-')}
                   </Text>
                   <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityMedium]}>
-                    {socialScience.hasData ? socialScience.medium : '-'}
+                    {String(socialScience.hasData ? socialScience.medium : '-')}
                   </Text>
                   <Text style={[styles.tableCellLast, { flex: COL_HML }, styles.priorityLow]}>
-                    {socialScience.hasData ? socialScience.low : '-'}
+                    {String(socialScience.hasData ? socialScience.low : '-')}
                   </Text>
                 </View>
               )
@@ -330,31 +364,49 @@ export function SchoolReportPdf({ school, scoreRows, aggregates, language }: Sch
       {grades.map(grade => {
         const gradeHasData = scoreRows.some(row => row.grade_level === grade)
         
-        if (!gradeHasData) return null
+        if (!gradeHasData) {
+          return (
+            <Page key={grade} size="A4" style={styles.page} break>
+              <Text style={styles.gradeTitle}>{String(t(language, `grade${grade}` as any))}</Text>
+              <Text style={styles.legend}>{String(t(language, 'noData'))}</Text>
+            </Page>
+          )
+        }
 
         const gradeLabel = `grade${grade}` as 'grade6' | 'grade7' | 'grade8'
         
         return (
           <Page key={grade} size="A4" style={styles.page} break>
-            <Text style={styles.gradeTitle}>{getLabel(language, gradeLabel)} - {getLabel(language, 'detailedReport')}</Text>
+            <Text style={styles.gradeTitle}>
+              <Text>{String(t(language, gradeLabel))}</Text>
+              <Text> - </Text>
+              <Text>{String(t(language, 'detailedReport'))}</Text>
+            </Text>
 
             {subjects.map(subject => {
               const competencies = getCompetencies(grade, subject)
               
-              if (competencies.length === 0) return null
+              if (competencies.length === 0) {
+                return (
+                  <View key={subject} style={styles.gradeSection}>
+                    <Text style={styles.subjectTitle}>{String(t(language, subject.toLowerCase().replace(' ', '') === 'socialscience' ? 'socialScience' : subject.toLowerCase().replace(' ', '') as any))}</Text>
+                    <Text style={styles.legend}>{String(t(language, 'noData'))}</Text>
+                  </View>
+                )
+              }
 
               const subjectKey = subject.toLowerCase().replace(' ', '') as 'english' | 'mathematics' | 'science' | 'socialscience'
               const subjectLabel = subjectKey === 'socialscience' ? 'socialScience' : subjectKey
 
               return (
                 <View key={subject} style={styles.gradeSection}>
-                  <Text style={styles.subjectTitle}>{getLabel(language, subjectLabel as any)}</Text>
+                  <Text style={styles.subjectTitle}>{String(t(language, subjectLabel as any))}</Text>
                   <View style={styles.table}>
                     {/* Header */}
                     <View style={[styles.tableRow, styles.tableHeader]}>
-                      <Text style={[styles.tableCell, { width: '60%' }]}>{getLabel(language, 'competency')}</Text>
-                      <Text style={[styles.tableCell, { width: '20%' }]}>{getLabel(language, 'score')}</Text>
-                      <Text style={[styles.tableCellLast, { width: '20%' }]}>{getLabel(language, 'priority')}</Text>
+                      <Text style={[styles.tableCell, { width: '60%' }]}>{String(t(language, 'competency'))}</Text>
+                      <Text style={[styles.tableCell, { width: '20%' }]}>{String(t(language, 'score'))}</Text>
+                      <Text style={[styles.tableCellLast, { width: '20%' }]}>{String(t(language, 'priority'))}</Text>
                     </View>
                     {/* Data Rows */}
                     {competencies.map((comp, index) => {
@@ -369,13 +421,13 @@ export function SchoolReportPdf({ school, scoreRows, aggregates, language }: Sch
                       return (
                         <View key={index} style={styles.tableRow}>
                           <Text style={[styles.tableCell, { width: '60%', fontSize: 9 }]}>
-                            {getCompetencyLabel(language, comp.competency_name)}
+                            {String(tc(language, comp.competency_name))}
                           </Text>
                           <Text style={[styles.tableCell, { width: '20%' }, priorityStyle]}>
-                            {comp.score_10.toFixed(1)}
+                            {String(comp.score_10.toFixed(1))}
                           </Text>
                           <Text style={[styles.tableCellLast, { width: '20%' }, priorityStyle]}>
-                            {getLabel(language, priorityLabel as any)}
+                            {String(t(language, priorityLabel as any))}
                           </Text>
                         </View>
                       )
