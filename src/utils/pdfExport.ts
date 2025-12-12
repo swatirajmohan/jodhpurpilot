@@ -35,23 +35,26 @@ export async function generateSchoolReportPDF(
   const fileName = `${school_code}_${sanitizedName}_report.pdf`
 
   const options = {
-    margin: [10, 10, 10, 10], // [top, left, bottom, right] in mm
+    margin: [8, 8, 8, 8], // [top, left, bottom, right] in mm - reduced margins
     filename: fileName,
-    image: { type: 'jpeg', quality: 0.98 },
+    image: { type: 'jpeg', quality: 0.95 },
     html2canvas: { 
-      scale: 2,
+      scale: 1.5, // Reduced scale for better fitting
       useCORS: true,
       letterRendering: true,
       logging: false,
+      windowWidth: 1200, // Fixed width for consistent rendering
     },
     jsPDF: { 
       unit: 'mm', 
       format: 'a4', 
       orientation: 'portrait',
+      compress: true,
     },
     pagebreak: { 
       mode: ['avoid-all', 'css', 'legacy'],
       before: '.pdf-page-break',
+      avoid: ['.summary-table-container', '.subject-section'],
     },
   }
 
