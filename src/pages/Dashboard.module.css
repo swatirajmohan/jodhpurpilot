@@ -72,6 +72,8 @@
   border: 1px solid var(--border);
   font-size: var(--font-base);
   color: var(--text);
+  text-align: center;
+  vertical-align: middle;
 }
 
 .table tbody tr {
@@ -138,6 +140,14 @@
 .actionCell {
   text-align: center;
   vertical-align: middle;
+}
+
+.textCell {
+  text-align: left;
+}
+
+.textHeader {
+  text-align: left !important;
 }
 
 .sortButton {

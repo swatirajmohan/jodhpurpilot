@@ -140,8 +140,8 @@ function Dashboard() {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th rowSpan={2}>School Name</th>
-              <th rowSpan={2}>School Code</th>
+              <th rowSpan={2} className={styles.textHeader}>School Name</th>
+              <th rowSpan={2} className={styles.textHeader}>School Code</th>
               <th rowSpan={2} onClick={handleSort} style={{ cursor: 'pointer', userSelect: 'none' }}>
                 Overall School Average
                 <span className={styles.sortButton}>{sortOrder === 'desc' ? '↓' : '↑'}</span>
@@ -179,8 +179,8 @@ function Dashboard() {
                 key={row.school_code}
                 onDoubleClick={() => handleRowDoubleClick(row.school_code)}
               >
-                <td>{row.school_name}</td>
-                <td>{row.school_code}</td>
+                <td className={styles.textCell}>{row.school_name}</td>
+                <td className={styles.textCell}>{row.school_code}</td>
                 <td>
                   <ScoreChip value={row.aggregates.overall_avg} />
                 </td>

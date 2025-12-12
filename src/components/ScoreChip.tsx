@@ -16,9 +16,9 @@ interface ScoreChipProps {
 }
 
 function ScoreChip({ value, decimal = 1 }: ScoreChipProps) {
-  // Handle null or missing data
+  // Handle null or missing data - render as plain text, NOT as chip
   if (value === null || value === undefined) {
-    return <span className={`${styles.chip} ${styles.noData}`}>No data</span>;
+    return <span className={styles.noData}>No data</span>;
   }
 
   // Determine priority band based on client specification

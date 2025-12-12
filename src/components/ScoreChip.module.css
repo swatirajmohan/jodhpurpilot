@@ -27,8 +27,9 @@
 }
 
 .noData {
-  background-color: var(--noDataBg);
-  color: var(--noDataText);
+  color: var(--muted);
   font-style: italic;
+  font-size: var(--font-sm);
+  font-weight: 400;
 }
 
