@@ -3,10 +3,12 @@
  * 
  * Displays a numeric score with color-coded priority band background
  * following FRS.md Section 4.4 specifications:
- * - 0-4: High priority (Below expected)
- * - 5-6: Medium priority (At expected)
- * - 7-10: Low priority (Above expected)
+ * - 0-4.9: High priority (Below expected)
+ * - 5.0-6.9: Medium priority (At expected)
+ * - 7.0+: Low priority (Above expected)
  */
+
+import styles from './ScoreChip.module.css'
 
 interface ScoreChipProps {
   value: number | null;
@@ -16,68 +18,36 @@ interface ScoreChipProps {
 function ScoreChip({ value, decimal = 1 }: ScoreChipProps) {
   // Handle null or missing data
   if (value === null || value === undefined) {
-    return <span style={styles.noData}>No data</span>;
+    return <span className={`${styles.chip} ${styles.noData}`}>No data</span>;
   }
 
   // Determine priority band based on client specification
   let priorityBand: 'High' | 'Medium' | 'Low';
-  let backgroundColor: string;
-  let textColor: string;
+  let className: string;
 
   if (value >= 0 && value < 5) {
-    // 0 to 4.9: Red (High priority - Below expected)
+    // 0 to 4.9: High priority (Below expected)
     priorityBand = 'High';
-    backgroundColor = '#ffcccc'; // Light red
-    textColor = '#cc0000'; // Dark red
+    className = styles.high;
   } else if (value >= 5 && value < 7) {
-    // 5.0 to 6.9: Yellow (Medium priority - At expected)
+    // 5.0 to 6.9: Medium priority (At expected)
     priorityBand = 'Medium';
-    backgroundColor = '#fff4cc'; // Light yellow
-    textColor = '#996600'; // Dark yellow/orange
-  } else if (value >= 7 && value <= 10) {
-    // 7.0 and above: Green (Low priority - Above expected)
-    priorityBand = 'Low';
-    backgroundColor = '#ccffcc'; // Light green
-    textColor = '#006600'; // Dark green
+    className = styles.medium;
   } else {
-    // Fallback for out of range values
-    priorityBand = 'High';
-    backgroundColor = '#eee';
-    textColor = '#666';
+    // 7.0+: Low priority (Above expected)
+    priorityBand = 'Low';
+    className = styles.low;
   }
 
   return (
     <span
-      style={{
-        ...styles.chip,
-        backgroundColor,
-        color: textColor,
-      }}
+      className={`${styles.chip} ${className}`}
       title={`Priority: ${priorityBand}`}
     >
       {value.toFixed(decimal)}
     </span>
   );
 }
-
-// Inline styles (minimal, no external libraries)
-const styles = {
-  chip: {
-    display: 'inline-block',
-    padding: '4px 10px',
-    borderRadius: '12px',
-    fontSize: '13px',
-    fontWeight: 500,
-    textAlign: 'center' as const,
-  },
-  noData: {
-    display: 'inline-block',
-    padding: '4px 10px',
-    color: '#999',
-    fontSize: '13px',
-    fontStyle: 'italic' as const,
-  },
-};
 
 export default ScoreChip;
 

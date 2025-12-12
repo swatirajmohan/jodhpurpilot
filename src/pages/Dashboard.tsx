@@ -5,6 +5,7 @@ import ScoreChip from '../components/ScoreChip'
 import schoolsData from '../data/schools.json'
 import aggregatesData from '../data/aggregates.json'
 import { downloadSchoolPdf } from '../pdf/downloadPdf'
+import styles from './Dashboard.module.css'
 
 // Type for combined school data with aggregates
 interface SchoolTableRow {
@@ -115,68 +116,61 @@ function Dashboard() {
   }
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Jodhpur School Assessment Dashboard</h1>
-      
-      {/* Search input */}
-      <div style={styles.searchContainer}>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Jodhpur School Assessment Dashboard</h1>
+      </div>
+
+      {/* Controls */}
+      <div className={styles.controls}>
         <input
           type="text"
           placeholder="Search by school name or code..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={styles.searchInput}
+          className={styles.searchBox}
         />
-        {searchQuery && (
-          <button
-            onClick={() => setSearchQuery('')}
-            style={styles.clearButton}
-          >
-            Clear
-          </button>
-        )}
-      </div>
-
-      {/* Results count */}
-      <div style={styles.resultsInfo}>
-        Showing {filteredData.length} of {tableData.length} schools
+        <span className={styles.resultCount}>
+          Showing {filteredData.length} of {tableData.length} schools
+        </span>
       </div>
 
       {/* Table */}
-      <div style={styles.tableContainer}>
-        <table style={styles.table}>
+      <div className={styles.tableWrapper}>
+        <table className={styles.table}>
           <thead>
             <tr>
-              <th rowSpan={2} style={styles.th}>School Name</th>
-              <th rowSpan={2} style={styles.th}>School Code</th>
-              <th rowSpan={2} style={{...styles.th, ...styles.sortable}} onClick={handleSort}>
-                Overall School Average {sortOrder === 'desc' ? '↓' : '↑'}
+              <th rowSpan={2}>School Name</th>
+              <th rowSpan={2}>School Code</th>
+              <th rowSpan={2} onClick={handleSort} style={{ cursor: 'pointer', userSelect: 'none' }}>
+                Overall School Average
+                <span className={styles.sortButton}>{sortOrder === 'desc' ? '↓' : '↑'}</span>
               </th>
-              <th colSpan={5} style={styles.th}>Grade 6 Average</th>
-              <th colSpan={5} style={styles.th}>Grade 7 Average</th>
-              <th colSpan={5} style={styles.th}>Grade 8 Average</th>
-              <th rowSpan={2} style={styles.th}>View detailed report</th>
-              <th rowSpan={2} style={styles.th}>Download detailed report (PDF)</th>
+              <th colSpan={5}>Grade 6 Average</th>
+              <th colSpan={5}>Grade 7 Average</th>
+              <th colSpan={5}>Grade 8 Average</th>
+              <th rowSpan={2}>View Report</th>
+              <th rowSpan={2}>Download PDF</th>
             </tr>
             <tr>
               {/* Grade 6 sub-columns */}
-              <th style={styles.th}>Overall</th>
-              <th style={styles.th}>English</th>
-              <th style={styles.th}>Mathematics</th>
-              <th style={styles.th}>Social Science</th>
-              <th style={styles.th}>Science</th>
+              <th>Overall</th>
+              <th>English</th>
+              <th>Mathematics</th>
+              <th>Social Science</th>
+              <th>Science</th>
               {/* Grade 7 sub-columns */}
-              <th style={styles.th}>Overall</th>
-              <th style={styles.th}>English</th>
-              <th style={styles.th}>Mathematics</th>
-              <th style={styles.th}>Social Science</th>
-              <th style={styles.th}>Science</th>
+              <th>Overall</th>
+              <th>English</th>
+              <th>Mathematics</th>
+              <th>Social Science</th>
+              <th>Science</th>
               {/* Grade 8 sub-columns */}
-              <th style={styles.th}>Overall</th>
-              <th style={styles.th}>English</th>
-              <th style={styles.th}>Mathematics</th>
-              <th style={styles.th}>Social Science</th>
-              <th style={styles.th}>Science</th>
+              <th>Overall</th>
+              <th>English</th>
+              <th>Mathematics</th>
+              <th>Social Science</th>
+              <th>Science</th>
             </tr>
           </thead>
           <tbody>
@@ -184,78 +178,77 @@ function Dashboard() {
               <tr
                 key={row.school_code}
                 onDoubleClick={() => handleRowDoubleClick(row.school_code)}
-                style={styles.tr}
               >
-                <td style={styles.td}>{row.school_name}</td>
-                <td style={styles.td}>{row.school_code}</td>
-                <td style={styles.td}>
+                <td>{row.school_name}</td>
+                <td>{row.school_code}</td>
+                <td>
                   <ScoreChip value={row.aggregates.overall_avg} />
                 </td>
                 
                 {/* Grade 6 columns */}
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_avg_map?.[6] ?? null} />
                 </td>
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.English ?? null} />
                 </td>
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.Mathematics ?? null} />
                 </td>
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.['Social Science'] ?? null} />
                 </td>
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.Science ?? null} />
                 </td>
 
                 {/* Grade 7 columns */}
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_avg_map?.[7] ?? null} />
                 </td>
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.English ?? null} />
                 </td>
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.Mathematics ?? null} />
                 </td>
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.['Social Science'] ?? null} />
                 </td>
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.Science ?? null} />
                 </td>
 
                 {/* Grade 8 columns */}
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_avg_map?.[8] ?? null} />
                 </td>
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.English ?? null} />
                 </td>
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.Mathematics ?? null} />
                 </td>
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.['Social Science'] ?? null} />
                 </td>
-                <td style={styles.td}>
+                <td>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.Science ?? null} />
                 </td>
 
                 {/* Action buttons */}
-                <td style={styles.td}>
+                <td>
                   <button
                     onClick={() => handleViewReport(row.school_code)}
-                    style={styles.button}
+                    className={styles.button}
                   >
                     View Report
                   </button>
                 </td>
-                <td style={styles.td}>
+                <td>
                   <button
                     onClick={() => handleDownloadPdf(row.school_code)}
-                    style={styles.button}
+                    className={styles.button}
                     disabled={downloadingPdf === row.school_code}
                     title="Download PDF report"
                   >
@@ -267,99 +260,8 @@ function Dashboard() {
           </tbody>
         </table>
       </div>
-
-      {filteredData.length === 0 && (
-        <div style={styles.noResults}>
-          No schools found matching "{searchQuery}"
-        </div>
-      )}
     </div>
   )
-}
-
-// Minimal inline styles
-const styles = {
-  container: {
-    padding: '20px',
-    fontFamily: 'system-ui, -apple-system, sans-serif',
-  },
-  title: {
-    fontSize: '24px',
-    marginBottom: '20px',
-    color: '#333',
-  },
-  searchContainer: {
-    marginBottom: '16px',
-    display: 'flex',
-    gap: '8px',
-    alignItems: 'center',
-  },
-  searchInput: {
-    padding: '8px 12px',
-    fontSize: '14px',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    width: '300px',
-  },
-  clearButton: {
-    padding: '8px 16px',
-    fontSize: '14px',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    backgroundColor: '#f5f5f5',
-    cursor: 'pointer',
-  },
-  resultsInfo: {
-    marginBottom: '12px',
-    fontSize: '14px',
-    color: '#666',
-  },
-  tableContainer: {
-    overflowX: 'auto' as const,
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse' as const,
-    fontSize: '13px',
-  },
-  th: {
-    padding: '10px 8px',
-    textAlign: 'left' as const,
-    backgroundColor: '#f8f9fa',
-    borderBottom: '2px solid #dee2e6',
-    fontSize: '12px',
-    fontWeight: 600,
-    color: '#495057',
-  },
-  sortable: {
-    cursor: 'pointer',
-    userSelect: 'none' as const,
-  },
-  td: {
-    padding: '8px',
-    borderBottom: '1px solid #eee',
-    fontSize: '13px',
-  },
-  tr: {
-    cursor: 'pointer',
-  },
-  button: {
-    padding: '6px 12px',
-    fontSize: '12px',
-    border: '1px solid #007bff',
-    borderRadius: '4px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    cursor: 'pointer',
-  },
-  noResults: {
-    padding: '40px',
-    textAlign: 'center' as const,
-    color: '#999',
-    fontSize: '14px',
-  },
 }
 
 export default Dashboard
