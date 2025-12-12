@@ -215,10 +215,10 @@ function SchoolReport() {
             </span>
           </div>
           <div style={styles.tableScroll}>
-            <table style={styles.priorityTable}>
+            <table style={styles.priorityTable} className="priority-table">
               <thead>
                 <tr>
-                  <th style={styles.priorityThGrade} rowSpan={2}>Grade</th>
+                  <th style={styles.priorityThGrade} className="priorityThGrade" rowSpan={2}>Grade</th>
                   <th style={styles.priorityTh} colSpan={3}>English</th>
                   <th style={styles.priorityTh} colSpan={3}>Mathematics</th>
                   <th style={styles.priorityTh} colSpan={3}>Science</th>
@@ -226,21 +226,21 @@ function SchoolReport() {
                 </tr>
                 <tr>
                   {/* English sub-columns */}
-                  <th style={styles.priorityThSub}>H</th>
-                  <th style={styles.priorityThSub}>M</th>
-                  <th style={styles.priorityThSub}>L</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">H</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">M</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">L</th>
                   {/* Mathematics sub-columns */}
-                  <th style={styles.priorityThSub}>H</th>
-                  <th style={styles.priorityThSub}>M</th>
-                  <th style={styles.priorityThSub}>L</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">H</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">M</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">L</th>
                   {/* Science sub-columns */}
-                  <th style={styles.priorityThSub}>H</th>
-                  <th style={styles.priorityThSub}>M</th>
-                  <th style={styles.priorityThSub}>L</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">H</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">M</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">L</th>
                   {/* Social Science sub-columns */}
-                  <th style={styles.priorityThSub}>H</th>
-                  <th style={styles.priorityThSub}>M</th>
-                  <th style={styles.priorityThSub}>L</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">H</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">M</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">L</th>
                 </tr>
               </thead>
               <tbody>
@@ -252,45 +252,45 @@ function SchoolReport() {
 
                   return (
                     <tr key={grade}>
-                      <td style={styles.priorityTdGrade}>{grade}</td>
+                      <td style={styles.priorityTdGrade} className="priorityTdGrade">{grade}</td>
                       {/* English */}
-                      <td style={styles.priorityTdHigh}>
+                      <td style={styles.priorityTdHigh} className="priorityTdHigh">
                         {english.hasData ? english.high : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTdMedium}>
+                      <td style={styles.priorityTdMedium} className="priorityTdMedium">
                         {english.hasData ? english.medium : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTdLow}>
+                      <td style={styles.priorityTdLow} className="priorityTdLow">
                         {english.hasData ? english.low : <span style={styles.noDataCell}>-</span>}
                       </td>
                       {/* Mathematics */}
-                      <td style={styles.priorityTdHigh}>
+                      <td style={styles.priorityTdHigh} className="priorityTdHigh">
                         {math.hasData ? math.high : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTdMedium}>
+                      <td style={styles.priorityTdMedium} className="priorityTdMedium">
                         {math.hasData ? math.medium : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTdLow}>
+                      <td style={styles.priorityTdLow} className="priorityTdLow">
                         {math.hasData ? math.low : <span style={styles.noDataCell}>-</span>}
                       </td>
                       {/* Science */}
-                      <td style={styles.priorityTdHigh}>
+                      <td style={styles.priorityTdHigh} className="priorityTdHigh">
                         {science.hasData ? science.high : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTdMedium}>
+                      <td style={styles.priorityTdMedium} className="priorityTdMedium">
                         {science.hasData ? science.medium : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTdLow}>
+                      <td style={styles.priorityTdLow} className="priorityTdLow">
                         {science.hasData ? science.low : <span style={styles.noDataCell}>-</span>}
                       </td>
                       {/* Social Science */}
-                      <td style={styles.priorityTdHigh}>
+                      <td style={styles.priorityTdHigh} className="priorityTdHigh">
                         {socialScience.hasData ? socialScience.high : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTdMedium}>
+                      <td style={styles.priorityTdMedium} className="priorityTdMedium">
                         {socialScience.hasData ? socialScience.medium : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTdLow}>
+                      <td style={styles.priorityTdLow} className="priorityTdLow">
                         {socialScience.hasData ? socialScience.low : <span style={styles.noDataCell}>-</span>}
                       </td>
                     </tr>

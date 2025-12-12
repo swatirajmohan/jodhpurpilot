@@ -1,83 +1,35 @@
-/* PDF-specific styles for proper printing */
-
-.pdf-mode {
-  max-width: 100%;
-  font-size: 12px;
-}
+/* PDF-specific styles - ONLY for priority distribution table fix */
 
 /* Hide elements not needed in PDF */
 .pdf-mode .no-pdf {
   display: none !important;
 }
 
-/* Priority table adjustments for PDF */
-.pdf-mode .priority-table-container {
-  overflow-x: visible !important;
-}
-
-.pdf-mode table {
-  font-size: 10px !important;
+/* ONLY fix the priority distribution table - make it fit by adjusting column widths */
+.pdf-mode .priority-table {
+  table-layout: fixed !important;
   width: 100% !important;
 }
 
-.pdf-mode th,
-.pdf-mode td {
-  padding: 4px 3px !important;
-  font-size: 9px !important;
+/* Grade column - narrow it down */
+.pdf-mode .priority-table .priorityThGrade,
+.pdf-mode .priority-table .priorityTdGrade {
+  width: 50px !important;
 }
 
-/* Reduce title sizes for PDF */
-.pdf-mode h1 {
-  font-size: 20px !important;
-  margin-bottom: 12px !important;
+/* Subject header columns - equal width */
+.pdf-mode .priority-table th[colspan="3"] {
+  width: 23% !important;
 }
 
-.pdf-mode h2 {
-  font-size: 16px !important;
-  margin-bottom: 10px !important;
-}
-
-.pdf-mode h3 {
-  font-size: 14px !important;
-  margin-bottom: 8px !important;
-}
-
-/* Summary tables in PDF */
-.pdf-mode .summary-section {
-  display: block !important;
-  margin-bottom: 20px !important;
-}
-
-.pdf-mode .summary-table-container {
-  display: inline-block !important;
-  width: 48% !important;
-  margin-right: 2% !important;
-  vertical-align: top !important;
-  page-break-inside: avoid !important;
-}
-
-/* Priority distribution table - make it fit */
-.pdf-mode .priority-table {
-  min-width: 100% !important;
-  table-layout: fixed !important;
-}
-
-.pdf-mode .priority-table th,
-.pdf-mode .priority-table td {
-  padding: 3px 2px !important;
-  font-size: 8px !important;
-  white-space: nowrap !important;
-}
-
-.pdf-mode .priority-table thead th {
-  font-size: 9px !important;
-  padding: 4px 2px !important;
-}
-
-/* Legend in PDF */
-.pdf-mode .legend {
-  font-size: 9px !important;
-  margin-bottom: 8px !important;
+/* Sub-columns (H/M/L) - equal narrow width */
+.pdf-mode .priority-table .priorityThSub,
+.pdf-mode .priority-table .priorityTd,
+.pdf-mode .priority-table .priorityTdHigh,
+.pdf-mode .priority-table .priorityTdMedium,
+.pdf-mode .priority-table .priorityTdLow {
+  width: auto !important;
+  padding: 8px 4px !important;
 }
 
 /* Page breaks */
@@ -87,34 +39,5 @@
 
 .pdf-page-break:first-child {
   page-break-before: avoid !important;
-}
-
-/* Score chips in PDF */
-.pdf-mode .score-chip {
-  font-size: 10px !important;
-  padding: 2px 6px !important;
-}
-
-/* Competency tables in PDF */
-.pdf-mode .competency-table {
-  width: 100% !important;
-  page-break-inside: avoid !important;
-}
-
-.pdf-mode .competency-table th,
-.pdf-mode .competency-table td {
-  font-size: 10px !important;
-  padding: 5px 4px !important;
-}
-
-/* Grade sections */
-.pdf-mode .grade-section {
-  page-break-inside: avoid !important;
-  margin-bottom: 20px !important;
-}
-
-.pdf-mode .subject-section {
-  page-break-inside: avoid !important;
-  margin-bottom: 15px !important;
 }
 
