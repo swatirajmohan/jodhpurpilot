@@ -214,34 +214,25 @@ function SchoolReport() {
               <strong>-</strong> = No data
             </span>
           </div>
+          {/* TABLE 1: English and Mathematics */}
           <div style={styles.tableScroll}>
             <table style={styles.priorityTable} className="priority-table">
               <colgroup>
-                <col style={{ width: '60px' }} />
+                <col style={{ width: '80px' }} />
                 {/* English H, M, L */}
-                <col style={{ width: '60px' }} />
-                <col style={{ width: '60px' }} />
-                <col style={{ width: '60px' }} />
+                <col style={{ width: '80px' }} />
+                <col style={{ width: '80px' }} />
+                <col style={{ width: '80px' }} />
                 {/* Mathematics H, M, L */}
-                <col style={{ width: '60px' }} />
-                <col style={{ width: '60px' }} />
-                <col style={{ width: '60px' }} />
-                {/* Science H, M, L */}
-                <col style={{ width: '60px' }} />
-                <col style={{ width: '60px' }} />
-                <col style={{ width: '60px' }} />
-                {/* Social Science H, M, L */}
-                <col style={{ width: '60px' }} />
-                <col style={{ width: '60px' }} />
-                <col style={{ width: '60px' }} />
+                <col style={{ width: '80px' }} />
+                <col style={{ width: '80px' }} />
+                <col style={{ width: '80px' }} />
               </colgroup>
               <thead>
                 <tr>
                   <th style={styles.priorityThGrade} className="priorityThGrade" rowSpan={2}>Grade</th>
                   <th style={styles.priorityTh} colSpan={3}>English</th>
                   <th style={styles.priorityTh} colSpan={3}>Mathematics</th>
-                  <th style={styles.priorityTh} colSpan={3}>Science</th>
-                  <th style={styles.priorityTh} colSpan={3}>Social Science</th>
                 </tr>
                 <tr>
                   {/* English sub-columns */}
@@ -252,22 +243,12 @@ function SchoolReport() {
                   <th style={styles.priorityThSub} className="priorityThSub">H</th>
                   <th style={styles.priorityThSub} className="priorityThSub">M</th>
                   <th style={styles.priorityThSub} className="priorityThSub">L</th>
-                  {/* Science sub-columns */}
-                  <th style={styles.priorityThSub} className="priorityThSub">H</th>
-                  <th style={styles.priorityThSub} className="priorityThSub">M</th>
-                  <th style={styles.priorityThSub} className="priorityThSub">L</th>
-                  {/* Social Science sub-columns */}
-                  <th style={styles.priorityThSub} className="priorityThSub">H</th>
-                  <th style={styles.priorityThSub} className="priorityThSub">M</th>
-                  <th style={styles.priorityThSub} className="priorityThSub">L</th>
                 </tr>
               </thead>
               <tbody>
                 {grades.map(grade => {
                   const english = getPriorityCounts(grade, 'English')
                   const math = getPriorityCounts(grade, 'Mathematics')
-                  const science = getPriorityCounts(grade, 'Science')
-                  const socialScience = getPriorityCounts(grade, 'Social Science')
 
                   return (
                     <tr key={grade}>
@@ -292,6 +273,52 @@ function SchoolReport() {
                       <td style={styles.priorityTdLow} className="priorityTdLow">
                         {math.hasData ? math.low : <span style={styles.noDataCell}>-</span>}
                       </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* TABLE 2: Science and Social Science */}
+          <div style={{ ...styles.tableScroll, marginTop: '30px' }}>
+            <table style={styles.priorityTable} className="priority-table">
+              <colgroup>
+                <col style={{ width: '80px' }} />
+                {/* Science H, M, L */}
+                <col style={{ width: '80px' }} />
+                <col style={{ width: '80px' }} />
+                <col style={{ width: '80px' }} />
+                {/* Social Science H, M, L */}
+                <col style={{ width: '80px' }} />
+                <col style={{ width: '80px' }} />
+                <col style={{ width: '80px' }} />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th style={styles.priorityThGrade} className="priorityThGrade" rowSpan={2}>Grade</th>
+                  <th style={styles.priorityTh} colSpan={3}>Science</th>
+                  <th style={styles.priorityTh} colSpan={3}>Social Science</th>
+                </tr>
+                <tr>
+                  {/* Science sub-columns */}
+                  <th style={styles.priorityThSub} className="priorityThSub">H</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">M</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">L</th>
+                  {/* Social Science sub-columns */}
+                  <th style={styles.priorityThSub} className="priorityThSub">H</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">M</th>
+                  <th style={styles.priorityThSub} className="priorityThSub">L</th>
+                </tr>
+              </thead>
+              <tbody>
+                {grades.map(grade => {
+                  const science = getPriorityCounts(grade, 'Science')
+                  const socialScience = getPriorityCounts(grade, 'Social Science')
+
+                  return (
+                    <tr key={grade}>
+                      <td style={styles.priorityTdGrade} className="priorityTdGrade">{grade}</td>
                       {/* Science */}
                       <td style={styles.priorityTdHigh} className="priorityTdHigh">
                         {science.hasData ? science.high : <span style={styles.noDataCell}>-</span>}
