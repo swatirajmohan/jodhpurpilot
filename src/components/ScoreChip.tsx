@@ -26,16 +26,16 @@ function ScoreChip({ value, decimal = 1 }: ScoreChipProps) {
 
   if (value >= 0 && value <= 4) {
     priorityBand = 'High';
-    backgroundColor = '#fee'; // Light red
-    textColor = '#c00'; // Dark red
+    backgroundColor = '#ffcccc'; // More visible light red
+    textColor = '#cc0000'; // Dark red
   } else if (value >= 5 && value <= 6) {
     priorityBand = 'Medium';
-    backgroundColor = '#ffe'; // Light yellow
-    textColor = '#880'; // Dark yellow/orange
+    backgroundColor = '#fff4cc'; // Light yellow
+    textColor = '#996600'; // Dark yellow/orange
   } else if (value >= 7 && value <= 10) {
     priorityBand = 'Low';
-    backgroundColor = '#efe'; // Light green
-    textColor = '#060'; // Dark green
+    backgroundColor = '#ccffcc'; // Light green
+    textColor = '#006600'; // Dark green
   } else {
     // Fallback for out of range values
     priorityBand = 'High';
