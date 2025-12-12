@@ -135,7 +135,7 @@ function importData() {
     }
 
     // Extract grade level
-    const grade_level = parseInt(row.Grade || row['Grade Level']);
+    const grade_level = parseInt(row.Grade || row['Grade Level'] || row.AsmtGradeLevel);
     
     // Filter: Keep only grades 6, 7, 8 (FRS.md Section 4.2)
     if (!VALID_GRADES.includes(grade_level)) {
@@ -144,7 +144,7 @@ function importData() {
     }
 
     // Extract subject
-    const subject = row.Subject || row.SubjectName;
+    const subject = row.Subject || row.SubjectName || row.AsmtSubject;
     
     // Filter: Keep only English, Math, Science, SST (FRS.md Section 4.2)
     if (!VALID_SUBJECTS.includes(subject)) {

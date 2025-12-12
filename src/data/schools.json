@@ -1,2 +1,194 @@
-[]
-
+[
+  {
+    "school_code": "220371",
+    "school_name": "DR PADAM CHAND BILAM KANWAR GANDHI GOVT. SENIOR SECONDARY SCHOOL RESIDENCY ROAD JODHPUR"
+  },
+  {
+    "school_code": "480708",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL 11 SECTOR CHB"
+  },
+  {
+    "school_code": "502793",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL AMBEDKAR NAGAR KALIBERI SOORSAGAR JODHPUR"
+  },
+  {
+    "school_code": "531989",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL BALSAMAND"
+  },
+  {
+    "school_code": "482028",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL BAMBA JODHPUR CITY"
+  },
+  {
+    "school_code": "520760",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL BASNI TAMBOLIYA"
+  },
+  {
+    "school_code": "521960",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL BHADVASIYA"
+  },
+  {
+    "school_code": "522430",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL BHATIYANADI"
+  },
+  {
+    "school_code": "477782",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL BHEEL BASTI AMBEDKAR COLONY KALIBERI JODHPUR"
+  },
+  {
+    "school_code": "414355",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL BHERVA BHAKARI BHIL BASTI KABIR NAGAR"
+  },
+  {
+    "school_code": "480695",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL CHANDPOLE BASNI JODHPUR"
+  },
+  {
+    "school_code": "482267",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL CHOPASANI ROAD JODHPUR"
+  },
+  {
+    "school_code": "482765",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL CITY POLICE KUDI HOUSING BOARD SECTOR"
+  },
+  {
+    "school_code": "220370",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL DHANDH JHALAMAND CIRCLE JODHPUR"
+  },
+  {
+    "school_code": "482180",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL DHERIYON KA MOHELLA"
+  },
+  {
+    "school_code": "520182",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL DIGADI JODHPUR"
+  },
+  {
+    "school_code": "531987",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL ENGLISH MEDIUM MATA KA THAN JODHPUR"
+  },
+  {
+    "school_code": "531986",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL ENGLISH MEDIUM PUNJALA"
+  },
+  {
+    "school_code": "220376",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL FATEHPOLE"
+  },
+  {
+    "school_code": "482348",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL GENVA SOORSAGAR."
+  },
+  {
+    "school_code": "482172",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL GGUPS MAHESH HOSTAL SOORSAGAR"
+  },
+  {
+    "school_code": "220378",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL HEWSON MANDI JODHPUR"
+  },
+  {
+    "school_code": "511017",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL JALAM SINGH KA HATTHA"
+  },
+  {
+    "school_code": "511016",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL JASWANT SAGAR ANGANWA"
+  },
+  {
+    "school_code": "462225",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL KHARDA RANDHEER"
+  },
+  {
+    "school_code": "481035",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL KHEME KA KUA JODHPUR"
+  },
+  {
+    "school_code": "476352",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL KUDI BHAGTASNI PALI ROAD JODHPUR"
+  },
+  {
+    "school_code": "410259",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL LALA LAJPAT RAI COLONY"
+  },
+  {
+    "school_code": "531988",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL MAHAMANDIR"
+  },
+  {
+    "school_code": "220379",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL MAHILA BAG JODHPUR"
+  },
+  {
+    "school_code": "532203",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL MANDORE NO. 1"
+  },
+  {
+    "school_code": "480604",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL NAGORI BERA"
+  },
+  {
+    "school_code": "509747",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL NAGORI GATE"
+  },
+  {
+    "school_code": "531990",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL PABUPURA"
+  },
+  {
+    "school_code": "480648",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL PAL JODHPUR"
+  },
+  {
+    "school_code": "220395",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL PAOTA JODHPUR"
+  },
+  {
+    "school_code": "480603",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL RAJIV GANDHI KACCHI BASTI BASNI BGKT"
+  },
+  {
+    "school_code": "480584",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL RAJMAHAL"
+  },
+  {
+    "school_code": "414644",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL RAM MOHALLA SANGARIYA FATA"
+  },
+  {
+    "school_code": "481957",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL SARRAFA BAJAR"
+  },
+  {
+    "school_code": "514146",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL SECTER 14 C. H. B."
+  },
+  {
+    "school_code": "480640",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL THORIYO KI DHANI"
+  },
+  {
+    "school_code": "516779",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL UDAIMANDIR"
+  },
+  {
+    "school_code": "477818",
+    "school_name": "MAHATMA GANDHI GOVT. SCHOOL VINAYKIYA JODHPUR CITY JODHPUR"
+  },
+  {
+    "school_code": "220372",
+    "school_name": "PM SHRI MAHATMA GANDHI GOVT. SCHOOL JODHPUR CITY"
+  },
+  {
+    "school_code": "220358",
+    "school_name": "SHRI BANSHIDHAR PUROHIT GOVT. SENIOR SECONDARY SCHOOL VIDYASHALA JODHPUR"
+  },
+  {
+    "school_code": "220363",
+    "school_name": "SHRI RAMSAWROOP GANESHI DEVI CHILKA GOVT. SENIOR SECONDARY SCHOOL SHASTRI NAGAR SECTOR-A JODHPUR CITY"
+  },
+  {
+    "school_code": "227454",
+    "school_name": "YOMIT JANGID GOVT. SENIOR SECONDARY SCHOOL BHAGAT KI KOTHI JODHPUR"
+  }
+]

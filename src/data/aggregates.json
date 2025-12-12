@@ -1,2 +1,1682 @@
-[]
-
+[
+  {
+    "school_code": "220371",
+    "overall_avg": 4.363636363636363,
+    "subject_avg_map": {
+      "English": 5.1,
+      "Math": null,
+      "Science": 3.75,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 5.2,
+      "7": 3.6666666666666665,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6,
+        "Math": null,
+        "Science": 4.4,
+        "SST": null
+      },
+      "7": {
+        "English": 4.2,
+        "Math": null,
+        "Science": 3.2857142857142856,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "480708",
+    "overall_avg": 3.6363636363636362,
+    "subject_avg_map": {
+      "English": 4.8,
+      "Math": null,
+      "Science": 2.6666666666666665,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 3,
+      "7": 2.8333333333333335,
+      "8": 5.090909090909091
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 5.4,
+        "Math": null,
+        "Science": 0.6,
+        "SST": null
+      },
+      "7": {
+        "English": 3,
+        "Math": null,
+        "Science": 2.7142857142857144,
+        "SST": null
+      },
+      "8": {
+        "English": 6,
+        "Math": null,
+        "Science": 4.333333333333333,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "502793",
+    "overall_avg": 3.0303030303030303,
+    "subject_avg_map": {
+      "English": 3.933333333333333,
+      "Math": null,
+      "Science": 2.2777777777777777,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 2.9,
+      "7": 2.9166666666666665,
+      "8": 3.272727272727273
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4,
+        "Math": null,
+        "Science": 1.8,
+        "SST": null
+      },
+      "7": {
+        "English": 3.8,
+        "Math": null,
+        "Science": 2.2857142857142856,
+        "SST": null
+      },
+      "8": {
+        "English": 4,
+        "Math": null,
+        "Science": 2.6666666666666665,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "531989",
+    "overall_avg": 2.484848484848485,
+    "subject_avg_map": {
+      "English": 3.8,
+      "Math": null,
+      "Science": 1.3888888888888888,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 2.8,
+      "7": 1.8333333333333333,
+      "8": 2.909090909090909
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4,
+        "Math": null,
+        "Science": 1.6,
+        "SST": null
+      },
+      "7": {
+        "English": 3.4,
+        "Math": null,
+        "Science": 0.7142857142857143,
+        "SST": null
+      },
+      "8": {
+        "English": 4,
+        "Math": null,
+        "Science": 2,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "482028",
+    "overall_avg": 3.409090909090909,
+    "subject_avg_map": {
+      "English": 4.8,
+      "Math": null,
+      "Science": 2.25,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.7,
+      "7": 2.3333333333333335,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 5,
+        "Math": null,
+        "Science": 4.4,
+        "SST": null
+      },
+      "7": {
+        "English": 4.6,
+        "Math": null,
+        "Science": 0.7142857142857143,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "520760",
+    "overall_avg": 3.515151515151515,
+    "subject_avg_map": {
+      "English": 4.533333333333333,
+      "Math": null,
+      "Science": 2.6666666666666665,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 3,
+      "7": 3.4166666666666665,
+      "8": 4.090909090909091
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4.6,
+        "Math": null,
+        "Science": 1.4,
+        "SST": null
+      },
+      "7": {
+        "English": 4.2,
+        "Math": null,
+        "Science": 2.857142857142857,
+        "SST": null
+      },
+      "8": {
+        "English": 4.8,
+        "Math": null,
+        "Science": 3.5,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "521960",
+    "overall_avg": 4.071428571428571,
+    "subject_avg_map": {
+      "English": 4.3,
+      "Math": null,
+      "Science": 3.9444444444444446,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 3.5,
+      "7": 4.428571428571429,
+      "8": 4.363636363636363
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4.4,
+        "Math": null,
+        "Science": 2.6,
+        "SST": null
+      },
+      "7": {
+        "English": null,
+        "Math": null,
+        "Science": 4.428571428571429,
+        "SST": null
+      },
+      "8": {
+        "English": 4.2,
+        "Math": null,
+        "Science": 4.5,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "522430",
+    "overall_avg": 4.363636363636363,
+    "subject_avg_map": {
+      "English": 4.866666666666666,
+      "Math": null,
+      "Science": 3.9444444444444446,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 5,
+      "7": 3.9166666666666665,
+      "8": 4.2727272727272725
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4.6,
+        "Math": null,
+        "Science": 5.4,
+        "SST": null
+      },
+      "7": {
+        "English": 4.8,
+        "Math": null,
+        "Science": 3.2857142857142856,
+        "SST": null
+      },
+      "8": {
+        "English": 5.2,
+        "Math": null,
+        "Science": 3.5,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "477782",
+    "overall_avg": 3.0454545454545454,
+    "subject_avg_map": {
+      "English": 3.5,
+      "Math": null,
+      "Science": 2.6666666666666665,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.2,
+      "7": 2.0833333333333335,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 5.6,
+        "Math": null,
+        "Science": 2.8,
+        "SST": null
+      },
+      "7": {
+        "English": 1.4,
+        "Math": null,
+        "Science": 2.5714285714285716,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "414355",
+    "overall_avg": 6.7,
+    "subject_avg_map": {
+      "English": 6,
+      "Math": null,
+      "Science": 7.4,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 6.7,
+      "7": null,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6,
+        "Math": null,
+        "Science": 7.4,
+        "SST": null
+      },
+      "7": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "480695",
+    "overall_avg": 5.2272727272727275,
+    "subject_avg_map": {
+      "English": 5.2,
+      "Math": null,
+      "Science": 5.25,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 5.5,
+      "7": 5,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4.8,
+        "Math": null,
+        "Science": 6.2,
+        "SST": null
+      },
+      "7": {
+        "English": 5.6,
+        "Math": null,
+        "Science": 4.571428571428571,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "482267",
+    "overall_avg": 4.545454545454546,
+    "subject_avg_map": {
+      "English": 6.6,
+      "Math": null,
+      "Science": 2.8333333333333335,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.9,
+      "7": 4.25,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 7.4,
+        "Math": null,
+        "Science": 2.4,
+        "SST": null
+      },
+      "7": {
+        "English": 5.8,
+        "Math": null,
+        "Science": 3.142857142857143,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "482765",
+    "overall_avg": 5.151515151515151,
+    "subject_avg_map": {
+      "English": 5.933333333333334,
+      "Math": null,
+      "Science": 4.5,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 6.1,
+      "7": 4.083333333333333,
+      "8": 5.454545454545454
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6.4,
+        "Math": null,
+        "Science": 5.8,
+        "SST": null
+      },
+      "7": {
+        "English": 5.6,
+        "Math": null,
+        "Science": 3,
+        "SST": null
+      },
+      "8": {
+        "English": 5.8,
+        "Math": null,
+        "Science": 5.166666666666667,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "220370",
+    "overall_avg": 5.2272727272727275,
+    "subject_avg_map": {
+      "English": 5.8,
+      "Math": null,
+      "Science": 4.75,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 5.8,
+      "7": 4.75,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6.2,
+        "Math": null,
+        "Science": 5.4,
+        "SST": null
+      },
+      "7": {
+        "English": 5.4,
+        "Math": null,
+        "Science": 4.285714285714286,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "482180",
+    "overall_avg": 5.5,
+    "subject_avg_map": {
+      "English": 5.9,
+      "Math": null,
+      "Science": 5.166666666666667,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 6.4,
+      "7": 4.75,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6.8,
+        "Math": null,
+        "Science": 6,
+        "SST": null
+      },
+      "7": {
+        "English": 5,
+        "Math": null,
+        "Science": 4.571428571428571,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "520182",
+    "overall_avg": 3.5757575757575757,
+    "subject_avg_map": {
+      "English": 5.533333333333333,
+      "Math": null,
+      "Science": 1.9444444444444444,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.4,
+      "7": 3.1666666666666665,
+      "8": 3.272727272727273
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 7,
+        "Math": null,
+        "Science": 1.8,
+        "SST": null
+      },
+      "7": {
+        "English": 5.2,
+        "Math": null,
+        "Science": 1.7142857142857142,
+        "SST": null
+      },
+      "8": {
+        "English": 4.4,
+        "Math": null,
+        "Science": 2.3333333333333335,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "531987",
+    "overall_avg": 2.8484848484848486,
+    "subject_avg_map": {
+      "English": 4.6,
+      "Math": null,
+      "Science": 1.3888888888888888,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 2.6,
+      "7": 2,
+      "8": 4
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4.6,
+        "Math": null,
+        "Science": 0.6,
+        "SST": null
+      },
+      "7": {
+        "English": 3.2,
+        "Math": null,
+        "Science": 1.1428571428571428,
+        "SST": null
+      },
+      "8": {
+        "English": 6,
+        "Math": null,
+        "Science": 2.3333333333333335,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "531986",
+    "overall_avg": 2.515151515151515,
+    "subject_avg_map": {
+      "English": 3.933333333333333,
+      "Math": null,
+      "Science": 1.3333333333333333,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 2.9,
+      "7": 2.0833333333333335,
+      "8": 2.6363636363636362
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 5.2,
+        "Math": null,
+        "Science": 0.6,
+        "SST": null
+      },
+      "7": {
+        "English": 3.4,
+        "Math": null,
+        "Science": 1.1428571428571428,
+        "SST": null
+      },
+      "8": {
+        "English": 3.2,
+        "Math": null,
+        "Science": 2.1666666666666665,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "220376",
+    "overall_avg": 4.7272727272727275,
+    "subject_avg_map": {
+      "English": 6.1,
+      "Math": null,
+      "Science": 3.5833333333333335,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 5.4,
+      "7": 4.166666666666667,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6.4,
+        "Math": null,
+        "Science": 4.4,
+        "SST": null
+      },
+      "7": {
+        "English": 5.8,
+        "Math": null,
+        "Science": 3,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "482348",
+    "overall_avg": 3.5,
+    "subject_avg_map": {
+      "English": 5.5,
+      "Math": null,
+      "Science": 1.8333333333333333,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.1,
+      "7": 3,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 5.8,
+        "Math": null,
+        "Science": 2.4,
+        "SST": null
+      },
+      "7": {
+        "English": 5.2,
+        "Math": null,
+        "Science": 1.4285714285714286,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "482172",
+    "overall_avg": 5.045454545454546,
+    "subject_avg_map": {
+      "English": 5,
+      "Math": null,
+      "Science": 5.083333333333333,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 5.8,
+      "7": 4.416666666666667,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 5.6,
+        "Math": null,
+        "Science": 6,
+        "SST": null
+      },
+      "7": {
+        "English": 4.4,
+        "Math": null,
+        "Science": 4.428571428571429,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "220378",
+    "overall_avg": 2.9545454545454546,
+    "subject_avg_map": {
+      "English": 3.3,
+      "Math": null,
+      "Science": 2.6666666666666665,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 3.9,
+      "7": 2.1666666666666665,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4.8,
+        "Math": null,
+        "Science": 3,
+        "SST": null
+      },
+      "7": {
+        "English": 1.8,
+        "Math": null,
+        "Science": 2.4285714285714284,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "511017",
+    "overall_avg": 4.909090909090909,
+    "subject_avg_map": {
+      "English": 4.7,
+      "Math": null,
+      "Science": 5.083333333333333,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 5.4,
+      "7": 4.5,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 5.4,
+        "Math": null,
+        "Science": 5.4,
+        "SST": null
+      },
+      "7": {
+        "English": 4,
+        "Math": null,
+        "Science": 4.857142857142857,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "511016",
+    "overall_avg": 2.878787878787879,
+    "subject_avg_map": {
+      "English": 3.7333333333333334,
+      "Math": null,
+      "Science": 2.1666666666666665,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.2,
+      "7": 2.3333333333333335,
+      "8": 2.272727272727273
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4.6,
+        "Math": null,
+        "Science": 3.8,
+        "SST": null
+      },
+      "7": {
+        "English": 3.4,
+        "Math": null,
+        "Science": 1.5714285714285714,
+        "SST": null
+      },
+      "8": {
+        "English": 3.2,
+        "Math": null,
+        "Science": 1.5,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "462225",
+    "overall_avg": 3.176470588235294,
+    "subject_avg_map": {
+      "English": 4.4,
+      "Math": null,
+      "Science": 2.6666666666666665,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 3,
+      "7": 3.4285714285714284,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4.4,
+        "Math": null,
+        "Science": 1.6,
+        "SST": null
+      },
+      "7": {
+        "English": null,
+        "Math": null,
+        "Science": 3.4285714285714284,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "481035",
+    "overall_avg": 3.7,
+    "subject_avg_map": {
+      "English": 4.4,
+      "Math": null,
+      "Science": 3,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 3.7,
+      "7": null,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4.4,
+        "Math": null,
+        "Science": 3,
+        "SST": null
+      },
+      "7": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "476352",
+    "overall_avg": 3.5,
+    "subject_avg_map": {
+      "English": 3.8,
+      "Math": null,
+      "Science": 3.25,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.2,
+      "7": 2.9166666666666665,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4.6,
+        "Math": null,
+        "Science": 3.8,
+        "SST": null
+      },
+      "7": {
+        "English": 3,
+        "Math": null,
+        "Science": 2.857142857142857,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "410259",
+    "overall_avg": 3.3181818181818183,
+    "subject_avg_map": {
+      "English": 3.8,
+      "Math": null,
+      "Science": 2.9166666666666665,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.2,
+      "7": 2.5833333333333335,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4.2,
+        "Math": null,
+        "Science": 4.2,
+        "SST": null
+      },
+      "7": {
+        "English": 3.4,
+        "Math": null,
+        "Science": 2,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "531988",
+    "overall_avg": 2.392857142857143,
+    "subject_avg_map": {
+      "English": 4,
+      "Math": null,
+      "Science": 1.5,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 1,
+      "7": 2.3333333333333335,
+      "8": 3.090909090909091
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": null,
+        "Math": null,
+        "Science": 1,
+        "SST": null
+      },
+      "7": {
+        "English": 4,
+        "Math": null,
+        "Science": 1.1428571428571428,
+        "SST": null
+      },
+      "8": {
+        "English": 4,
+        "Math": null,
+        "Science": 2.3333333333333335,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "220379",
+    "overall_avg": 4.363636363636363,
+    "subject_avg_map": {
+      "English": 5.6,
+      "Math": null,
+      "Science": 3.3333333333333335,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 5.2,
+      "7": 3.6666666666666665,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6.2,
+        "Math": null,
+        "Science": 4.2,
+        "SST": null
+      },
+      "7": {
+        "English": 5,
+        "Math": null,
+        "Science": 2.7142857142857144,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "532203",
+    "overall_avg": 2.787878787878788,
+    "subject_avg_map": {
+      "English": 3.6,
+      "Math": null,
+      "Science": 2.111111111111111,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 3.6,
+      "7": 1.9166666666666667,
+      "8": 3
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 5,
+        "Math": null,
+        "Science": 2.2,
+        "SST": null
+      },
+      "7": {
+        "English": 2.8,
+        "Math": null,
+        "Science": 1.2857142857142858,
+        "SST": null
+      },
+      "8": {
+        "English": 3,
+        "Math": null,
+        "Science": 3,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "480604",
+    "overall_avg": 1.8181818181818181,
+    "subject_avg_map": {
+      "English": 2.3333333333333335,
+      "Math": null,
+      "Science": 1.3888888888888888,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 1.9,
+      "7": 1.4166666666666667,
+      "8": 2.1818181818181817
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 2.6,
+        "Math": null,
+        "Science": 1.2,
+        "SST": null
+      },
+      "7": {
+        "English": 2,
+        "Math": null,
+        "Science": 1,
+        "SST": null
+      },
+      "8": {
+        "English": 2.4,
+        "Math": null,
+        "Science": 2,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "509747",
+    "overall_avg": 2.272727272727273,
+    "subject_avg_map": {
+      "English": 2.933333333333333,
+      "Math": null,
+      "Science": 1.7222222222222223,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 1.9,
+      "7": 2.5,
+      "8": 2.3636363636363638
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 3,
+        "Math": null,
+        "Science": 0.8,
+        "SST": null
+      },
+      "7": {
+        "English": 3,
+        "Math": null,
+        "Science": 2.142857142857143,
+        "SST": null
+      },
+      "8": {
+        "English": 2.8,
+        "Math": null,
+        "Science": 2,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "531990",
+    "overall_avg": 3.878787878787879,
+    "subject_avg_map": {
+      "English": 4.733333333333333,
+      "Math": null,
+      "Science": 3.1666666666666665,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.6,
+      "7": 3.1666666666666665,
+      "8": 4
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 5.8,
+        "Math": null,
+        "Science": 3.4,
+        "SST": null
+      },
+      "7": {
+        "English": 5,
+        "Math": null,
+        "Science": 1.8571428571428572,
+        "SST": null
+      },
+      "8": {
+        "English": 3.4,
+        "Math": null,
+        "Science": 4.5,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "480648",
+    "overall_avg": 3.2857142857142856,
+    "subject_avg_map": {
+      "English": 3.533333333333333,
+      "Math": null,
+      "Science": 2.6666666666666665,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4,
+      "7": 3.2,
+      "8": 3
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      },
+      "7": {
+        "English": 3.2,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      },
+      "8": {
+        "English": 3.4,
+        "Math": null,
+        "Science": 2.6666666666666665,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "220395",
+    "overall_avg": 3.772727272727273,
+    "subject_avg_map": {
+      "English": 4.5,
+      "Math": null,
+      "Science": 3.1666666666666665,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.1,
+      "7": 3.5,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 5.4,
+        "Math": null,
+        "Science": 2.8,
+        "SST": null
+      },
+      "7": {
+        "English": 3.6,
+        "Math": null,
+        "Science": 3.4285714285714284,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "480603",
+    "overall_avg": 5.181818181818182,
+    "subject_avg_map": {
+      "English": 5.2,
+      "Math": null,
+      "Science": 5.166666666666667,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 5.7,
+      "7": 4.75,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6.2,
+        "Math": null,
+        "Science": 5.2,
+        "SST": null
+      },
+      "7": {
+        "English": 4.2,
+        "Math": null,
+        "Science": 5.142857142857143,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "480584",
+    "overall_avg": 4.2727272727272725,
+    "subject_avg_map": {
+      "English": 5.3,
+      "Math": null,
+      "Science": 3.4166666666666665,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.5,
+      "7": 4.083333333333333,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6,
+        "Math": null,
+        "Science": 3,
+        "SST": null
+      },
+      "7": {
+        "English": 4.6,
+        "Math": null,
+        "Science": 3.7142857142857144,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "414644",
+    "overall_avg": 4.7272727272727275,
+    "subject_avg_map": {
+      "English": 6.2,
+      "Math": null,
+      "Science": 3.5,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.6,
+      "7": 4.833333333333333,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6,
+        "Math": null,
+        "Science": 3.2,
+        "SST": null
+      },
+      "7": {
+        "English": 6.4,
+        "Math": null,
+        "Science": 3.7142857142857144,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "481957",
+    "overall_avg": 2.3181818181818183,
+    "subject_avg_map": {
+      "English": 1.8,
+      "Math": null,
+      "Science": 2.75,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 2.4,
+      "7": 2.25,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 1.8,
+        "Math": null,
+        "Science": 3,
+        "SST": null
+      },
+      "7": {
+        "English": 1.8,
+        "Math": null,
+        "Science": 2.5714285714285716,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "514146",
+    "overall_avg": 4.409090909090909,
+    "subject_avg_map": {
+      "English": 5.3,
+      "Math": null,
+      "Science": 3.6666666666666665,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.7,
+      "7": 4.166666666666667,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6,
+        "Math": null,
+        "Science": 3.4,
+        "SST": null
+      },
+      "7": {
+        "English": 4.6,
+        "Math": null,
+        "Science": 3.857142857142857,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "480640",
+    "overall_avg": 4.5,
+    "subject_avg_map": {
+      "English": 6.2,
+      "Math": null,
+      "Science": 3.0833333333333335,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 5.1,
+      "7": 4,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6.4,
+        "Math": null,
+        "Science": 3.8,
+        "SST": null
+      },
+      "7": {
+        "English": 6,
+        "Math": null,
+        "Science": 2.5714285714285716,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "516779",
+    "overall_avg": 3.1818181818181817,
+    "subject_avg_map": {
+      "English": 3.7333333333333334,
+      "Math": null,
+      "Science": 2.7222222222222223,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 3.2,
+      "7": 2.4166666666666665,
+      "8": 4
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4,
+        "Math": null,
+        "Science": 2.4,
+        "SST": null
+      },
+      "7": {
+        "English": 2.6,
+        "Math": null,
+        "Science": 2.2857142857142856,
+        "SST": null
+      },
+      "8": {
+        "English": 4.6,
+        "Math": null,
+        "Science": 3.5,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "477818",
+    "overall_avg": 4.2727272727272725,
+    "subject_avg_map": {
+      "English": 4.866666666666666,
+      "Math": null,
+      "Science": 3.7777777777777777,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 5.6,
+      "7": 3.3333333333333335,
+      "8": 4.090909090909091
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 5.4,
+        "Math": null,
+        "Science": 5.8,
+        "SST": null
+      },
+      "7": {
+        "English": 4.8,
+        "Math": null,
+        "Science": 2.2857142857142856,
+        "SST": null
+      },
+      "8": {
+        "English": 4.4,
+        "Math": null,
+        "Science": 3.8333333333333335,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "220372",
+    "overall_avg": 3.1515151515151514,
+    "subject_avg_map": {
+      "English": 4.133333333333334,
+      "Math": null,
+      "Science": 2.3333333333333335,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 3.2,
+      "7": 2.3333333333333335,
+      "8": 4
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 4.4,
+        "Math": null,
+        "Science": 2,
+        "SST": null
+      },
+      "7": {
+        "English": 2.6,
+        "Math": null,
+        "Science": 2.142857142857143,
+        "SST": null
+      },
+      "8": {
+        "English": 5.4,
+        "Math": null,
+        "Science": 2.8333333333333335,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "220358",
+    "overall_avg": 5.0588235294117645,
+    "subject_avg_map": {
+      "English": 6.2,
+      "Math": null,
+      "Science": 3.4285714285714284,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 6,
+      "7": 4.666666666666667,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 6,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      },
+      "7": {
+        "English": 6.4,
+        "Math": null,
+        "Science": 3.4285714285714284,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "220363",
+    "overall_avg": 4.363636363636363,
+    "subject_avg_map": {
+      "English": 3.8,
+      "Math": null,
+      "Science": 4.833333333333333,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 4.6,
+      "7": 4.166666666666667,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 3.8,
+        "Math": null,
+        "Science": 5.4,
+        "SST": null
+      },
+      "7": {
+        "English": 3.8,
+        "Math": null,
+        "Science": 4.428571428571429,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  },
+  {
+    "school_code": "227454",
+    "overall_avg": 3.3181818181818183,
+    "subject_avg_map": {
+      "English": 4.2,
+      "Math": null,
+      "Science": 2.5833333333333335,
+      "SST": null
+    },
+    "grade_avg_map": {
+      "6": 3,
+      "7": 3.5833333333333335,
+      "8": null
+    },
+    "grade_subject_avg_map": {
+      "6": {
+        "English": 2.8,
+        "Math": null,
+        "Science": 3.2,
+        "SST": null
+      },
+      "7": {
+        "English": 5.6,
+        "Math": null,
+        "Science": 2.142857142857143,
+        "SST": null
+      },
+      "8": {
+        "English": null,
+        "Math": null,
+        "Science": null,
+        "SST": null
+      }
+    }
+  }
+]
