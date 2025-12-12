@@ -237,18 +237,18 @@ function Dashboard() {
                 </td>
 
                 {/* Action buttons */}
-                <td>
+                <td className={styles.actionCell}>
                   <button
                     onClick={() => handleViewReport(row.school_code)}
-                    className={styles.button}
+                    className={styles.actionButton}
                   >
                     View Report
                   </button>
                 </td>
-                <td>
+                <td className={styles.actionCell}>
                   <button
                     onClick={() => handleDownloadPdf(row.school_code)}
-                    className={styles.button}
+                    className={styles.actionButton}
                     disabled={downloadingPdf === row.school_code}
                     title="Download PDF report"
                   >

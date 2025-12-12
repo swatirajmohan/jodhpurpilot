@@ -60,7 +60,8 @@
   background-color: var(--headerBg);
   color: var(--headerText);
   padding: var(--space-3) var(--space-4);
-  text-align: left;
+  text-align: center;
+  vertical-align: middle;
   font-size: var(--font-tableHeader);
   font-weight: 600;
   border: 1px solid var(--border);
@@ -105,6 +106,38 @@
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  line-height: 1;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 10px;
+  min-width: 120px;
+  font-size: var(--font-base);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  transition: all 0.15s ease;
+}
+
+.actionButton:hover:not(:disabled) {
+  background: var(--bg);
+  border-color: var(--headerBg);
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.actionCell {
+  text-align: center;
+  vertical-align: middle;
 }
 
 .sortButton {
