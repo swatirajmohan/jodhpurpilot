@@ -1,10 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { School, ScoreRow, Aggregates } from '../types'
 import ScoreChip from '../components/ScoreChip'
 import schoolsData from '../data/schools.json'
 import scoreRowsData from '../data/score_rows.json'
 import aggregatesData from '../data/aggregates.json'
+import { downloadSchoolReportPDF } from '../utils/pdfExport'
 
 function SchoolReport() {
   const { school_code } = useParams<{ school_code: string }>()
@@ -14,6 +15,10 @@ function SchoolReport() {
   const [school, setSchool] = useState<School | null>(null)
   const [scoreRows, setScoreRows] = useState<ScoreRow[]>([])
   const [aggregates, setAggregates] = useState<Aggregates | null>(null)
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+  
+  // Ref for PDF content
+  const reportRef = useRef<HTMLDivElement>(null)
 
   // Load data on mount
   useEffect(() => {
@@ -62,6 +67,25 @@ function SchoolReport() {
     return scoreRows.some(row => row.grade_level === grade)
   }
 
+  // Handle PDF download
+  const handleDownloadPDF = async () => {
+    if (!school || !reportRef.current) return
+
+    setIsGeneratingPDF(true)
+    try {
+      await downloadSchoolReportPDF(
+        school.school_code,
+        school.school_name,
+        reportRef.current
+      )
+    } catch (error) {
+      alert('Failed to generate PDF. Please try again.')
+      console.error(error)
+    } finally {
+      setIsGeneratingPDF(false)
+    }
+  }
+
   // Get priority counts for a specific grade and subject
   const getPriorityCounts = (grade: number, subject: string) => {
     const filtered = scoreRows.filter(
@@ -97,19 +121,34 @@ function SchoolReport() {
 
   return (
     <div style={styles.container}>
-      {/* Header Section */}
-      <div style={styles.header}>
+      {/* Action Buttons (Not included in PDF) */}
+      <div style={styles.actions} className="no-pdf">
         <button onClick={() => navigate('/')} style={styles.backButton}>
           ← Back to Dashboard
         </button>
-        
-        <h1 style={styles.title}>School Assessment Report</h1>
-        
-        <div style={styles.schoolInfo}>
-          <div style={styles.schoolName}>{school.school_name}</div>
-          <div style={styles.schoolCode}>School Code: {school.school_code}</div>
-        </div>
+        <button 
+          onClick={handleDownloadPDF} 
+          style={{
+            ...styles.downloadButton,
+            ...(isGeneratingPDF ? styles.downloadButtonDisabled : {})
+          }}
+          disabled={isGeneratingPDF}
+        >
+          {isGeneratingPDF ? 'Generating PDF...' : '📄 Download PDF Report'}
+        </button>
       </div>
+
+      {/* PDF Content */}
+      <div ref={reportRef} style={styles.pdfContent}>
+        {/* Header Section */}
+        <div style={styles.header}>
+          <h1 style={styles.title}>School Assessment Report</h1>
+          
+          <div style={styles.schoolInfo}>
+            <div style={styles.schoolName}>{school.school_name}</div>
+            <div style={styles.schoolCode}>School Code: {school.school_code}</div>
+          </div>
+        </div>
 
       {/* Summary Tables */}
       <div style={styles.summarySection}>
@@ -275,7 +314,7 @@ function SchoolReport() {
         }
 
         return (
-          <div key={grade} style={styles.gradeSection}>
+          <div key={grade} style={styles.gradeSection} className="pdf-page-break">
             <h2 style={styles.gradeHeader}>Grade {grade}</h2>
 
             {/* Subject Sections */}
@@ -327,11 +366,12 @@ function SchoolReport() {
         )
       })}
 
-      {scoreRows.length === 0 && (
-        <div style={styles.noDataGlobal}>
-          No assessment data available for this school.
-        </div>
-      )}
+        {scoreRows.length === 0 && (
+          <div style={styles.noDataGlobal}>
+            No assessment data available for this school.
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -376,20 +416,41 @@ const styles = {
     margin: '0 auto',
     fontFamily: 'system-ui, -apple-system, sans-serif',
   },
-  header: {
-    marginBottom: '32px',
-    borderBottom: '2px solid #dee2e6',
-    paddingBottom: '20px',
+  actions: {
+    display: 'flex',
+    gap: '12px',
+    marginBottom: '20px',
+    alignItems: 'center',
   },
   backButton: {
     padding: '8px 16px',
-    marginBottom: '16px',
     fontSize: '14px',
     border: '1px solid #ddd',
     borderRadius: '4px',
     backgroundColor: '#f5f5f5',
     cursor: 'pointer',
-    display: 'inline-block',
+  },
+  downloadButton: {
+    padding: '10px 20px',
+    fontSize: '14px',
+    border: 'none',
+    borderRadius: '4px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    cursor: 'pointer',
+    fontWeight: 600,
+  },
+  downloadButtonDisabled: {
+    backgroundColor: '#6c757d',
+    cursor: 'not-allowed',
+  },
+  pdfContent: {
+    backgroundColor: '#ffffff',
+  },
+  header: {
+    marginBottom: '32px',
+    borderBottom: '2px solid #dee2e6',
+    paddingBottom: '20px',
   },
   title: {
     fontSize: '28px',

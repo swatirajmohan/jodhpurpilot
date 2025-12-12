@@ -239,11 +239,11 @@ function Dashboard() {
                 </td>
                 <td style={styles.td}>
                   <button
+                    onClick={() => handleViewReport(row.school_code)}
                     style={styles.button}
-                    disabled
-                    title="PDF export coming in Phase 5"
+                    title="Go to report page to download PDF"
                   >
-                    Download PDF
+                    View to Download
                   </button>
                 </td>
               </tr>
