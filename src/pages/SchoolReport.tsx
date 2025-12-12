@@ -215,16 +215,16 @@ function SchoolReport() {
             </span>
           </div>
           {/* TABLE 1: English and Mathematics */}
-          <div style={{ ...styles.tableScroll, pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+          <div style={{ ...styles.tableScroll, pageBreakInside: 'avoid', breakInside: 'avoid' }} className="priority-table-wrapper">
             <table style={{ ...styles.priorityTable, pageBreakInside: 'avoid', breakInside: 'avoid' }} className="priority-table priority-table-1">
               <colgroup>
-                <col style={{ width: '12%' }} />
-                <col style={{ width: '14%' }} />
-                <col style={{ width: '14%' }} />
-                <col style={{ width: '14%' }} />
-                <col style={{ width: '14%' }} />
-                <col style={{ width: '14%' }} />
-                <col style={{ width: '14%' }} />
+                <col style={{ width: '48px' }} />
+                <col style={{ width: '56px' }} />
+                <col style={{ width: '56px' }} />
+                <col style={{ width: '56px' }} />
+                <col style={{ width: '56px' }} />
+                <col style={{ width: '56px' }} />
+                <col style={{ width: '56px' }} />
               </colgroup>
               <thead>
                 <tr>
@@ -279,16 +279,16 @@ function SchoolReport() {
           </div>
 
           {/* TABLE 2: Science and Social Science */}
-          <div style={{ ...styles.tableScroll, paddingTop: '30px', pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+          <div style={{ ...styles.tableScroll, paddingTop: '30px', pageBreakInside: 'avoid', breakInside: 'avoid' }} className="priority-table-wrapper">
             <table style={{ ...styles.priorityTable, pageBreakInside: 'avoid', breakInside: 'avoid' }} className="priority-table priority-table-2">
               <colgroup>
-                <col style={{ width: '12%' }} />
-                <col style={{ width: '14%' }} />
-                <col style={{ width: '14%' }} />
-                <col style={{ width: '14%' }} />
-                <col style={{ width: '14%' }} />
-                <col style={{ width: '14%' }} />
-                <col style={{ width: '14%' }} />
+                <col style={{ width: '48px' }} />
+                <col style={{ width: '56px' }} />
+                <col style={{ width: '56px' }} />
+                <col style={{ width: '56px' }} />
+                <col style={{ width: '56px' }} />
+                <col style={{ width: '56px' }} />
+                <col style={{ width: '56px' }} />
               </colgroup>
               <thead>
                 <tr>
