@@ -77,7 +77,7 @@ See `FRS.md` section 6 for complete data model specification.
 - ✅ Phase 1: Repo setup, routing, static JSON loading
 - ✅ Phase 2: Excel to JSON import script
 - ✅ Phase 3: Dashboard table with real data, search, and sorting
-- ⏳ Phase 4: Detailed report card view
+- ✅ Phase 4: Detailed report card view with competency-level breakdown
 - ⏳ Phase 5: PDF export
 - ⏳ Phase 6: QA and validation
 
