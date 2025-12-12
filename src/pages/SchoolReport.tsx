@@ -1,11 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { School, ScoreRow, Aggregates } from '../types'
 import ScoreChip from '../components/ScoreChip'
 import schoolsData from '../data/schools.json'
 import scoreRowsData from '../data/score_rows.json'
 import aggregatesData from '../data/aggregates.json'
-import { downloadSchoolReportPDF } from '../utils/pdfExport'
+import { downloadSchoolPdf } from '../pdf/downloadPdf'
 
 function SchoolReport() {
   const { school_code } = useParams<{ school_code: string }>()
@@ -16,9 +16,6 @@ function SchoolReport() {
   const [scoreRows, setScoreRows] = useState<ScoreRow[]>([])
   const [aggregates, setAggregates] = useState<Aggregates | null>(null)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
-  
-  // Ref for PDF content
-  const reportRef = useRef<HTMLDivElement>(null)
 
   // Load data on mount
   useEffect(() => {
@@ -69,15 +66,11 @@ function SchoolReport() {
 
   // Handle PDF download
   const handleDownloadPDF = async () => {
-    if (!school || !reportRef.current) return
+    if (!school) return
 
     setIsGeneratingPDF(true)
     try {
-      await downloadSchoolReportPDF(
-        school.school_code,
-        school.school_name,
-        reportRef.current
-      )
+      await downloadSchoolPdf(school.school_code)
     } catch (error) {
       alert('Failed to generate PDF. Please try again.')
       console.error(error)
@@ -139,7 +132,7 @@ function SchoolReport() {
       </div>
 
       {/* PDF Content */}
-      <div ref={reportRef} style={styles.pdfContent}>
+      <div style={styles.pdfContent}>
         {/* Header Section */}
         <div style={styles.header}>
           <h1 style={styles.title}>School Assessment Report</h1>

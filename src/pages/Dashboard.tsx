@@ -4,6 +4,7 @@ import { Aggregates, School } from '../types'
 import ScoreChip from '../components/ScoreChip'
 import schoolsData from '../data/schools.json'
 import aggregatesData from '../data/aggregates.json'
+import { downloadSchoolPdf } from '../pdf/downloadPdf'
 
 // Type for combined school data with aggregates
 interface SchoolTableRow {
@@ -20,6 +21,7 @@ function Dashboard() {
   const [filteredData, setFilteredData] = useState<SchoolTableRow[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+  const [downloadingPdf, setDownloadingPdf] = useState<string | null>(null)
 
   // Load data on mount
   useEffect(() => {
@@ -97,6 +99,19 @@ function Dashboard() {
   // Handle row double-click
   const handleRowDoubleClick = (school_code: string) => {
     navigate(`/school/${school_code}`)
+  }
+
+  // Handle PDF download
+  const handleDownloadPdf = async (school_code: string) => {
+    setDownloadingPdf(school_code)
+    try {
+      await downloadSchoolPdf(school_code)
+    } catch (error) {
+      alert('Failed to generate PDF. Please try again.')
+      console.error(error)
+    } finally {
+      setDownloadingPdf(null)
+    }
   }
 
   return (
@@ -239,11 +254,12 @@ function Dashboard() {
                 </td>
                 <td style={styles.td}>
                   <button
-                    onClick={() => handleViewReport(row.school_code)}
+                    onClick={() => handleDownloadPdf(row.school_code)}
                     style={styles.button}
-                    title="Go to report page to download PDF"
+                    disabled={downloadingPdf === row.school_code}
+                    title="Download PDF report"
                   >
-                    View to Download
+                    {downloadingPdf === row.school_code ? 'Generating...' : 'Download PDF'}
                   </button>
                 </td>
               </tr>
