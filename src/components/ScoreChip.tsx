@@ -19,20 +19,23 @@ function ScoreChip({ value, decimal = 1 }: ScoreChipProps) {
     return <span style={styles.noData}>No data</span>;
   }
 
-  // Determine priority band based on FRS.md Section 4.4
+  // Determine priority band based on client specification
   let priorityBand: 'High' | 'Medium' | 'Low';
   let backgroundColor: string;
   let textColor: string;
 
-  if (value >= 0 && value <= 4) {
+  if (value >= 0 && value < 5) {
+    // 0 to 4.9: Red (High priority - Below expected)
     priorityBand = 'High';
-    backgroundColor = '#ffcccc'; // More visible light red
+    backgroundColor = '#ffcccc'; // Light red
     textColor = '#cc0000'; // Dark red
-  } else if (value >= 5 && value <= 6) {
+  } else if (value >= 5 && value < 7) {
+    // 5.0 to 6.9: Yellow (Medium priority - At expected)
     priorityBand = 'Medium';
     backgroundColor = '#fff4cc'; // Light yellow
     textColor = '#996600'; // Dark yellow/orange
   } else if (value >= 7 && value <= 10) {
+    // 7.0 and above: Green (Low priority - Above expected)
     priorityBand = 'Low';
     backgroundColor = '#ccffcc'; // Light green
     textColor = '#006600'; // Dark green

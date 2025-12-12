@@ -57,17 +57,17 @@ function parseSchoolName(schoolNameRaw) {
 
 /**
  * Calculate priority band from 10-point score
- * FRS.md Section 4.4:
- * - 0–4: High (Below expected)
- * - 5–6: Medium (At expected)
- * - 7–10: Low (Above expected)
+ * Client specification:
+ * - 0–4.9: High (Red - Below expected)
+ * - 5.0–6.9: Medium (Yellow - At expected)
+ * - 7.0+: Low (Green - Above expected)
  * 
  * @param {number} score - 10-point score
  * @returns {string} Priority band: 'High', 'Medium', or 'Low'
  */
 function calculatePriorityBand(score) {
-  if (score >= 0 && score <= 4) return 'High';
-  if (score >= 5 && score <= 6) return 'Medium';
+  if (score >= 0 && score < 5) return 'High';
+  if (score >= 5 && score < 7) return 'Medium';
   if (score >= 7 && score <= 10) return 'Low';
   return 'High'; // Default for invalid scores
 }
