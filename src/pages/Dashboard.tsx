@@ -5,6 +5,9 @@ import ScoreChip from '../components/ScoreChip'
 import schoolsData from '../data/schools.json'
 import aggregatesData from '../data/aggregates.json'
 import { downloadSchoolPdf } from '../pdf/downloadPdf'
+import { useLanguage } from '../contexts/LanguageContext'
+import { getLabel } from '../i18n/labels'
+import { LanguageToggle } from '../components/LanguageToggle'
 import styles from './Dashboard.module.css'
 
 // Type for combined school data with aggregates
@@ -16,6 +19,7 @@ interface SchoolTableRow {
 
 function Dashboard() {
   const navigate = useNavigate()
+  const { language } = useLanguage()
   
   // State
   const [tableData, setTableData] = useState<SchoolTableRow[]>([])
@@ -118,20 +122,21 @@ function Dashboard() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Jodhpur School Assessment Dashboard</h1>
+        <h1 className={styles.title}>{getLabel(language, 'dashboardTitle')}</h1>
+        <LanguageToggle />
       </div>
 
       {/* Controls */}
       <div className={styles.controls}>
         <input
           type="text"
-          placeholder="Search by school name or code..."
+          placeholder={getLabel(language, 'searchPlaceholder')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className={styles.searchBox}
         />
         <span className={styles.resultCount}>
-          Showing {filteredData.length} of {tableData.length} schools
+          {getLabel(language, 'showingResults')} {filteredData.length} {getLabel(language, 'of')} {tableData.length} {getLabel(language, 'schools')}
         </span>
       </div>
 
@@ -140,37 +145,37 @@ function Dashboard() {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th rowSpan={2} className={styles.textHeader}>School Name</th>
-              <th rowSpan={2} className={styles.textHeader}>School Code</th>
+              <th rowSpan={2} className={styles.textHeader}>{getLabel(language, 'schoolName')}</th>
+              <th rowSpan={2} className={styles.textHeader}>{getLabel(language, 'schoolCode')}</th>
               <th rowSpan={2} onClick={handleSort} style={{ cursor: 'pointer', userSelect: 'none' }}>
-                Overall School Average
+                {getLabel(language, 'overallAverage')}
                 <span className={styles.sortButton}>{sortOrder === 'desc' ? '↓' : '↑'}</span>
               </th>
-              <th colSpan={5}>Grade 6 Average</th>
-              <th colSpan={5}>Grade 7 Average</th>
-              <th colSpan={5}>Grade 8 Average</th>
-              <th rowSpan={2}>View Report</th>
-              <th rowSpan={2}>Download PDF</th>
+              <th colSpan={5}>{getLabel(language, 'grade6Average')}</th>
+              <th colSpan={5}>{getLabel(language, 'grade7Average')}</th>
+              <th colSpan={5}>{getLabel(language, 'grade8Average')}</th>
+              <th rowSpan={2}>{getLabel(language, 'viewReport')}</th>
+              <th rowSpan={2}>{getLabel(language, 'downloadPdf')}</th>
             </tr>
             <tr>
               {/* Grade 6 sub-columns */}
-              <th>Overall</th>
-              <th>English</th>
-              <th>Mathematics</th>
-              <th>Social Science</th>
-              <th>Science</th>
+              <th>{getLabel(language, 'overall')}</th>
+              <th>{getLabel(language, 'english')}</th>
+              <th>{getLabel(language, 'mathematics')}</th>
+              <th>{getLabel(language, 'socialScience')}</th>
+              <th>{getLabel(language, 'science')}</th>
               {/* Grade 7 sub-columns */}
-              <th>Overall</th>
-              <th>English</th>
-              <th>Mathematics</th>
-              <th>Social Science</th>
-              <th>Science</th>
+              <th>{getLabel(language, 'overall')}</th>
+              <th>{getLabel(language, 'english')}</th>
+              <th>{getLabel(language, 'mathematics')}</th>
+              <th>{getLabel(language, 'socialScience')}</th>
+              <th>{getLabel(language, 'science')}</th>
               {/* Grade 8 sub-columns */}
-              <th>Overall</th>
-              <th>English</th>
-              <th>Mathematics</th>
-              <th>Social Science</th>
-              <th>Science</th>
+              <th>{getLabel(language, 'overall')}</th>
+              <th>{getLabel(language, 'english')}</th>
+              <th>{getLabel(language, 'mathematics')}</th>
+              <th>{getLabel(language, 'socialScience')}</th>
+              <th>{getLabel(language, 'science')}</th>
             </tr>
           </thead>
           <tbody>
@@ -242,7 +247,7 @@ function Dashboard() {
                     onClick={() => handleViewReport(row.school_code)}
                     className={styles.actionButton}
                   >
-                    View Report
+                    {getLabel(language, 'viewReport')}
                   </button>
                 </td>
                 <td className={styles.actionCell}>
@@ -250,9 +255,9 @@ function Dashboard() {
                     onClick={() => handleDownloadPdf(row.school_code)}
                     className={styles.actionButton}
                     disabled={downloadingPdf === row.school_code}
-                    title="Download PDF report"
+                    title={getLabel(language, 'downloadPdf')}
                   >
-                    {downloadingPdf === row.school_code ? 'Generating...' : 'Download PDF'}
+                    {downloadingPdf === row.school_code ? getLabel(language, 'generating') : getLabel(language, 'downloadPdf')}
                   </button>
                 </td>
               </tr>

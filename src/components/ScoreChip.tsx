@@ -9,6 +9,8 @@
  */
 
 import styles from './ScoreChip.module.css'
+import { useLanguage } from '../contexts/LanguageContext'
+import { getLabel } from '../i18n/labels'
 
 interface ScoreChipProps {
   value: number | null;
@@ -16,9 +18,11 @@ interface ScoreChipProps {
 }
 
 function ScoreChip({ value, decimal = 1 }: ScoreChipProps) {
+  const { language } = useLanguage()
+  
   // Handle null or missing data - render as plain text, NOT as chip
   if (value === null || value === undefined) {
-    return <span className={styles.noData}>No data</span>;
+    return <span className={styles.noData}>{getLabel(language, 'noData')}</span>;
   }
 
   // Determine priority band based on client specification

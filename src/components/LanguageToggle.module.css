@@ -1,0 +1,32 @@
+.toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.button {
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--font-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-right: 1px solid var(--border);
+}
+
+.button:last-child {
+  border-right: none;
+}
+
+.button:hover {
+  background: var(--bg);
+}
+
+.button.active {
+  background: var(--headerBg);
+  color: var(--headerText);
+  font-weight: 600;
+}
+

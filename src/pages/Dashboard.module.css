@@ -5,13 +5,18 @@
 }
 
 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+  gap: var(--space-4);
 }
 
 .title {
   font-size: var(--font-heading);
   font-weight: 600;
-  margin-bottom: var(--space-4);
+  margin: 0;
   color: var(--text);
 }
 
