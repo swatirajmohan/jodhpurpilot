@@ -6,6 +6,7 @@ import schoolsData from '../data/schools.json'
 import aggregatesData from '../data/aggregates.json'
 import { downloadSchoolPdf } from '../pdf/downloadSinglePdf'
 import { downloadAllPdfs } from '../pdf/downloadAllPdfs'
+import { loadPdfMake } from '../pdf/loadPdfMake'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getLabel } from '../i18n/labels'
 import { LanguageToggle } from '../components/LanguageToggle'
@@ -139,11 +140,32 @@ function Dashboard() {
     }
   }
 
+  // TEST FUNCTION - Temporary test for pdfMake
+  const handleTestPdf = async () => {
+    try {
+      const pdfMake = await loadPdfMake()
+      pdfMake.createPdf({
+        content: [{ text: 'PDF test OK - pdfMake is working!' }],
+      }).download('test.pdf')
+      console.log('✅ PDF test successful!')
+    } catch (error) {
+      console.error('❌ PDF test failed:', error)
+      alert('PDF test failed. Check console.')
+    }
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>{getLabel(language, 'dashboardTitle')}</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <button
+            onClick={handleTestPdf}
+            className={styles.actionButton}
+            style={{ minWidth: '120px', backgroundColor: '#4CAF50', color: 'white' }}
+          >
+            Test PDF
+          </button>
           <button
             onClick={handleDownloadAllPdfs}
             disabled={downloadingAll}

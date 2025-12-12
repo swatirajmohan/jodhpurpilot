@@ -3,7 +3,7 @@
  * Downloads a PDF for a single school
  */
 
-import { getPdfMake } from './fonts'
+import { loadPdfMake } from './loadPdfMake'
 import { buildSchoolReportPdf } from './buildSchoolReportPdf'
 import { PdfLang } from './translations'
 import schoolsData from '../data/schools.json'
@@ -42,41 +42,42 @@ function sanitizeFileName(name: string): string {
     .substring(0, 50)
 }
 
-export function downloadSchoolPdf(schoolCode: string, lang: PdfLang = 'en'): Promise<void> {
-  return new Promise((resolve, reject) => {
-    try {
-      const schools = schoolsData as School[]
-      const school = schools.find((s) => s.school_code === schoolCode)
+export async function downloadSchoolPdf(schoolCode: string, lang: PdfLang = 'en'): Promise<void> {
+  try {
+    const schools = schoolsData as School[]
+    const school = schools.find((s) => s.school_code === schoolCode)
 
-      if (!school) {
-        reject(new Error(`School with code ${schoolCode} not found`))
-        return
-      }
+    if (!school) {
+      throw new Error(`School with code ${schoolCode} not found`)
+    }
 
-      const allScoreRows = scoreRowsData as ScoreRow[]
-      const schoolScoreRows = allScoreRows.filter((row) => row.school_code === schoolCode)
+    const allScoreRows = scoreRowsData as ScoreRow[]
+    const schoolScoreRows = allScoreRows.filter((row) => row.school_code === schoolCode)
 
-      const allAggregates = aggregatesData as Aggregates[]
-      const schoolAggregates = allAggregates.find((a) => a.school_code === schoolCode) || null
+    const allAggregates = aggregatesData as Aggregates[]
+    const schoolAggregates = allAggregates.find((a) => a.school_code === schoolCode) || null
 
-      // Build document definition
-      const docDefinition = buildSchoolReportPdf({
-        school,
-        aggregates: schoolAggregates,
-        scoreRows: schoolScoreRows,
-        lang,
-      })
+    // Build document definition
+    const docDefinition = buildSchoolReportPdf({
+      school,
+      aggregates: schoolAggregates,
+      scoreRows: schoolScoreRows,
+      lang,
+    })
 
-      // Generate and download PDF
-      const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${lang}.pdf`
+    // Dynamically load pdfMake
+    const pdfMake = await loadPdfMake()
 
-      const pdfMake = getPdfMake()
+    // Generate and download PDF
+    const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${lang}.pdf`
+
+    return new Promise<void>((resolve) => {
       pdfMake.createPdf(docDefinition).download(filename, () => {
         resolve()
       })
-    } catch (error) {
-      reject(error)
-    }
-  })
+    })
+  } catch (error) {
+    throw error
+  }
 }
 

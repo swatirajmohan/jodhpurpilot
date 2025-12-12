@@ -5,7 +5,6 @@
 
 import { TDocumentDefinitions } from 'pdfmake/interfaces'
 import { t, PdfLang } from './translations'
-import { fonts } from './fonts'
 
 interface School {
   school_code: string
@@ -357,7 +356,7 @@ export function buildSchoolReportPdf({
     pageOrientation: 'portrait',
     pageMargins: [40, 40, 40, 40],
     defaultStyle: {
-      font: fonts[lang],
+      font: 'Roboto', // Both languages use Roboto (includes Devanagari)
       fontSize: 10,
     },
     styles: {
