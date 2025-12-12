@@ -11,10 +11,10 @@
   width: 100% !important;
 }
 
-/* ALL table cells - minimal padding 0.1px */
+/* ALL table cells - normal padding */
 .pdf-mode .priority-table th,
 .pdf-mode .priority-table td {
-  padding: 0.1px !important;
+  padding: 8px 2px !important;
 }
 
 /* Grade column - KEEP ORIGINAL WIDTH */
@@ -23,15 +23,15 @@
   width: 60px !important;
 }
 
-/* H/M/L columns - VERY SMALL to fit all 4 subjects */
+/* H/M/L columns - CUT IN HALF: 15px / 2 = 7.5px */
 .pdf-mode .priority-table .priorityThSub {
-  width: 15px !important;
+  width: 8px !important;
 }
 
 .pdf-mode .priority-table .priorityTdHigh,
 .pdf-mode .priority-table .priorityTdMedium,
 .pdf-mode .priority-table .priorityTdLow {
-  width: 15px !important;
+  width: 8px !important;
 }
 
 /* Page breaks */
