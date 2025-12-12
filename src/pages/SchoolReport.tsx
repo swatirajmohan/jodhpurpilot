@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { School, ScoreRow } from '../types'
+import { School, ScoreRow, Aggregates } from '../types'
 import ScoreChip from '../components/ScoreChip'
 import schoolsData from '../data/schools.json'
 import scoreRowsData from '../data/score_rows.json'
+import aggregatesData from '../data/aggregates.json'
 
 function SchoolReport() {
   const { school_code } = useParams<{ school_code: string }>()
@@ -12,6 +13,7 @@ function SchoolReport() {
   // State
   const [school, setSchool] = useState<School | null>(null)
   const [scoreRows, setScoreRows] = useState<ScoreRow[]>([])
+  const [aggregates, setAggregates] = useState<Aggregates | null>(null)
 
   // Load data on mount
   useEffect(() => {
@@ -26,6 +28,11 @@ function SchoolReport() {
     const allScores = scoreRowsData as ScoreRow[]
     const schoolScores = allScores.filter(row => row.school_code === school_code)
     setScoreRows(schoolScores)
+
+    // Get aggregates for this school
+    const allAggregates = aggregatesData as Aggregates[]
+    const schoolAggregates = allAggregates.find(a => a.school_code === school_code)
+    setAggregates(schoolAggregates || null)
   }, [school_code])
 
   // Sort competencies by priority band and score
@@ -53,6 +60,24 @@ function SchoolReport() {
   // Check if a grade has any data
   const gradeHasData = (grade: number): boolean => {
     return scoreRows.some(row => row.grade_level === grade)
+  }
+
+  // Get priority counts for a specific grade and subject
+  const getPriorityCounts = (grade: number, subject: string) => {
+    const filtered = scoreRows.filter(
+      row => row.grade_level === grade && row.subject === subject
+    )
+    
+    if (filtered.length === 0) {
+      return { high: 0, medium: 0, low: 0, hasData: false }
+    }
+
+    return {
+      high: filtered.filter(r => r.priority_band === 'High').length,
+      medium: filtered.filter(r => r.priority_band === 'Medium').length,
+      low: filtered.filter(r => r.priority_band === 'Low').length,
+      hasData: true
+    }
   }
 
   if (!school) {
@@ -83,6 +108,155 @@ function SchoolReport() {
         <div style={styles.schoolInfo}>
           <div style={styles.schoolName}>{school.school_name}</div>
           <div style={styles.schoolCode}>School Code: {school.school_code}</div>
+        </div>
+      </div>
+
+      {/* Summary Tables */}
+      <div style={styles.summarySection}>
+        {/* 1. Subject Averages Table (Portrait Mode) */}
+        <div style={styles.summaryTableContainer}>
+          <h2 style={styles.summaryTitle}>Subject-wise Average Scores</h2>
+          <table style={styles.summaryTable}>
+            <thead>
+              <tr>
+                <th style={styles.summaryTh}>Subject</th>
+                <th style={styles.summaryThScore}>Average Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={styles.summaryTdBold}>Overall School Average</td>
+                <td style={styles.summaryTdScore}>
+                  <ScoreChip value={aggregates?.overall_avg ?? null} />
+                </td>
+              </tr>
+              <tr>
+                <td style={styles.summaryTd}>English</td>
+                <td style={styles.summaryTdScore}>
+                  <ScoreChip value={aggregates?.subject_avg_map.English ?? null} />
+                </td>
+              </tr>
+              <tr>
+                <td style={styles.summaryTd}>Mathematics</td>
+                <td style={styles.summaryTdScore}>
+                  <ScoreChip value={aggregates?.subject_avg_map.Mathematics ?? null} />
+                </td>
+              </tr>
+              <tr>
+                <td style={styles.summaryTd}>Science</td>
+                <td style={styles.summaryTdScore}>
+                  <ScoreChip value={aggregates?.subject_avg_map.Science ?? null} />
+                </td>
+              </tr>
+              <tr>
+                <td style={styles.summaryTd}>Social Science</td>
+                <td style={styles.summaryTdScore}>
+                  <ScoreChip value={aggregates?.subject_avg_map['Social Science'] ?? null} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* 2. Grade-Subject Priority Count Table */}
+        <div style={styles.summaryTableContainer}>
+          <h2 style={styles.summaryTitle}>Competency Priority Distribution by Grade</h2>
+          <div style={styles.legend}>
+            <span style={styles.legendItem}>
+              <strong>H</strong> = High Priority (0-4.9)
+            </span>
+            <span style={styles.legendItem}>
+              <strong>M</strong> = Medium Priority (5.0-6.9)
+            </span>
+            <span style={styles.legendItem}>
+              <strong>L</strong> = Low Priority (7.0+)
+            </span>
+          </div>
+          <div style={styles.tableScroll}>
+            <table style={styles.priorityTable}>
+              <thead>
+                <tr>
+                  <th style={styles.priorityThGrade} rowSpan={2}>Grade</th>
+                  <th style={styles.priorityTh} colSpan={3}>English</th>
+                  <th style={styles.priorityTh} colSpan={3}>Mathematics</th>
+                  <th style={styles.priorityTh} colSpan={3}>Science</th>
+                  <th style={styles.priorityTh} colSpan={3}>Social Science</th>
+                </tr>
+                <tr>
+                  {/* English sub-columns */}
+                  <th style={styles.priorityThSub}>H</th>
+                  <th style={styles.priorityThSub}>M</th>
+                  <th style={styles.priorityThSub}>L</th>
+                  {/* Mathematics sub-columns */}
+                  <th style={styles.priorityThSub}>H</th>
+                  <th style={styles.priorityThSub}>M</th>
+                  <th style={styles.priorityThSub}>L</th>
+                  {/* Science sub-columns */}
+                  <th style={styles.priorityThSub}>H</th>
+                  <th style={styles.priorityThSub}>M</th>
+                  <th style={styles.priorityThSub}>L</th>
+                  {/* Social Science sub-columns */}
+                  <th style={styles.priorityThSub}>H</th>
+                  <th style={styles.priorityThSub}>M</th>
+                  <th style={styles.priorityThSub}>L</th>
+                </tr>
+              </thead>
+              <tbody>
+                {grades.map(grade => {
+                  const english = getPriorityCounts(grade, 'English')
+                  const math = getPriorityCounts(grade, 'Mathematics')
+                  const science = getPriorityCounts(grade, 'Science')
+                  const socialScience = getPriorityCounts(grade, 'Social Science')
+
+                  return (
+                    <tr key={grade}>
+                      <td style={styles.priorityTdGrade}>{grade}</td>
+                      {/* English */}
+                      <td style={styles.priorityTd}>
+                        {english.hasData ? english.high : <span style={styles.noDataCell}>-</span>}
+                      </td>
+                      <td style={styles.priorityTd}>
+                        {english.hasData ? english.medium : <span style={styles.noDataCell}>-</span>}
+                      </td>
+                      <td style={styles.priorityTd}>
+                        {english.hasData ? english.low : <span style={styles.noDataCell}>-</span>}
+                      </td>
+                      {/* Mathematics */}
+                      <td style={styles.priorityTd}>
+                        {math.hasData ? math.high : <span style={styles.noDataCell}>-</span>}
+                      </td>
+                      <td style={styles.priorityTd}>
+                        {math.hasData ? math.medium : <span style={styles.noDataCell}>-</span>}
+                      </td>
+                      <td style={styles.priorityTd}>
+                        {math.hasData ? math.low : <span style={styles.noDataCell}>-</span>}
+                      </td>
+                      {/* Science */}
+                      <td style={styles.priorityTd}>
+                        {science.hasData ? science.high : <span style={styles.noDataCell}>-</span>}
+                      </td>
+                      <td style={styles.priorityTd}>
+                        {science.hasData ? science.medium : <span style={styles.noDataCell}>-</span>}
+                      </td>
+                      <td style={styles.priorityTd}>
+                        {science.hasData ? science.low : <span style={styles.noDataCell}>-</span>}
+                      </td>
+                      {/* Social Science */}
+                      <td style={styles.priorityTd}>
+                        {socialScience.hasData ? socialScience.high : <span style={styles.noDataCell}>-</span>}
+                      </td>
+                      <td style={styles.priorityTd}>
+                        {socialScience.hasData ? socialScience.medium : <span style={styles.noDataCell}>-</span>}
+                      </td>
+                      <td style={styles.priorityTd}>
+                        {socialScience.hasData ? socialScience.low : <span style={styles.noDataCell}>-</span>}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -328,6 +502,128 @@ const styles = {
     textAlign: 'center' as const,
     color: '#dc3545',
     fontSize: '16px',
+  },
+  // Summary section styles
+  summarySection: {
+    marginBottom: '32px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+    gap: '24px',
+  },
+  summaryTableContainer: {
+    backgroundColor: '#ffffff',
+    padding: '20px',
+    borderRadius: '8px',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+  },
+  summaryTitle: {
+    fontSize: '18px',
+    fontWeight: 600,
+    color: '#212529',
+    marginTop: '0',
+    marginBottom: '16px',
+  },
+  summaryTable: {
+    width: '100%',
+    borderCollapse: 'collapse' as const,
+    fontSize: '14px',
+  },
+  summaryTh: {
+    padding: '12px',
+    textAlign: 'left' as const,
+    backgroundColor: '#e9ecef',
+    borderBottom: '2px solid #dee2e6',
+    fontWeight: 600,
+    color: '#495057',
+    width: '60%',
+  },
+  summaryThScore: {
+    padding: '12px',
+    textAlign: 'center' as const,
+    backgroundColor: '#e9ecef',
+    borderBottom: '2px solid #dee2e6',
+    fontWeight: 600,
+    color: '#495057',
+    width: '40%',
+  },
+  summaryTd: {
+    padding: '10px 12px',
+    borderBottom: '1px solid #dee2e6',
+    color: '#495057',
+  },
+  summaryTdBold: {
+    padding: '10px 12px',
+    borderBottom: '1px solid #dee2e6',
+    color: '#212529',
+    fontWeight: 600,
+  },
+  summaryTdScore: {
+    padding: '10px 12px',
+    textAlign: 'center' as const,
+    borderBottom: '1px solid #dee2e6',
+  },
+  legend: {
+    display: 'flex',
+    gap: '16px',
+    marginBottom: '12px',
+    fontSize: '13px',
+    color: '#6c757d',
+    flexWrap: 'wrap' as const,
+  },
+  legendItem: {
+    display: 'flex',
+    gap: '4px',
+  },
+  tableScroll: {
+    overflowX: 'auto' as const,
+  },
+  priorityTable: {
+    width: '100%',
+    borderCollapse: 'collapse' as const,
+    fontSize: '13px',
+    minWidth: '800px',
+  },
+  priorityThGrade: {
+    padding: '10px 12px',
+    textAlign: 'center' as const,
+    backgroundColor: '#495057',
+    color: '#ffffff',
+    fontWeight: 600,
+    border: '1px solid #dee2e6',
+  },
+  priorityTh: {
+    padding: '10px 8px',
+    textAlign: 'center' as const,
+    backgroundColor: '#6c757d',
+    color: '#ffffff',
+    fontWeight: 600,
+    border: '1px solid #dee2e6',
+    fontSize: '12px',
+  },
+  priorityThSub: {
+    padding: '8px 6px',
+    textAlign: 'center' as const,
+    backgroundColor: '#adb5bd',
+    color: '#212529',
+    fontWeight: 600,
+    border: '1px solid #dee2e6',
+    fontSize: '11px',
+  },
+  priorityTdGrade: {
+    padding: '10px 12px',
+    textAlign: 'center' as const,
+    backgroundColor: '#f8f9fa',
+    fontWeight: 600,
+    border: '1px solid #dee2e6',
+  },
+  priorityTd: {
+    padding: '10px 8px',
+    textAlign: 'center' as const,
+    border: '1px solid #dee2e6',
+  },
+  noDataCell: {
+    color: '#adb5bd',
+    fontStyle: 'italic' as const,
   },
 }
 
