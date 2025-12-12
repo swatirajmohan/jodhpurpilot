@@ -3,7 +3,7 @@
  * Downloads a PDF for a single school
  */
 
-import pdfMake from './fonts'
+import { getPdfMake } from './fonts'
 import { buildSchoolReportPdf } from './buildSchoolReportPdf'
 import { PdfLang } from './translations'
 import schoolsData from '../data/schools.json'
@@ -70,6 +70,7 @@ export function downloadSchoolPdf(schoolCode: string, lang: PdfLang = 'en'): Pro
       // Generate and download PDF
       const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${lang}.pdf`
 
+      const pdfMake = getPdfMake()
       pdfMake.createPdf(docDefinition).download(filename, () => {
         resolve()
       })

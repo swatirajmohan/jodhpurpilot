@@ -3,7 +3,7 @@
  * Downloads all school PDFs as a ZIP file
  */
 
-import pdfMake from './fonts'
+import { getPdfMake } from './fonts'
 import { buildSchoolReportPdf } from './buildSchoolReportPdf'
 import { PdfLang } from './translations'
 import JSZip from 'jszip'
@@ -54,6 +54,9 @@ export async function downloadAllPdfs(
 
   const zip = new JSZip()
   const failures: string[] = []
+
+  // Initialize pdfMake once for all schools
+  const pdfMake = getPdfMake()
 
   // Process schools sequentially
   for (let i = 0; i < schools.length; i++) {
