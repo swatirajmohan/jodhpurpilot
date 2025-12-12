@@ -212,43 +212,43 @@ function SchoolReport() {
                     <tr key={grade}>
                       <td style={styles.priorityTdGrade}>{grade}</td>
                       {/* English */}
-                      <td style={styles.priorityTd}>
+                      <td style={styles.priorityTdHigh}>
                         {english.hasData ? english.high : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTd}>
+                      <td style={styles.priorityTdMedium}>
                         {english.hasData ? english.medium : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTd}>
+                      <td style={styles.priorityTdLow}>
                         {english.hasData ? english.low : <span style={styles.noDataCell}>-</span>}
                       </td>
                       {/* Mathematics */}
-                      <td style={styles.priorityTd}>
+                      <td style={styles.priorityTdHigh}>
                         {math.hasData ? math.high : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTd}>
+                      <td style={styles.priorityTdMedium}>
                         {math.hasData ? math.medium : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTd}>
+                      <td style={styles.priorityTdLow}>
                         {math.hasData ? math.low : <span style={styles.noDataCell}>-</span>}
                       </td>
                       {/* Science */}
-                      <td style={styles.priorityTd}>
+                      <td style={styles.priorityTdHigh}>
                         {science.hasData ? science.high : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTd}>
+                      <td style={styles.priorityTdMedium}>
                         {science.hasData ? science.medium : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTd}>
+                      <td style={styles.priorityTdLow}>
                         {science.hasData ? science.low : <span style={styles.noDataCell}>-</span>}
                       </td>
                       {/* Social Science */}
-                      <td style={styles.priorityTd}>
+                      <td style={styles.priorityTdHigh}>
                         {socialScience.hasData ? socialScience.high : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTd}>
+                      <td style={styles.priorityTdMedium}>
                         {socialScience.hasData ? socialScience.medium : <span style={styles.noDataCell}>-</span>}
                       </td>
-                      <td style={styles.priorityTd}>
+                      <td style={styles.priorityTdLow}>
                         {socialScience.hasData ? socialScience.low : <span style={styles.noDataCell}>-</span>}
                       </td>
                     </tr>
@@ -620,6 +620,30 @@ const styles = {
     padding: '10px 8px',
     textAlign: 'center' as const,
     border: '1px solid #dee2e6',
+  },
+  priorityTdHigh: {
+    padding: '10px 8px',
+    textAlign: 'center' as const,
+    border: '1px solid #dee2e6',
+    backgroundColor: '#ffe6e6',
+    fontWeight: 600,
+    color: '#cc0000',
+  },
+  priorityTdMedium: {
+    padding: '10px 8px',
+    textAlign: 'center' as const,
+    border: '1px solid #dee2e6',
+    backgroundColor: '#fff9e6',
+    fontWeight: 600,
+    color: '#996600',
+  },
+  priorityTdLow: {
+    padding: '10px 8px',
+    textAlign: 'center' as const,
+    border: '1px solid #dee2e6',
+    backgroundColor: '#e6ffe6',
+    fontWeight: 600,
+    color: '#006600',
   },
   noDataCell: {
     color: '#adb5bd',
