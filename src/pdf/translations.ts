@@ -1,11 +1,11 @@
 /**
- * PDF Translations
- * FULL dictionaries for BOTH languages - NO missing keys allowed
+ * PDF Translation Dictionary
+ * Complete translations for English and Hindi
  */
 
-export type PdfLanguage = 'en' | 'hi'
+export type PdfLang = 'en' | 'hi'
 
-export const pdfTranslations = {
+export const translations = {
   en: {
     // Header
     reportTitle: 'School Assessment Report Card',
@@ -181,11 +181,9 @@ export const pdfTranslations = {
 }
 
 /**
- * Safe translation helper - never crashes, always returns string
+ * Safe translation helper
  */
-export function t(lang: PdfLanguage, key: string): string {
-  return pdfTranslations[lang]?.[key as keyof typeof pdfTranslations.en] 
-      || pdfTranslations.en[key as keyof typeof pdfTranslations.en] 
-      || '-'
+export function t(lang: PdfLang, key: string): string {
+  return (translations[lang] as any)?.[key] || (translations.en as any)?.[key] || '-'
 }
 

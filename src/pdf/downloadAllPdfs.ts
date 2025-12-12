@@ -1,13 +1,13 @@
 /**
- * Bulk PDF Download Utility
- * Downloads all school PDFs and packages them in a ZIP file
+ * Bulk PDF Download
+ * Downloads all school PDFs as a ZIP file
  */
 
-import { pdf } from '@react-pdf/renderer'
+import pdfMake from './fonts'
+import { buildSchoolReportPdf } from './buildSchoolReportPdf'
+import { PdfLang } from './translations'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
-import { SchoolReportPdf } from '../pdf/SchoolReportPdf'
-import { PdfLanguage } from '../pdf/pdfTranslations'
 import schoolsData from '../data/schools.json'
 import scoreRowsData from '../data/score_rows.json'
 import aggregatesData from '../data/aggregates.json'
@@ -45,7 +45,7 @@ function sanitizeFileName(name: string): string {
 }
 
 export async function downloadAllPdfs(
-  language: PdfLanguage = 'en',
+  lang: PdfLang = 'en',
   onProgress?: (current: number, total: number) => void
 ): Promise<void> {
   const schools = schoolsData as School[]
@@ -70,18 +70,27 @@ export async function downloadAllPdfs(
       const schoolAggregates =
         allAggregates.find((a) => a.school_code === school.school_code) || null
 
-      // Generate blob
-      const blob = await pdf(
-        <SchoolReportPdf
-          lang={language}
-          school={school}
-          scoreRows={schoolScoreRows}
-          aggregates={schoolAggregates}
-        />
-      ).toBlob()
+      // Build document definition
+      const docDefinition = buildSchoolReportPdf({
+        school,
+        aggregates: schoolAggregates,
+        scoreRows: schoolScoreRows,
+        lang,
+      })
+
+      // Generate PDF blob
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        pdfMake.createPdf(docDefinition).getBlob((result: Blob) => {
+          if (result) {
+            resolve(result)
+          } else {
+            reject(new Error('Failed to generate PDF blob'))
+          }
+        })
+      })
 
       // Add to zip
-      const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${language}.pdf`
+      const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${lang}.pdf`
       zip.file(filename, blob)
     } catch (error) {
       console.error(`Failed to generate PDF for ${school.school_code}:`, error)
@@ -92,7 +101,7 @@ export async function downloadAllPdfs(
   // Generate and download zip
   try {
     const zipBlob = await zip.generateAsync({ type: 'blob' })
-    const zipFilename = `all_schools_reports_${language}_${new Date().toISOString().split('T')[0]}.zip`
+    const zipFilename = `jodhpur_reports_${lang}_${new Date().toISOString().split('T')[0]}.zip`
     saveAs(zipBlob, zipFilename)
 
     // Show summary
@@ -106,6 +115,7 @@ export async function downloadAllPdfs(
   } catch (error) {
     console.error('Failed to create ZIP file:', error)
     alert('Failed to create ZIP file. Check console for details.')
+    throw error
   }
 }
 
