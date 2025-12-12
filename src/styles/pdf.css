@@ -5,14 +5,22 @@
   display: none !important;
 }
 
-/* LOCK TABLE GEOMETRY - exact pixel widths in colgroup */
+/* LOCK TABLE GEOMETRY - percentage widths in colgroup */
 .pdf-mode .priority-table {
   table-layout: fixed !important;
   width: 100% !important;
   border-collapse: collapse !important;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
 }
 
-/* Page breaks */
+/* Keep both tables on same page if height allows */
+.pdf-mode .priority-table-1,
+.pdf-mode .priority-table-2 {
+  page-break-after: avoid !important;
+}
+
+/* Page breaks for grade sections only */
 .pdf-page-break {
   page-break-before: always !important;
 }

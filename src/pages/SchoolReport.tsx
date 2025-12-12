@@ -215,18 +215,16 @@ function SchoolReport() {
             </span>
           </div>
           {/* TABLE 1: English and Mathematics */}
-          <div style={styles.tableScroll}>
-            <table style={styles.priorityTable} className="priority-table">
+          <div style={{ ...styles.tableScroll, pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+            <table style={{ ...styles.priorityTable, pageBreakInside: 'avoid', breakInside: 'avoid' }} className="priority-table priority-table-1">
               <colgroup>
-                <col style={{ width: '80px' }} />
-                {/* English H, M, L */}
-                <col style={{ width: '80px' }} />
-                <col style={{ width: '80px' }} />
-                <col style={{ width: '80px' }} />
-                {/* Mathematics H, M, L */}
-                <col style={{ width: '80px' }} />
-                <col style={{ width: '80px' }} />
-                <col style={{ width: '80px' }} />
+                <col style={{ width: '12%' }} />
+                <col style={{ width: '14%' }} />
+                <col style={{ width: '14%' }} />
+                <col style={{ width: '14%' }} />
+                <col style={{ width: '14%' }} />
+                <col style={{ width: '14%' }} />
+                <col style={{ width: '14%' }} />
               </colgroup>
               <thead>
                 <tr>
@@ -281,18 +279,16 @@ function SchoolReport() {
           </div>
 
           {/* TABLE 2: Science and Social Science */}
-          <div style={{ ...styles.tableScroll, marginTop: '30px' }}>
-            <table style={styles.priorityTable} className="priority-table">
+          <div style={{ ...styles.tableScroll, paddingTop: '30px', pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+            <table style={{ ...styles.priorityTable, pageBreakInside: 'avoid', breakInside: 'avoid' }} className="priority-table priority-table-2">
               <colgroup>
-                <col style={{ width: '80px' }} />
-                {/* Science H, M, L */}
-                <col style={{ width: '80px' }} />
-                <col style={{ width: '80px' }} />
-                <col style={{ width: '80px' }} />
-                {/* Social Science H, M, L */}
-                <col style={{ width: '80px' }} />
-                <col style={{ width: '80px' }} />
-                <col style={{ width: '80px' }} />
+                <col style={{ width: '12%' }} />
+                <col style={{ width: '14%' }} />
+                <col style={{ width: '14%' }} />
+                <col style={{ width: '14%' }} />
+                <col style={{ width: '14%' }} />
+                <col style={{ width: '14%' }} />
+                <col style={{ width: '14%' }} />
               </colgroup>
               <thead>
                 <tr>
