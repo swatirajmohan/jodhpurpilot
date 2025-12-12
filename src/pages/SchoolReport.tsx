@@ -8,6 +8,7 @@ import aggregatesData from '../data/aggregates.json'
 import { downloadSchoolPdf } from '../pdf/downloadPdf'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getLabel } from '../i18n/labels'
+import { getCompetencyLabel } from '../i18n/competencies'
 import { LanguageToggle } from '../components/LanguageToggle'
 
 function SchoolReport() {
@@ -388,7 +389,7 @@ function SchoolReport() {
                     <tbody>
                       {competencies.map((comp, index) => (
                         <tr key={index} style={styles.tr}>
-                          <td style={styles.tdCompetency}>{comp.competency_name}</td>
+                          <td style={styles.tdCompetency}>{getCompetencyLabel(language, comp.competency_name)}</td>
                           <td style={styles.tdScore}>
                             <ScoreChip value={comp.score_10} />
                           </td>

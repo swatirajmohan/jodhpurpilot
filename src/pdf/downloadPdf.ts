@@ -1,4 +1,5 @@
 import { pdf } from '@react-pdf/renderer'
+import React from 'react'
 import { SchoolReportPdf } from './SchoolReportPdf'
 import { School, ScoreRow, Aggregates } from '../types'
 import { Language } from '../i18n/labels'
@@ -40,7 +41,7 @@ export async function downloadSchoolPdf(schoolCode: string, language: Language =
 
   // Generate PDF blob
   const blob = await pdf(
-    SchoolReportPdf({ school, scoreRows, aggregates, language })
+    React.createElement(SchoolReportPdf, { school, scoreRows, aggregates, language })
   ).toBlob()
 
   // Create download link

@@ -1,6 +1,7 @@
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer'
 import { School, ScoreRow, Aggregates } from '../types'
 import { Language, getLabel } from '../i18n/labels'
+import { getCompetencyLabel } from '../i18n/competencies'
 
 // Register font for Hindi support
 Font.register({
@@ -368,7 +369,7 @@ export function SchoolReportPdf({ school, scoreRows, aggregates, language }: Sch
                       return (
                         <View key={index} style={styles.tableRow}>
                           <Text style={[styles.tableCell, { width: '60%', fontSize: 9 }]}>
-                            {comp.competency_name}
+                            {getCompetencyLabel(language, comp.competency_name)}
                           </Text>
                           <Text style={[styles.tableCell, { width: '20%' }, priorityStyle]}>
                             {comp.score_10.toFixed(1)}
