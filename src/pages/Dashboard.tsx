@@ -5,6 +5,7 @@ import ScoreChip from '../components/ScoreChip'
 import schoolsData from '../data/schools.json'
 import aggregatesData from '../data/aggregates.json'
 import { downloadSchoolPdf } from '../pdf/downloadPdf'
+import { downloadAllPdfs } from '../utils/bulkPdfDownload'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getLabel } from '../i18n/labels'
 import { LanguageToggle } from '../components/LanguageToggle'
@@ -27,6 +28,8 @@ function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [downloadingPdf, setDownloadingPdf] = useState<string | null>(null)
+  const [downloadingAll, setDownloadingAll] = useState(false)
+  const [downloadProgress, setDownloadProgress] = useState<{ current: number; total: number } | null>(null)
 
   // Load data on mount
   useEffect(() => {
@@ -119,11 +122,42 @@ function Dashboard() {
     }
   }
 
+  // Handle download all PDFs
+  const handleDownloadAllPdfs = async () => {
+    setDownloadingAll(true)
+    setDownloadProgress(null)
+    try {
+      await downloadAllPdfs(language, (current, total) => {
+        setDownloadProgress({ current, total })
+      })
+    } catch (error) {
+      console.error('BULK_PDF_ERROR', error)
+      alert('Bulk PDF download error. Check console.')
+    } finally {
+      setDownloadingAll(false)
+      setDownloadProgress(null)
+    }
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>{getLabel(language, 'dashboardTitle')}</h1>
-        <LanguageToggle />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <button
+            onClick={handleDownloadAllPdfs}
+            disabled={downloadingAll}
+            className={styles.actionButton}
+            style={{ minWidth: '180px' }}
+          >
+            {downloadingAll && downloadProgress
+              ? `Downloading ${downloadProgress.current}/${downloadProgress.total}...`
+              : downloadingAll
+              ? 'Preparing...'
+              : 'Download All PDFs'}
+          </button>
+          <LanguageToggle />
+        </div>
       </div>
 
       {/* Controls */}
