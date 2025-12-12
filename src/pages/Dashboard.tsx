@@ -6,7 +6,7 @@ import schoolsData from '../data/schools.json'
 import aggregatesData from '../data/aggregates.json'
 import { downloadSchoolPdf } from '../pdf/downloadSinglePdf'
 import { downloadAllPdfs } from '../pdf/downloadAllPdfs'
-import { loadPdfMake, debugPdfMakeImports } from '../pdf/loadPdfMake'
+import { loadPdfMake } from '../pdf/loadPdfMake'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getLabel } from '../i18n/labels'
 import { LanguageToggle } from '../components/LanguageToggle'
@@ -143,20 +143,16 @@ function Dashboard() {
   // TEST FUNCTION - Temporary test for pdfMake
   const handleTestPdf = async () => {
     try {
-      // Debug imports first
-      console.log('🔍 Debugging pdfMake imports...')
-      await debugPdfMakeImports()
-      
-      // Load pdfMake
       console.log('📦 Loading pdfMake...')
       const pdfMake = await loadPdfMake()
       
-      // Simplest possible doc definition
-      const doc = { content: ['PDF test OK'] }
-      
-      // Generate and download
-      console.log('📄 Creating PDF...')
-      pdfMake.createPdf(doc).download('test.pdf')
+      console.log('📄 Creating test PDF with both fonts...')
+      pdfMake.createPdf({
+        content: [
+          { text: "PDF test OK", font: "Roboto" },
+          { text: "हिंदी परीक्षण सफल", font: "NotoSansDevanagari" }
+        ]
+      }).download("test.pdf")
       
       console.log('✅ PDF test successful!')
     } catch (error) {

@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "import-data": "node scripts/import_xlsx_to_json.js"
+    "import-data": "node scripts/import_xlsx_to_json.js",
+    "build:vfs": "node scripts/encode_fonts_to_vfs.mjs"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.3.1",

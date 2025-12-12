@@ -356,7 +356,7 @@ export function buildSchoolReportPdf({
     pageOrientation: 'portrait',
     pageMargins: [40, 40, 40, 40],
     defaultStyle: {
-      font: 'Roboto', // Both languages use Roboto (includes Devanagari)
+      font: lang === 'hi' ? 'NotoSansDevanagari' : 'Roboto',
       fontSize: 10,
     },
     styles: {
