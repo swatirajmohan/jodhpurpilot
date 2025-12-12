@@ -8,7 +8,6 @@ import { buildSchoolReportPdf } from './buildSchoolReportPdf'
 import { pdfMakeToBlob } from './pdfMakeToBlob'
 import { sanitiseDocDefinition } from './sanitiseDocDefinition'
 import { PdfLang } from './translations'
-import { saveAs } from 'file-saver'
 import schoolsData from '../data/schools.json'
 import scoreRowsData from '../data/score_rows.json'
 import aggregatesData from '../data/aggregates.json'
@@ -74,8 +73,12 @@ export async function downloadSchoolPdf(schoolCode: string, lang: PdfLang = 'en'
   const pdfMake = await loadPdfMake()
   const blob = await pdfMakeToBlob(pdfMake, safeDoc, 30000)
 
-  // Download using file-saver for guaranteed download
+  // Download using manual link creation for better reliability
   const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${lang}.pdf`
-  saveAs(blob, filename)
+  const link = document.createElement("a")
+  link.href = URL.createObjectURL(blob)
+  link.download = filename
+  link.click()
+  URL.revokeObjectURL(link.href)
 }
 

@@ -92,6 +92,9 @@ export async function downloadAllPdfs(
       // Add to zip
       const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${lang}.pdf`
       zip.file(filename, blob)
+
+      // IMPORTANT: pause between PDFs to prevent timeout
+      await new Promise(r => setTimeout(r, 400))
     } catch (error) {
       console.error('BULK_PDF_FAIL', school.school_code, error)
       failures.push(`${school.school_code} (${school.school_name})`)

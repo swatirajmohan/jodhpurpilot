@@ -156,7 +156,7 @@ export function buildSchoolReportPdf({
 
   content.push({
     table: {
-      widths: ['*', '*'],
+      widths: [200, 100],
       body: avgTableBody,
     },
     layout: {
@@ -338,7 +338,7 @@ export function buildSchoolReportPdf({
 
         content.push({
           table: {
-            widths: ['*', 60, 60],
+            widths: [250, 60, 60],
             body: compTableBody,
           },
           layout: {
@@ -357,7 +357,7 @@ export function buildSchoolReportPdf({
     pageMargins: [40, 40, 40, 40],
     defaultStyle: {
       font: lang === 'hi' ? 'NotoSansDevanagari' : 'Roboto',
-      fontSize: 10,
+      fontSize: 9,
     },
     styles: {
       header: {

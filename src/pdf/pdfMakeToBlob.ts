@@ -1,4 +1,7 @@
 export async function pdfMakeToBlob(pdfMake: any, docDefinition: any, timeoutMs = 30000): Promise<Blob> {
+  // Let browser breathe before PDF generation
+  await new Promise(requestAnimationFrame);
+
   return await new Promise((resolve, reject) => {
     let done = false;
 
@@ -11,11 +14,14 @@ export async function pdfMakeToBlob(pdfMake: any, docDefinition: any, timeoutMs 
     try {
       const pdfDoc = pdfMake.createPdf(docDefinition);
 
-      // pdfmake uses callback style
-      pdfDoc.getBlob((blob: Blob) => {
+      // Use getBuffer instead of getBlob for better performance
+      pdfDoc.getBuffer((buffer: ArrayBuffer) => {
         if (done) return;
         done = true;
         clearTimeout(timer);
+        
+        // Convert buffer to blob
+        const blob = new Blob([buffer], { type: "application/pdf" });
         resolve(blob);
       });
     } catch (e) {
