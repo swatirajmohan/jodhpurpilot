@@ -6,10 +6,14 @@ import schoolsData from '../data/schools.json'
 import scoreRowsData from '../data/score_rows.json'
 import aggregatesData from '../data/aggregates.json'
 import { downloadSchoolPdf } from '../pdf/downloadPdf'
+import { useLanguage } from '../contexts/LanguageContext'
+import { getLabel } from '../i18n/labels'
+import { LanguageToggle } from '../components/LanguageToggle'
 
 function SchoolReport() {
   const { school_code } = useParams<{ school_code: string }>()
   const navigate = useNavigate()
+  const { language } = useLanguage()
 
   // State
   const [school, setSchool] = useState<School | null>(null)
@@ -70,7 +74,7 @@ function SchoolReport() {
 
     setIsGeneratingPDF(true)
     try {
-      await downloadSchoolPdf(school.school_code)
+      await downloadSchoolPdf(school.school_code, language)
     } catch (error) {
       alert('Failed to generate PDF. Please try again.')
       console.error(error)

@@ -1,6 +1,7 @@
 import { pdf } from '@react-pdf/renderer'
 import { SchoolReportPdf } from './SchoolReportPdf'
 import { School, ScoreRow, Aggregates } from '../types'
+import { Language } from '../i18n/labels'
 import schoolsData from '../data/schools.json'
 import scoreRowsData from '../data/score_rows.json'
 import aggregatesData from '../data/aggregates.json'
@@ -18,8 +19,9 @@ function sanitizeFileName(name: string): string {
 /**
  * Download PDF for a specific school
  * @param schoolCode - The school code to generate PDF for
+ * @param language - The language for the PDF ('en' or 'hi')
  */
-export async function downloadSchoolPdf(schoolCode: string): Promise<void> {
+export async function downloadSchoolPdf(schoolCode: string, language: Language = 'en'): Promise<void> {
   // Find school
   const schools = schoolsData as School[]
   const school = schools.find(s => s.school_code === schoolCode)
@@ -38,7 +40,7 @@ export async function downloadSchoolPdf(schoolCode: string): Promise<void> {
 
   // Generate PDF blob
   const blob = await pdf(
-    SchoolReportPdf({ school, scoreRows, aggregates })
+    SchoolReportPdf({ school, scoreRows, aggregates, language })
   ).toBlob()
 
   // Create download link
@@ -46,9 +48,9 @@ export async function downloadSchoolPdf(schoolCode: string): Promise<void> {
   const link = document.createElement('a')
   link.href = url
   
-  // Set filename
+  // Set filename with language suffix
   const sanitizedName = sanitizeFileName(school.school_name)
-  link.download = `${school.school_code}_${sanitizedName}_report.pdf`
+  link.download = `${school.school_code}_${sanitizedName}_report_${language}.pdf`
   
   // Trigger download
   document.body.appendChild(link)

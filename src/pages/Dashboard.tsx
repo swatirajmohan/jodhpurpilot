@@ -110,7 +110,7 @@ function Dashboard() {
   const handleDownloadPdf = async (school_code: string) => {
     setDownloadingPdf(school_code)
     try {
-      await downloadSchoolPdf(school_code)
+      await downloadSchoolPdf(school_code, language)
     } catch (error) {
       alert('Failed to generate PDF. Please try again.')
       console.error(error)
