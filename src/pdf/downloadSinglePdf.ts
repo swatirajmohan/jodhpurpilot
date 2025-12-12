@@ -5,7 +5,6 @@
 
 import { loadPdfMake } from './loadPdfMake'
 import { buildSchoolReportPdf } from './buildSchoolReportPdf'
-import { pdfMakeToBlob } from './pdfMakeToBlob'
 import { sanitiseDocDefinition } from './sanitiseDocDefinition'
 import { PdfLang } from './translations'
 import schoolsData from '../data/schools.json'
@@ -69,16 +68,14 @@ export async function downloadSchoolPdf(schoolCode: string, lang: PdfLang = 'en'
   // Sanitise docDefinition to prevent crashes
   const safeDoc = sanitiseDocDefinition(docDefinition)
 
-  // Load pdfMake and generate blob with timeout
+  // Load pdfMake
   const pdfMake = await loadPdfMake()
-  const blob = await pdfMakeToBlob(pdfMake, safeDoc, 30000)
 
-  // Download using manual link creation for better reliability
+  // Yield once so UI updates
+  await new Promise(requestAnimationFrame)
+
+  // Direct download (no blob, no buffer, no timeout wrapper)
   const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${lang}.pdf`
-  const link = document.createElement("a")
-  link.href = URL.createObjectURL(blob)
-  link.download = filename
-  link.click()
-  URL.revokeObjectURL(link.href)
+  pdfMake.createPdf(safeDoc).download(filename)
 }
 

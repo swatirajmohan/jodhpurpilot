@@ -7,9 +7,7 @@ import aggregatesData from '../data/aggregates.json'
 import { downloadSchoolPdf } from '../pdf/downloadSinglePdf'
 import { downloadAllPdfs } from '../pdf/downloadAllPdfs'
 import { loadPdfMake } from '../pdf/loadPdfMake'
-import { pdfMakeToBlob } from '../pdf/pdfMakeToBlob'
 import { sanitiseDocDefinition } from '../pdf/sanitiseDocDefinition'
-import { saveAs } from 'file-saver'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getLabel } from '../i18n/labels'
 import { LanguageToggle } from '../components/LanguageToggle'
@@ -131,6 +129,13 @@ function Dashboard() {
   const handleDownloadAllPdfs = async () => {
     setDownloadingAll(true)
     setDownloadProgress(null)
+
+    // Safety timeout: force reset after 2 minutes
+    const safetyTimer = setTimeout(() => {
+      setDownloadingAll(false)
+      setDownloadProgress(null)
+    }, 120000)
+
     try {
       await downloadAllPdfs(language, (current, total) => {
         setDownloadProgress({ current, total })
@@ -140,6 +145,7 @@ function Dashboard() {
       alert(String((e as any)?.message ?? e))
     } finally {
       // CRITICAL: Always reset UI state
+      clearTimeout(safetyTimer)
       setDownloadingAll(false)
       setDownloadProgress(null)
     }
@@ -162,11 +168,11 @@ function Dashboard() {
       console.log('🧹 Sanitising docDefinition...')
       const safeDoc = sanitiseDocDefinition(docDefinition)
       
-      console.log('🔄 Generating blob...')
-      const blob = await pdfMakeToBlob(pdfMake, safeDoc, 30000)
+      // Yield so UI updates
+      await new Promise(requestAnimationFrame)
       
       console.log('💾 Downloading...')
-      saveAs(blob, "test.pdf")
+      pdfMake.createPdf(safeDoc).download("test.pdf")
       
       console.log('✅ PDF test successful!')
     } catch (e) {

@@ -1,15 +1,12 @@
 /**
  * Bulk PDF Download
- * Downloads all school PDFs as a ZIP file
+ * Downloads all school PDFs sequentially
  */
 
 import { loadPdfMake } from './loadPdfMake'
 import { buildSchoolReportPdf } from './buildSchoolReportPdf'
-import { pdfMakeToBlob } from './pdfMakeToBlob'
 import { sanitiseDocDefinition } from './sanitiseDocDefinition'
 import { PdfLang } from './translations'
-import JSZip from 'jszip'
-import { saveAs } from 'file-saver'
 import schoolsData from '../data/schools.json'
 import scoreRowsData from '../data/score_rows.json'
 import aggregatesData from '../data/aggregates.json'
@@ -46,6 +43,8 @@ function sanitizeFileName(name: string): string {
     .substring(0, 50)
 }
 
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
+
 export async function downloadAllPdfs(
   lang: PdfLang = 'en',
   onProgress?: (current: number, total: number) => void
@@ -54,13 +53,13 @@ export async function downloadAllPdfs(
   const allScoreRows = scoreRowsData as ScoreRow[]
   const allAggregates = aggregatesData as Aggregates[]
 
-  const zip = new JSZip()
+  let success = 0
   const failures: string[] = []
 
-  // Dynamically load pdfMake once for all schools
+  // Load pdfMake ONCE outside loop
   const pdfMake = await loadPdfMake()
 
-  // Process schools sequentially
+  // Process schools sequentially with direct downloads
   for (let i = 0; i < schools.length; i++) {
     const school = schools[i]
 
@@ -86,49 +85,30 @@ export async function downloadAllPdfs(
       // Sanitise docDefinition to prevent crashes
       const safeDoc = sanitiseDocDefinition(docDefinition)
 
-      // Generate PDF blob with timeout
-      const blob = await pdfMakeToBlob(pdfMake, safeDoc, 30000)
+      // Yield so UI updates
+      await new Promise(requestAnimationFrame)
 
-      // Add to zip
+      // Direct download (no zip, no blob, no buffer)
       const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${lang}.pdf`
-      zip.file(filename, blob)
+      pdfMake.createPdf(safeDoc).download(filename)
 
-      // IMPORTANT: pause between PDFs to prevent timeout
-      await new Promise(r => setTimeout(r, 400))
+      success++
+
+      // IMPORTANT: pause between PDFs (700ms)
+      await sleep(700)
     } catch (error) {
       console.error('BULK_PDF_FAIL', school.school_code, error)
       failures.push(`${school.school_code} (${school.school_name})`)
     }
   }
 
-  // Generate and download zip
-  try {
-    console.log('📦 Generating ZIP file...')
-    const zipBlob = await zip.generateAsync({ type: 'blob' })
-    
-    console.log('💾 Downloading ZIP...')
-    const zipFilename = `jodhpur_reports_${lang}.zip`
-    
-    try {
-      saveAs(zipBlob, zipFilename)
-      console.log('✅ ZIP download initiated')
-    } catch (saveError) {
-      console.error('saveAs failed:', saveError)
-      throw new Error('Failed to save ZIP file')
-    }
-
-    // Show summary
-    if (failures.length > 0) {
-      alert(
-        `Downloaded ${schools.length - failures.length} of ${schools.length} PDFs.\n\nFailed:\n${failures.join('\n')}`
-      )
-    } else {
-      alert(`Successfully downloaded all ${schools.length} school PDFs!`)
-    }
-  } catch (error) {
-    console.error('ZIP generation/save failed:', error)
-    alert('Failed to create ZIP file. Check console for details.')
-    throw error
+  // Show summary
+  if (failures.length > 0) {
+    alert(
+      `Downloaded ${success} of ${schools.length} PDFs.\n\nFailed:\n${failures.join('\n')}`
+    )
+  } else {
+    alert(`Successfully downloaded all ${schools.length} school PDFs!`)
   }
 }
 
