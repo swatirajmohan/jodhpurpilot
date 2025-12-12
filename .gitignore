@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
+# Data files (Excel files are not committed, only generated JSON)
+data_input/*.xlsx
+data_input/*.xls
+
