@@ -105,7 +105,7 @@ function SchoolReport() {
     return (
       <div style={styles.container}>
         <button onClick={() => navigate('/')} style={styles.backButton}>
-          ← Back to Dashboard
+          ← {getLabel(language, 'backToDashboard')}
         </button>
         <div style={styles.error}>School not found</div>
       </div>
@@ -121,8 +121,9 @@ function SchoolReport() {
       {/* Action Buttons (Not included in PDF) */}
       <div style={styles.actions} className="no-pdf">
         <button onClick={() => navigate('/')} style={styles.backButton}>
-          ← Back to Dashboard
+          ← {getLabel(language, 'backToDashboard')}
         </button>
+        <LanguageToggle />
         <button 
           onClick={handleDownloadPDF} 
           style={{
@@ -131,7 +132,7 @@ function SchoolReport() {
           }}
           disabled={isGeneratingPDF}
         >
-          {isGeneratingPDF ? 'Generating PDF...' : '📄 Download PDF Report'}
+          {isGeneratingPDF ? getLabel(language, 'generating') : `📄 ${getLabel(language, 'downloadPdfReport')}`}
         </button>
       </div>
 
@@ -139,11 +140,11 @@ function SchoolReport() {
       <div style={styles.pdfContent}>
         {/* Header Section */}
         <div style={styles.header}>
-          <h1 style={styles.title}>School Assessment Report</h1>
+          <h1 style={styles.title}>{getLabel(language, 'reportTitle')}</h1>
           
           <div style={styles.schoolInfo}>
             <div style={styles.schoolName}>{school.school_name}</div>
-            <div style={styles.schoolCode}>School Code: {school.school_code}</div>
+            <div style={styles.schoolCode}>{getLabel(language, 'schoolCode')}: {school.school_code}</div>
           </div>
         </div>
 
@@ -151,41 +152,41 @@ function SchoolReport() {
       <div style={styles.summarySection}>
         {/* 1. Subject Averages Table (Portrait Mode) */}
         <div style={styles.summaryTableContainer}>
-          <h2 style={styles.summaryTitle}>Subject-wise Average Scores</h2>
+          <h2 style={styles.summaryTitle}>{getLabel(language, 'subjectwiseAverages')}</h2>
           <table style={styles.summaryTable}>
             <thead>
               <tr>
-                <th style={styles.summaryTh}>Subject</th>
-                <th style={styles.summaryThScore}>Average Score</th>
+                <th style={styles.summaryTh}>{getLabel(language, 'subject')}</th>
+                <th style={styles.summaryThScore}>{getLabel(language, 'averageScore')}</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style={styles.summaryTdBold}>Overall School Average</td>
+                <td style={styles.summaryTdBold}>{getLabel(language, 'overallAverage')}</td>
                 <td style={styles.summaryTdScore}>
                   <ScoreChip value={aggregates?.overall_avg ?? null} />
                 </td>
               </tr>
               <tr>
-                <td style={styles.summaryTd}>English</td>
+                <td style={styles.summaryTd}>{getLabel(language, 'english')}</td>
                 <td style={styles.summaryTdScore}>
                   <ScoreChip value={aggregates?.subject_avg_map.English ?? null} />
                 </td>
               </tr>
               <tr>
-                <td style={styles.summaryTd}>Mathematics</td>
+                <td style={styles.summaryTd}>{getLabel(language, 'mathematics')}</td>
                 <td style={styles.summaryTdScore}>
                   <ScoreChip value={aggregates?.subject_avg_map.Mathematics ?? null} />
                 </td>
               </tr>
               <tr>
-                <td style={styles.summaryTd}>Science</td>
+                <td style={styles.summaryTd}>{getLabel(language, 'science')}</td>
                 <td style={styles.summaryTdScore}>
                   <ScoreChip value={aggregates?.subject_avg_map.Science ?? null} />
                 </td>
               </tr>
               <tr>
-                <td style={styles.summaryTd}>Social Science</td>
+                <td style={styles.summaryTd}>{getLabel(language, 'socialScience')}</td>
                 <td style={styles.summaryTdScore}>
                   <ScoreChip value={aggregates?.subject_avg_map['Social Science'] ?? null} />
                 </td>
@@ -196,19 +197,19 @@ function SchoolReport() {
 
         {/* 2. Grade-Subject Priority Count Table */}
         <div style={styles.summaryTableContainer}>
-          <h2 style={styles.summaryTitle}>Competency Priority Distribution by Grade</h2>
+          <h2 style={styles.summaryTitle}>{getLabel(language, 'priorityDistribution')}</h2>
           <div style={styles.legend}>
             <span style={styles.legendItem}>
-              <strong>H</strong> = High Priority (0-4.9)
+              <strong>H</strong> = {getLabel(language, 'highPriority')}
             </span>
             <span style={styles.legendItem}>
-              <strong>M</strong> = Medium Priority (5.0-6.9)
+              <strong>M</strong> = {getLabel(language, 'mediumPriority')}
             </span>
             <span style={styles.legendItem}>
-              <strong>L</strong> = Low Priority (7.0+)
+              <strong>L</strong> = {getLabel(language, 'lowPriority')}
             </span>
             <span style={styles.legendItem}>
-              <strong>-</strong> = No data
+              <strong>-</strong> = {getLabel(language, 'noData')}
             </span>
           </div>
           {/* TABLE 1: English and Mathematics */}
@@ -225,9 +226,9 @@ function SchoolReport() {
               </colgroup>
               <thead>
                 <tr>
-                  <th style={styles.priorityThGrade} className="priorityThGrade" rowSpan={2}>Grade</th>
-                  <th style={styles.priorityTh} colSpan={3}>English</th>
-                  <th style={styles.priorityTh} colSpan={3}>Mathematics</th>
+                  <th style={styles.priorityThGrade} className="priorityThGrade" rowSpan={2}>{getLabel(language, 'grade')}</th>
+                  <th style={styles.priorityTh} colSpan={3}>{getLabel(language, 'english')}</th>
+                  <th style={styles.priorityTh} colSpan={3}>{getLabel(language, 'mathematics')}</th>
                 </tr>
                 <tr>
                   {/* English sub-columns */}
@@ -289,9 +290,9 @@ function SchoolReport() {
               </colgroup>
               <thead>
                 <tr>
-                  <th style={styles.priorityThGrade} className="priorityThGrade" rowSpan={2}>Grade</th>
-                  <th style={styles.priorityTh} colSpan={3}>Science</th>
-                  <th style={styles.priorityTh} colSpan={3}>Social Science</th>
+                  <th style={styles.priorityThGrade} className="priorityThGrade" rowSpan={2}>{getLabel(language, 'grade')}</th>
+                  <th style={styles.priorityTh} colSpan={3}>{getLabel(language, 'science')}</th>
+                  <th style={styles.priorityTh} colSpan={3}>{getLabel(language, 'socialScience')}</th>
                 </tr>
                 <tr>
                   {/* Science sub-columns */}
@@ -344,17 +345,19 @@ function SchoolReport() {
       {/* Grade Sections */}
       {grades.map(grade => {
         if (!gradeHasData(grade)) {
+          const gradeLabel = `grade${grade}` as 'grade6' | 'grade7' | 'grade8'
           return (
             <div key={grade} style={styles.gradeSection}>
-              <h2 style={styles.gradeHeader}>Grade {grade}</h2>
-              <div style={styles.noData}>No assessment data available for Grade {grade}</div>
+              <h2 style={styles.gradeHeader}>{getLabel(language, gradeLabel)}</h2>
+              <div style={styles.noData}>{getLabel(language, 'noData')}</div>
             </div>
           )
         }
 
+        const gradeLabel = `grade${grade}` as 'grade6' | 'grade7' | 'grade8'
         return (
           <div key={grade} style={styles.gradeSection} className="pdf-page-break">
-            <h2 style={styles.gradeHeader}>Grade {grade}</h2>
+            <h2 style={styles.gradeHeader}>{getLabel(language, gradeLabel)}</h2>
 
             {/* Subject Sections */}
             {subjects.map(subject => {
@@ -377,9 +380,9 @@ function SchoolReport() {
                   <table style={styles.table}>
                     <thead>
                       <tr>
-                        <th style={styles.th}>Competency</th>
-                        <th style={styles.thScore}>Score</th>
-                        <th style={styles.thPriority}>Priority</th>
+                        <th style={styles.th}>{getLabel(language, 'competency')}</th>
+                        <th style={styles.thScore}>{getLabel(language, 'score')}</th>
+                        <th style={styles.thPriority}>{getLabel(language, 'priority')}</th>
                       </tr>
                     </thead>
                     <tbody>
