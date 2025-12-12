@@ -12,15 +12,34 @@ function Dashboard() {
       <table border={1} cellPadding={8} cellSpacing={0}>
         <thead>
           <tr>
-            <th>School Name</th>
-            <th>School Code</th>
-            <th>Overall Average (Grades 6–8, all subjects)</th>
-            <th>English Average</th>
-            <th>Math Average</th>
-            <th>SST Average</th>
-            <th>Science Average</th>
-            <th>View detailed report</th>
-            <th>Download detailed report (PDF)</th>
+            <th rowSpan={2}>School Name</th>
+            <th rowSpan={2}>School Code</th>
+            <th rowSpan={2}>Overall School Average</th>
+            <th colSpan={5}>Grade 6 Average</th>
+            <th colSpan={5}>Grade 7 Average</th>
+            <th colSpan={5}>Grade 8 Average</th>
+            <th rowSpan={2}>View detailed report</th>
+            <th rowSpan={2}>Download detailed report (PDF)</th>
+          </tr>
+          <tr>
+            {/* Grade 6 sub-columns */}
+            <th>Overall</th>
+            <th>English</th>
+            <th>Math</th>
+            <th>SST</th>
+            <th>Science</th>
+            {/* Grade 7 sub-columns */}
+            <th>Overall</th>
+            <th>English</th>
+            <th>Math</th>
+            <th>SST</th>
+            <th>Science</th>
+            {/* Grade 8 sub-columns */}
+            <th>Overall</th>
+            <th>English</th>
+            <th>Math</th>
+            <th>SST</th>
+            <th>Science</th>
           </tr>
         </thead>
         <tbody>
