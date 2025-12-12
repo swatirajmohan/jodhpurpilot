@@ -30,7 +30,7 @@ const AGGREGATES_OUTPUT = path.join(OUTPUT_DIR, 'aggregates.json');
 
 // Constants from FRS.md
 const VALID_GRADES = [6, 7, 8];
-const VALID_SUBJECTS = ['English', 'Math', 'Science', 'SST'];
+const VALID_SUBJECTS = ['English', 'Mathematics', 'Science', 'Social Science'];
 
 /**
  * Parse school name to extract school_name and school_code
@@ -206,9 +206,9 @@ function importData() {
     // Subject averages: mean of 10-point scores per subject across grades 6-8
     const subject_avg_map = {
       English: calculateMean(scores.filter(s => s.subject === 'English').map(s => s.score_10)),
-      Math: calculateMean(scores.filter(s => s.subject === 'Math').map(s => s.score_10)),
+      Mathematics: calculateMean(scores.filter(s => s.subject === 'Mathematics').map(s => s.score_10)),
       Science: calculateMean(scores.filter(s => s.subject === 'Science').map(s => s.score_10)),
-      SST: calculateMean(scores.filter(s => s.subject === 'SST').map(s => s.score_10))
+      'Social Science': calculateMean(scores.filter(s => s.subject === 'Social Science').map(s => s.score_10))
     };
 
     // Grade averages: mean of 10-point scores per grade across all subjects
@@ -222,21 +222,21 @@ function importData() {
     const grade_subject_avg_map = {
       6: {
         English: calculateMean(scores.filter(s => s.grade_level === 6 && s.subject === 'English').map(s => s.score_10)),
-        Math: calculateMean(scores.filter(s => s.grade_level === 6 && s.subject === 'Math').map(s => s.score_10)),
+        Mathematics: calculateMean(scores.filter(s => s.grade_level === 6 && s.subject === 'Mathematics').map(s => s.score_10)),
         Science: calculateMean(scores.filter(s => s.grade_level === 6 && s.subject === 'Science').map(s => s.score_10)),
-        SST: calculateMean(scores.filter(s => s.grade_level === 6 && s.subject === 'SST').map(s => s.score_10))
+        'Social Science': calculateMean(scores.filter(s => s.grade_level === 6 && s.subject === 'Social Science').map(s => s.score_10))
       },
       7: {
         English: calculateMean(scores.filter(s => s.grade_level === 7 && s.subject === 'English').map(s => s.score_10)),
-        Math: calculateMean(scores.filter(s => s.grade_level === 7 && s.subject === 'Math').map(s => s.score_10)),
+        Mathematics: calculateMean(scores.filter(s => s.grade_level === 7 && s.subject === 'Mathematics').map(s => s.score_10)),
         Science: calculateMean(scores.filter(s => s.grade_level === 7 && s.subject === 'Science').map(s => s.score_10)),
-        SST: calculateMean(scores.filter(s => s.grade_level === 7 && s.subject === 'SST').map(s => s.score_10))
+        'Social Science': calculateMean(scores.filter(s => s.grade_level === 7 && s.subject === 'Social Science').map(s => s.score_10))
       },
       8: {
         English: calculateMean(scores.filter(s => s.grade_level === 8 && s.subject === 'English').map(s => s.score_10)),
-        Math: calculateMean(scores.filter(s => s.grade_level === 8 && s.subject === 'Math').map(s => s.score_10)),
+        Mathematics: calculateMean(scores.filter(s => s.grade_level === 8 && s.subject === 'Mathematics').map(s => s.score_10)),
         Science: calculateMean(scores.filter(s => s.grade_level === 8 && s.subject === 'Science').map(s => s.score_10)),
-        SST: calculateMean(scores.filter(s => s.grade_level === 8 && s.subject === 'SST').map(s => s.score_10))
+        'Social Science': calculateMean(scores.filter(s => s.grade_level === 8 && s.subject === 'Social Science').map(s => s.score_10))
       }
     };
 

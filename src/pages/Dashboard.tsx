@@ -40,9 +40,9 @@ function Dashboard() {
           overall_avg: null,
           subject_avg_map: {
             English: null,
-            Math: null,
+            Mathematics: null,
             Science: null,
-            SST: null,
+            'Social Science': null,
           },
         },
       }
@@ -147,20 +147,20 @@ function Dashboard() {
               {/* Grade 6 sub-columns */}
               <th style={styles.th}>Overall</th>
               <th style={styles.th}>English</th>
-              <th style={styles.th}>Math</th>
-              <th style={styles.th}>SST</th>
+              <th style={styles.th}>Mathematics</th>
+              <th style={styles.th}>Social Science</th>
               <th style={styles.th}>Science</th>
               {/* Grade 7 sub-columns */}
               <th style={styles.th}>Overall</th>
               <th style={styles.th}>English</th>
-              <th style={styles.th}>Math</th>
-              <th style={styles.th}>SST</th>
+              <th style={styles.th}>Mathematics</th>
+              <th style={styles.th}>Social Science</th>
               <th style={styles.th}>Science</th>
               {/* Grade 8 sub-columns */}
               <th style={styles.th}>Overall</th>
               <th style={styles.th}>English</th>
-              <th style={styles.th}>Math</th>
-              <th style={styles.th}>SST</th>
+              <th style={styles.th}>Mathematics</th>
+              <th style={styles.th}>Social Science</th>
               <th style={styles.th}>Science</th>
             </tr>
           </thead>
@@ -185,10 +185,10 @@ function Dashboard() {
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.English ?? null} />
                 </td>
                 <td style={styles.td}>
-                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.Math ?? null} />
+                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.Mathematics ?? null} />
                 </td>
                 <td style={styles.td}>
-                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.SST ?? null} />
+                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.['Social Science'] ?? null} />
                 </td>
                 <td style={styles.td}>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.Science ?? null} />
@@ -202,10 +202,10 @@ function Dashboard() {
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.English ?? null} />
                 </td>
                 <td style={styles.td}>
-                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.Math ?? null} />
+                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.Mathematics ?? null} />
                 </td>
                 <td style={styles.td}>
-                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.SST ?? null} />
+                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.['Social Science'] ?? null} />
                 </td>
                 <td style={styles.td}>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.Science ?? null} />
@@ -219,10 +219,10 @@ function Dashboard() {
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.English ?? null} />
                 </td>
                 <td style={styles.td}>
-                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.Math ?? null} />
+                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.Mathematics ?? null} />
                 </td>
                 <td style={styles.td}>
-                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.SST ?? null} />
+                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.['Social Science'] ?? null} />
                 </td>
                 <td style={styles.td}>
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.Science ?? null} />
