@@ -6,6 +6,7 @@
 import { loadPdfMake } from './loadPdfMake'
 import { buildSchoolReportPdf } from './buildSchoolReportPdf'
 import { pdfMakeToBlob } from './pdfMakeToBlob'
+import { sanitiseDocDefinition } from './sanitiseDocDefinition'
 import { PdfLang } from './translations'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
@@ -82,8 +83,11 @@ export async function downloadAllPdfs(
         lang,
       })
 
+      // Sanitise docDefinition to prevent crashes
+      const safeDoc = sanitiseDocDefinition(docDefinition)
+
       // Generate PDF blob with timeout
-      const blob = await pdfMakeToBlob(pdfMake, docDefinition, 30000)
+      const blob = await pdfMakeToBlob(pdfMake, safeDoc, 30000)
 
       // Add to zip
       const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${lang}.pdf`

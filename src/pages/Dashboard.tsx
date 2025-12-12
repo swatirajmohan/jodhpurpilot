@@ -8,6 +8,7 @@ import { downloadSchoolPdf } from '../pdf/downloadSinglePdf'
 import { downloadAllPdfs } from '../pdf/downloadAllPdfs'
 import { loadPdfMake } from '../pdf/loadPdfMake'
 import { pdfMakeToBlob } from '../pdf/pdfMakeToBlob'
+import { sanitiseDocDefinition } from '../pdf/sanitiseDocDefinition'
 import { saveAs } from 'file-saver'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getLabel } from '../i18n/labels'
@@ -117,9 +118,9 @@ function Dashboard() {
     setDownloadingPdf(school_code)
     try {
       await downloadSchoolPdf(school_code, language)
-    } catch (error) {
-      console.error('PDF_ERROR', error)
-      alert('PDF generation error. Check console.')
+    } catch (e) {
+      console.error('PDF_FATAL_ERROR', e)
+      alert(String((e as any)?.message ?? e))
     } finally {
       // CRITICAL: Always reset UI state
       setDownloadingPdf(null)
@@ -134,9 +135,9 @@ function Dashboard() {
       await downloadAllPdfs(language, (current, total) => {
         setDownloadProgress({ current, total })
       })
-    } catch (error) {
-      console.error('BULK_PDF_ERROR', error)
-      alert('Bulk PDF download error. Check console.')
+    } catch (e) {
+      console.error('PDF_FATAL_ERROR', e)
+      alert(String((e as any)?.message ?? e))
     } finally {
       // CRITICAL: Always reset UI state
       setDownloadingAll(false)
@@ -158,16 +159,19 @@ function Dashboard() {
         ]
       }
       
+      console.log('🧹 Sanitising docDefinition...')
+      const safeDoc = sanitiseDocDefinition(docDefinition)
+      
       console.log('🔄 Generating blob...')
-      const blob = await pdfMakeToBlob(pdfMake, docDefinition, 30000)
+      const blob = await pdfMakeToBlob(pdfMake, safeDoc, 30000)
       
       console.log('💾 Downloading...')
       saveAs(blob, "test.pdf")
       
       console.log('✅ PDF test successful!')
-    } catch (error) {
-      console.error('PDF_FATAL_ERROR', error)
-      alert(`PDF test failed: ${(error as Error).message}\nCheck console for details.`)
+    } catch (e) {
+      console.error('PDF_FATAL_ERROR', e)
+      alert(String((e as any)?.message ?? e))
     }
   }
 

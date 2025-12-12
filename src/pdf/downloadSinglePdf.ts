@@ -6,6 +6,7 @@
 import { loadPdfMake } from './loadPdfMake'
 import { buildSchoolReportPdf } from './buildSchoolReportPdf'
 import { pdfMakeToBlob } from './pdfMakeToBlob'
+import { sanitiseDocDefinition } from './sanitiseDocDefinition'
 import { PdfLang } from './translations'
 import { saveAs } from 'file-saver'
 import schoolsData from '../data/schools.json'
@@ -66,9 +67,12 @@ export async function downloadSchoolPdf(schoolCode: string, lang: PdfLang = 'en'
     lang,
   })
 
+  // Sanitise docDefinition to prevent crashes
+  const safeDoc = sanitiseDocDefinition(docDefinition)
+
   // Load pdfMake and generate blob with timeout
   const pdfMake = await loadPdfMake()
-  const blob = await pdfMakeToBlob(pdfMake, docDefinition, 30000)
+  const blob = await pdfMakeToBlob(pdfMake, safeDoc, 30000)
 
   // Download using file-saver for guaranteed download
   const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${lang}.pdf`
