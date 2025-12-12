@@ -11,6 +11,13 @@ interface SchoolReportPdfProps {
 const COL_GRADE = 1.2
 const COL_HML = 1
 
+// Spacing scale for consistency
+const SPACING = {
+  sectionGap: 20,
+  headingGap: 10,
+  rowGap: 15,
+}
+
 // Styles for PDF
 const styles = StyleSheet.create({
   page: {
@@ -20,7 +27,7 @@ const styles = StyleSheet.create({
   },
   // Header
   header: {
-    marginBottom: 20,
+    marginBottom: SPACING.sectionGap,
     borderBottom: '2pt solid #000',
     paddingBottom: 10,
   },
@@ -37,22 +44,22 @@ const styles = StyleSheet.create({
   },
   // Section
   section: {
-    marginTop: 20,
-    marginBottom: 15,
+    marginBottom: SPACING.rowGap,
   },
   sectionTitle: {
     fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: SPACING.headingGap,
   },
   // Table
   table: {
     width: '100%',
-    marginBottom: 15,
+    marginBottom: SPACING.rowGap,
   },
   tableRow: {
     flexDirection: 'row',
     borderBottom: '1pt solid #ddd',
+    minPresenceAhead: 10,
   },
   tableHeader: {
     flexDirection: 'row',
@@ -82,14 +89,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#c6f6d5',
     color: '#2f855a',
   },
-  // Page break
-  pageBreak: {
-    marginTop: 20,
-  },
   legend: {
     fontSize: 9,
-    marginBottom: 10,
+    marginBottom: SPACING.headingGap,
     color: '#666',
+  },
+  // Grade section (for page breaks)
+  gradeSection: {
+    marginBottom: SPACING.sectionGap,
+  },
+  gradeTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: SPACING.sectionGap,
+  },
+  subjectTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginBottom: 8,
   },
 })
 
@@ -151,7 +168,7 @@ export function SchoolReportPdf({ school, scoreRows, aggregates }: SchoolReportP
         </View>
 
         {/* Subject-wise Average Scores */}
-        <View style={styles.section}>
+        <View style={styles.section} wrap={false}>
           <Text style={styles.sectionTitle}>Subject-wise Average Scores</Text>
           <View style={styles.table}>
             {/* Header */}
@@ -179,14 +196,14 @@ export function SchoolReportPdf({ school, scoreRows, aggregates }: SchoolReportP
         </View>
 
         {/* Competency Priority Distribution by Grade */}
-        <View style={styles.section}>
+        <View style={styles.section} wrap={false}>
           <Text style={styles.sectionTitle}>Competency Priority Distribution by Grade</Text>
           <Text style={styles.legend}>
             H = High Priority (0-4.9)  |  M = Medium Priority (5.0-6.9)  |  L = Low Priority (7.0+)  |  - = No data
           </Text>
 
           {/* Table 1: English and Mathematics */}
-          <View style={styles.table}>
+          <View style={styles.table} wrap={false}>
             {/* Header Row 1: Subject names */}
             <View style={[styles.tableRow, styles.tableHeader]}>
               <View style={{ flex: COL_GRADE }} />
@@ -238,7 +255,7 @@ export function SchoolReportPdf({ school, scoreRows, aggregates }: SchoolReportP
           </View>
 
           {/* Table 2: Science and Social Science */}
-          <View style={styles.table}>
+          <View style={styles.table} wrap={false}>
             {/* Header Row 1: Subject names */}
             <View style={[styles.tableRow, styles.tableHeader]}>
               <View style={{ flex: COL_GRADE }} />
@@ -298,8 +315,8 @@ export function SchoolReportPdf({ school, scoreRows, aggregates }: SchoolReportP
         if (!gradeHasData) return null
 
         return (
-          <Page key={grade} size="A4" style={styles.page}>
-            <Text style={[styles.sectionTitle, { marginBottom: 20 }]}>Grade {grade} - Detailed Competency Report</Text>
+          <Page key={grade} size="A4" style={styles.page} break>
+            <Text style={styles.gradeTitle}>Grade {grade} - Detailed Competency Report</Text>
 
             {subjects.map(subject => {
               const competencies = getCompetencies(grade, subject)
@@ -307,8 +324,8 @@ export function SchoolReportPdf({ school, scoreRows, aggregates }: SchoolReportP
               if (competencies.length === 0) return null
 
               return (
-                <View key={subject} style={styles.section}>
-                  <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 8 }}>{subject}</Text>
+                <View key={subject} style={styles.gradeSection}>
+                  <Text style={styles.subjectTitle}>{subject}</Text>
                   <View style={styles.table}>
                     {/* Header */}
                     <View style={[styles.tableRow, styles.tableHeader]}>
