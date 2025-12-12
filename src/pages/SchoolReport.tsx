@@ -216,6 +216,25 @@ function SchoolReport() {
           </div>
           <div style={styles.tableScroll}>
             <table style={styles.priorityTable} className="priority-table">
+              <colgroup>
+                <col style={{ width: '6%' }} />
+                {/* English: 23.5% / 3 = 7.833% each */}
+                <col style={{ width: '7.833%' }} />
+                <col style={{ width: '7.833%' }} />
+                <col style={{ width: '7.833%' }} />
+                {/* Mathematics: 23.5% / 3 = 7.833% each */}
+                <col style={{ width: '7.833%' }} />
+                <col style={{ width: '7.833%' }} />
+                <col style={{ width: '7.833%' }} />
+                {/* Science: 23.5% / 3 = 7.833% each */}
+                <col style={{ width: '7.833%' }} />
+                <col style={{ width: '7.833%' }} />
+                <col style={{ width: '7.833%' }} />
+                {/* Social Science: 23.5% / 3 = 7.833% each */}
+                <col style={{ width: '7.833%' }} />
+                <col style={{ width: '7.833%' }} />
+                <col style={{ width: '7.833%' }} />
+              </colgroup>
               <thead>
                 <tr>
                   <th style={styles.priorityThGrade} className="priorityThGrade" rowSpan={2}>Grade</th>
