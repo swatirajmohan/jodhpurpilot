@@ -171,6 +171,9 @@ function SchoolReport() {
             <span style={styles.legendItem}>
               <strong>L</strong> = Low Priority (7.0+)
             </span>
+            <span style={styles.legendItem}>
+              <strong>-</strong> = No data
+            </span>
           </div>
           <div style={styles.tableScroll}>
             <table style={styles.priorityTable}>
