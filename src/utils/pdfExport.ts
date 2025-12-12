@@ -47,7 +47,7 @@ export async function generateSchoolReportPDF(
     jsPDF: { 
       unit: 'mm', 
       format: 'a4', 
-      orientation: 'portrait',
+      orientation: 'landscape',
     },
     pagebreak: { 
       mode: ['avoid-all', 'css', 'legacy'],

@@ -5,10 +5,11 @@
   display: none !important;
 }
 
-/* FIXED WIDTH TABLE LAYOUT - prevents overflow */
+/* LOCK TABLE GEOMETRY - exact pixel widths in colgroup */
 .pdf-mode .priority-table {
   table-layout: fixed !important;
   width: 100% !important;
+  border-collapse: collapse !important;
 }
 
 /* Page breaks */
