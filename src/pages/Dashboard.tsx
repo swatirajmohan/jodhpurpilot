@@ -6,7 +6,7 @@ import schoolsData from '../data/schools.json'
 import aggregatesData from '../data/aggregates.json'
 import { downloadSchoolPdf } from '../pdf/downloadSinglePdf'
 import { downloadAllPdfs } from '../pdf/downloadAllPdfs'
-import { loadPdfMake } from '../pdf/loadPdfMake'
+import { loadPdfMake, debugPdfMakeImports } from '../pdf/loadPdfMake'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getLabel } from '../i18n/labels'
 import { LanguageToggle } from '../components/LanguageToggle'
@@ -143,14 +143,25 @@ function Dashboard() {
   // TEST FUNCTION - Temporary test for pdfMake
   const handleTestPdf = async () => {
     try {
+      // Debug imports first
+      console.log('🔍 Debugging pdfMake imports...')
+      await debugPdfMakeImports()
+      
+      // Load pdfMake
+      console.log('📦 Loading pdfMake...')
       const pdfMake = await loadPdfMake()
-      pdfMake.createPdf({
-        content: [{ text: 'PDF test OK - pdfMake is working!' }],
-      }).download('test.pdf')
+      
+      // Simplest possible doc definition
+      const doc = { content: ['PDF test OK'] }
+      
+      // Generate and download
+      console.log('📄 Creating PDF...')
+      pdfMake.createPdf(doc).download('test.pdf')
+      
       console.log('✅ PDF test successful!')
     } catch (error) {
-      console.error('❌ PDF test failed:', error)
-      alert('PDF test failed. Check console.')
+      console.error('PDF_FATAL_ERROR', error)
+      alert(`PDF test failed: ${(error as Error).message}\nCheck console for details.`)
     }
   }
 
