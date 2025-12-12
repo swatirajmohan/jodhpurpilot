@@ -7,6 +7,10 @@ interface SchoolReportPdfProps {
   aggregates: Aggregates | null
 }
 
+// Column width constants for priority distribution tables
+const COL_GRADE = 1.2
+const COL_HML = 1
+
 // Styles for PDF
 const styles = StyleSheet.create({
   page: {
@@ -77,16 +81,6 @@ const styles = StyleSheet.create({
   priorityLow: {
     backgroundColor: '#c6f6d5',
     color: '#2f855a',
-  },
-  // Column widths for priority tables
-  colGrade: {
-    width: '12%',
-  },
-  colSubject: {
-    width: '22%',
-  },
-  colHML: {
-    width: '11%',
   },
   // Page break
   pageBreak: {
@@ -193,21 +187,25 @@ export function SchoolReportPdf({ school, scoreRows, aggregates }: SchoolReportP
 
           {/* Table 1: English and Mathematics */}
           <View style={styles.table}>
-            {/* Header Row 1 */}
+            {/* Header Row 1: Subject names */}
             <View style={[styles.tableRow, styles.tableHeader]}>
-              <Text style={[styles.tableCell, styles.colGrade]}>Grade</Text>
-              <Text style={[styles.tableCell, { width: '44%' }]}>English</Text>
-              <Text style={[styles.tableCellLast, { width: '44%' }]}>Mathematics</Text>
+              <View style={{ flex: COL_GRADE }} />
+              <View style={{ flex: COL_HML * 3, alignItems: 'center' }}>
+                <Text style={styles.tableCell}>English</Text>
+              </View>
+              <View style={{ flex: COL_HML * 3, alignItems: 'center' }}>
+                <Text style={styles.tableCellLast}>Mathematics</Text>
+              </View>
             </View>
-            {/* Header Row 2 */}
+            {/* Header Row 2: H/M/L labels */}
             <View style={[styles.tableRow, styles.tableHeader]}>
-              <Text style={[styles.tableCell, styles.colGrade]}></Text>
-              <Text style={[styles.tableCell, styles.colHML]}>H</Text>
-              <Text style={[styles.tableCell, styles.colHML]}>M</Text>
-              <Text style={[styles.tableCell, styles.colHML]}>L</Text>
-              <Text style={[styles.tableCell, styles.colHML]}>H</Text>
-              <Text style={[styles.tableCell, styles.colHML]}>M</Text>
-              <Text style={[styles.tableCellLast, styles.colHML]}>L</Text>
+              <Text style={[styles.tableCell, { flex: COL_GRADE }]}>Grade</Text>
+              <Text style={[styles.tableCell, { flex: COL_HML }]}>H</Text>
+              <Text style={[styles.tableCell, { flex: COL_HML }]}>M</Text>
+              <Text style={[styles.tableCell, { flex: COL_HML }]}>L</Text>
+              <Text style={[styles.tableCell, { flex: COL_HML }]}>H</Text>
+              <Text style={[styles.tableCell, { flex: COL_HML }]}>M</Text>
+              <Text style={[styles.tableCellLast, { flex: COL_HML }]}>L</Text>
             </View>
             {/* Data Rows */}
             {grades.map(grade => {
@@ -215,23 +213,23 @@ export function SchoolReportPdf({ school, scoreRows, aggregates }: SchoolReportP
               const math = getPriorityCounts(grade, 'Mathematics')
               return (
                 <View key={grade} style={styles.tableRow}>
-                  <Text style={[styles.tableCell, styles.colGrade]}>{grade}</Text>
-                  <Text style={[styles.tableCell, styles.colHML, styles.priorityHigh]}>
+                  <Text style={[styles.tableCell, { flex: COL_GRADE }]}>{grade}</Text>
+                  <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityHigh]}>
                     {english.hasData ? english.high : '-'}
                   </Text>
-                  <Text style={[styles.tableCell, styles.colHML, styles.priorityMedium]}>
+                  <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityMedium]}>
                     {english.hasData ? english.medium : '-'}
                   </Text>
-                  <Text style={[styles.tableCell, styles.colHML, styles.priorityLow]}>
+                  <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityLow]}>
                     {english.hasData ? english.low : '-'}
                   </Text>
-                  <Text style={[styles.tableCell, styles.colHML, styles.priorityHigh]}>
+                  <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityHigh]}>
                     {math.hasData ? math.high : '-'}
                   </Text>
-                  <Text style={[styles.tableCell, styles.colHML, styles.priorityMedium]}>
+                  <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityMedium]}>
                     {math.hasData ? math.medium : '-'}
                   </Text>
-                  <Text style={[styles.tableCellLast, styles.colHML, styles.priorityLow]}>
+                  <Text style={[styles.tableCellLast, { flex: COL_HML }, styles.priorityLow]}>
                     {math.hasData ? math.low : '-'}
                   </Text>
                 </View>
@@ -241,21 +239,25 @@ export function SchoolReportPdf({ school, scoreRows, aggregates }: SchoolReportP
 
           {/* Table 2: Science and Social Science */}
           <View style={styles.table}>
-            {/* Header Row 1 */}
+            {/* Header Row 1: Subject names */}
             <View style={[styles.tableRow, styles.tableHeader]}>
-              <Text style={[styles.tableCell, styles.colGrade]}>Grade</Text>
-              <Text style={[styles.tableCell, { width: '44%' }]}>Science</Text>
-              <Text style={[styles.tableCellLast, { width: '44%' }]}>Social Science</Text>
+              <View style={{ flex: COL_GRADE }} />
+              <View style={{ flex: COL_HML * 3, alignItems: 'center' }}>
+                <Text style={styles.tableCell}>Science</Text>
+              </View>
+              <View style={{ flex: COL_HML * 3, alignItems: 'center' }}>
+                <Text style={styles.tableCellLast}>Social Science</Text>
+              </View>
             </View>
-            {/* Header Row 2 */}
+            {/* Header Row 2: H/M/L labels */}
             <View style={[styles.tableRow, styles.tableHeader]}>
-              <Text style={[styles.tableCell, styles.colGrade]}></Text>
-              <Text style={[styles.tableCell, styles.colHML]}>H</Text>
-              <Text style={[styles.tableCell, styles.colHML]}>M</Text>
-              <Text style={[styles.tableCell, styles.colHML]}>L</Text>
-              <Text style={[styles.tableCell, styles.colHML]}>H</Text>
-              <Text style={[styles.tableCell, styles.colHML]}>M</Text>
-              <Text style={[styles.tableCellLast, styles.colHML]}>L</Text>
+              <Text style={[styles.tableCell, { flex: COL_GRADE }]}>Grade</Text>
+              <Text style={[styles.tableCell, { flex: COL_HML }]}>H</Text>
+              <Text style={[styles.tableCell, { flex: COL_HML }]}>M</Text>
+              <Text style={[styles.tableCell, { flex: COL_HML }]}>L</Text>
+              <Text style={[styles.tableCell, { flex: COL_HML }]}>H</Text>
+              <Text style={[styles.tableCell, { flex: COL_HML }]}>M</Text>
+              <Text style={[styles.tableCellLast, { flex: COL_HML }]}>L</Text>
             </View>
             {/* Data Rows */}
             {grades.map(grade => {
@@ -263,23 +265,23 @@ export function SchoolReportPdf({ school, scoreRows, aggregates }: SchoolReportP
               const socialScience = getPriorityCounts(grade, 'Social Science')
               return (
                 <View key={grade} style={styles.tableRow}>
-                  <Text style={[styles.tableCell, styles.colGrade]}>{grade}</Text>
-                  <Text style={[styles.tableCell, styles.colHML, styles.priorityHigh]}>
+                  <Text style={[styles.tableCell, { flex: COL_GRADE }]}>{grade}</Text>
+                  <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityHigh]}>
                     {science.hasData ? science.high : '-'}
                   </Text>
-                  <Text style={[styles.tableCell, styles.colHML, styles.priorityMedium]}>
+                  <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityMedium]}>
                     {science.hasData ? science.medium : '-'}
                   </Text>
-                  <Text style={[styles.tableCell, styles.colHML, styles.priorityLow]}>
+                  <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityLow]}>
                     {science.hasData ? science.low : '-'}
                   </Text>
-                  <Text style={[styles.tableCell, styles.colHML, styles.priorityHigh]}>
+                  <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityHigh]}>
                     {socialScience.hasData ? socialScience.high : '-'}
                   </Text>
-                  <Text style={[styles.tableCell, styles.colHML, styles.priorityMedium]}>
+                  <Text style={[styles.tableCell, { flex: COL_HML }, styles.priorityMedium]}>
                     {socialScience.hasData ? socialScience.medium : '-'}
                   </Text>
-                  <Text style={[styles.tableCellLast, styles.colHML, styles.priorityLow]}>
+                  <Text style={[styles.tableCellLast, { flex: COL_HML }, styles.priorityLow]}>
                     {socialScience.hasData ? socialScience.low : '-'}
                   </Text>
                 </View>
