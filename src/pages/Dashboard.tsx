@@ -203,14 +203,42 @@ function Dashboard() {
     }
   }
 
-  // Test backend health
+  // FORCE PDF DOWNLOAD TEST
   const handleTestPdf = async () => {
+    console.log("FRONTEND: CLICKED");
+
+    const payload = {
+      test: true,
+      timestamp: Date.now()
+    };
+
+    console.log("FRONTEND: SENDING PAYLOAD", payload);
+
     try {
-      const response = await fetch('http://localhost:3001/health')
-      const data = await response.json()
-      alert(`Backend status: ${data.status}\nService: ${data.service}`)
+      const res = await fetch("http://localhost:3001/generate-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      console.log("FRONTEND: RESPONSE STATUS", res.status);
+
+      const blob = await res.blob();
+      console.log("FRONTEND: BLOB SIZE", blob.size);
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "proof.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      
+      console.log("FRONTEND: DOWNLOAD TRIGGERED");
     } catch (error) {
-      alert('Backend not running. Start it with: cd backend && npm start')
+      console.error("FRONTEND: ERROR", error);
+      alert(`Error: ${error}`);
     }
   }
 
@@ -222,9 +250,9 @@ function Dashboard() {
           <button
             onClick={handleTestPdf}
             className={styles.actionButton}
-            style={{ minWidth: '120px', backgroundColor: '#4CAF50', color: 'white' }}
+            style={{ minWidth: '180px', backgroundColor: '#4CAF50', color: 'white' }}
           >
-            Test PDF
+            FORCE PDF DOWNLOAD
           </button>
           <button
             onClick={handleDownloadAllPdfs}

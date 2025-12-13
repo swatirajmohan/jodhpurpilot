@@ -1,118 +1,29 @@
-import express from 'express';
-import cors from 'cors';
-import puppeteer from 'puppeteer';
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import express from "express";
+import cors from "cors";
 
 const app = express();
-const PORT = 3001;
-
-// Middleware
 app.use(cors());
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json());
 
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'pdf-backend' });
+app.post("/generate-pdf", (req, res) => {
+  console.log("PDF REQUEST RECEIVED");
+  console.log("REQUEST BODY:", JSON.stringify(req.body, null, 2));
+
+  const pdfBuffer = Buffer.from(
+    "%PDF-1.4\n" +
+    "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n" +
+    "2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n" +
+    "3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 300 144] /Contents 4 0 R >>\nendobj\n" +
+    "4 0 obj\n<< /Length 44 >>\nstream\nBT /F1 12 Tf 72 72 Td (PDF GENERATED SUCCESSFULLY) Tj ET\nendstream\nendobj\n" +
+    "xref\n0 5\n0000000000 65535 f \n0000000010 00000 n \n0000000060 00000 n \n0000000111 00000 n \n0000000200 00000 n \n" +
+    "trailer\n<< /Root 1 0 R /Size 5 >>\nstartxref\n290\n%%EOF"
+  );
+
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", "attachment; filename=proof.pdf");
+  res.send(pdfBuffer);
 });
 
-// PDF generation endpoint
-app.post('/generate-pdf', async (req, res) => {
-  let browser = null;
-  
-  try {
-    console.log('📄 PDF generation request received');
-    
-    const { school, aggregates, competencies, lang } = req.body;
-    
-    if (!school || !lang) {
-      return res.status(400).json({ error: 'Missing required fields: school, lang' });
-    }
-    
-    // Load HTML template
-    const templatePath = join(__dirname, 'templates', 'report.html');
-    let html = readFileSync(templatePath, 'utf-8');
-    
-    // Replace template variables
-    html = html
-      .replace(/{{SCHOOL_NAME}}/g, school.school_name || 'N/A')
-      .replace(/{{SCHOOL_CODE}}/g, school.school_code || 'N/A')
-      .replace(/{{LANG}}/g, lang)
-      .replace(/{{DATA_JSON}}/g, JSON.stringify({
-        school,
-        aggregates,
-        competencies,
-        lang
-      }));
-    
-    console.log('🚀 Launching Puppeteer...');
-    
-    // Launch Puppeteer
-    browser = await puppeteer.launch({
-      headless: 'new',
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--disable-gpu'
-      ]
-    });
-    
-    const page = await browser.newPage();
-    
-    // Set content
-    await page.setContent(html, {
-      waitUntil: 'networkidle0'
-    });
-    
-    console.log('📄 Generating PDF...');
-    
-    // Generate PDF
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '20mm',
-        right: '15mm',
-        bottom: '20mm',
-        left: '15mm'
-      }
-    });
-    
-    await browser.close();
-    browser = null;
-    
-    console.log('✅ PDF generated successfully');
-    
-    // Send PDF
-    const filename = `${school.school_code}_${school.school_name.replace(/[^a-zA-Z0-9]/g, '_')}_report.pdf`;
-    
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.send(pdfBuffer);
-    
-  } catch (error) {
-    console.error('❌ PDF generation error:', error);
-    
-    if (browser) {
-      await browser.close().catch(() => {});
-    }
-    
-    res.status(500).json({
-      error: 'Failed to generate PDF',
-      message: error.message
-    });
-  }
+app.listen(3001, () => {
+  console.log("PDF PROOF BACKEND RUNNING ON http://localhost:3001");
 });
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`✅ PDF Backend running on http://localhost:${PORT}`);
-  console.log(`📄 Health check: http://localhost:${PORT}/health`);
-});
-
