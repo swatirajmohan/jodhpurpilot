@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Aggregates, School } from '../types'
 import ScoreChip from '../components/ScoreChip'
 import schoolsData from '../data/schools.json'
 import aggregatesData from '../data/aggregates.json'
-import { downloadSchoolPdf } from '../pdf/downloadSinglePdf'
-import { downloadAllPdfs } from '../pdf/downloadAllPdfs'
 import { loadPdfMake } from '../pdf/loadPdfMake'
 import { sanitiseDocDefinition } from '../pdf/sanitiseDocDefinition'
+import { buildSchoolReportPdf } from '../pdf/buildSchoolReportPdf'
+import schoolsFullData from '../data/schools.json'
+import scoreRowsData from '../data/score_rows.json'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getLabel } from '../i18n/labels'
 import { LanguageToggle } from '../components/LanguageToggle'
@@ -29,9 +30,7 @@ function Dashboard() {
   const [filteredData, setFilteredData] = useState<SchoolTableRow[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-  const [downloadingPdf, setDownloadingPdf] = useState<string | null>(null)
-  const [downloadingAll, setDownloadingAll] = useState(false)
-  const [downloadProgress, setDownloadProgress] = useState<{ current: number; total: number } | null>(null)
+  const [pdfMakeInstance, setPdfMakeInstance] = useState<any>(null)
 
   // Load data on mount
   useEffect(() => {
@@ -63,6 +62,50 @@ function Dashboard() {
     setTableData(combined)
     setFilteredData(combined)
   }, [])
+
+  // Preload pdfMake on mount (CRITICAL: must load before user clicks)
+  useEffect(() => {
+    loadPdfMake().then(setPdfMakeInstance).catch(err => {
+      console.error('Failed to load pdfMake:', err)
+    })
+  }, [])
+
+  // Prebuild test PDF doc (synchronous, no async in click)
+  const testPdfDoc = useMemo(() => {
+    return sanitiseDocDefinition({
+      content: [
+        { text: "PDF test OK", font: "Roboto" },
+        { text: "हिंदी परीक्षण सफल", font: "NotoSansDevanagari" }
+      ]
+    })
+  }, [])
+
+  // Prebuild all docDefinitions for filtered schools (synchronous, no async in click)
+  const preparedDocs = useMemo(() => {
+    const schools = schoolsFullData as School[]
+    const allScoreRows = scoreRowsData as any[]
+    const aggregates = aggregatesData as Aggregates[]
+    const docs: Record<string, any> = {}
+
+    filteredData.forEach(row => {
+      const school = schools.find(s => s.school_code === row.school_code)
+      if (!school) return
+
+      const schoolScoreRows = allScoreRows.filter((r: any) => r.school_code === row.school_code)
+      const schoolAggregates = aggregates.find(a => a.school_code === row.school_code) || null
+
+      const docDefinition = buildSchoolReportPdf({
+        school,
+        aggregates: schoolAggregates,
+        scoreRows: schoolScoreRows,
+        lang: language,
+      })
+
+      docs[row.school_code] = sanitiseDocDefinition(docDefinition)
+    })
+
+    return docs
+  }, [filteredData, language])
 
   // Search functionality
   useEffect(() => {
@@ -112,62 +155,64 @@ function Dashboard() {
   }
 
   // Handle PDF download
-  const handleDownloadPdf = async (school_code: string) => {
-    try {
-      setDownloadingPdf(school_code)
-      await downloadSchoolPdf(school_code, language)
-    } catch (e) {
-      console.error('PDF_FATAL_ERROR', e)
-      alert(String((e as any)?.message ?? e))
-    } finally {
-      // CRITICAL: Always reset UI state
-      setDownloadingPdf(null)
+  // SYNCHRONOUS handler (no async, no await - CRITICAL for .open() to work)
+  const handleDownloadPdf = (school_code: string) => {
+    if (!pdfMakeInstance) {
+      alert('PDF engine not ready yet. Please wait a moment and try again.')
+      return
     }
+
+    const preparedDoc = preparedDocs[school_code]
+    if (!preparedDoc) {
+      alert('PDF document not ready for this school.')
+      return
+    }
+
+    console.log('PDF_CLICK', school_code, language)
+    
+    // MUST be called synchronously (same call stack as click)
+    pdfMakeInstance.createPdf(preparedDoc).open()
+    
+    console.log('OPEN_CALLED')
   }
 
-  // Handle open all PDFs
-  const handleDownloadAllPdfs = async () => {
-    try {
-      setDownloadingAll(true)
-      setDownloadProgress(null)
-      await downloadAllPdfs(language, (current, total) => {
-        setDownloadProgress({ current, total })
-      })
-    } catch (e) {
-      console.error('PDF_FATAL_ERROR', e)
-      alert(String((e as any)?.message ?? e))
-    } finally {
-      // CRITICAL: Always reset UI state
-      setDownloadingAll(false)
-      setDownloadProgress(null)
+  // SYNCHRONOUS handler for bulk (no async, no await - CRITICAL for .open() to work)
+  const handleDownloadAllPdfs = () => {
+    if (!pdfMakeInstance) {
+      alert('PDF engine not ready yet. Please wait a moment and try again.')
+      return
     }
+
+    const docsToOpen = Object.entries(preparedDocs)
+    if (docsToOpen.length === 0) {
+      alert('No PDFs ready to open.')
+      return
+    }
+
+    console.log('BULK_OPEN_START', docsToOpen.length)
+
+    // Open all PDFs synchronously (browser may limit tabs, that's expected)
+    docsToOpen.forEach(([school_code, doc], index) => {
+      console.log(`BULK_OPEN_${index + 1}`, school_code)
+      pdfMakeInstance.createPdf(doc).open()
+    })
+
+    alert(`Opened ${docsToOpen.length} PDFs in new tabs. Please save them manually.`)
   }
 
-  // TEST FUNCTION - Temporary test for pdfMake
-  const handleTestPdf = async () => {
-    try {
-      console.log('📦 Loading pdfMake...')
-      const pdfMake = await loadPdfMake()
-      
-      console.log('📄 Creating test PDF with both fonts...')
-      const docDefinition = {
-        content: [
-          { text: "PDF test OK", font: "Roboto" },
-          { text: "हिंदी परीक्षण सफल", font: "NotoSansDevanagari" }
-        ]
-      }
-      
-      console.log('🧹 Sanitising docDefinition...')
-      const safeDoc = sanitiseDocDefinition(docDefinition)
-      
-      console.log('🔓 Opening PDF...')
-      pdfMake.createPdf(safeDoc).open()
-      
-      console.log('✅ PDF opened successfully!')
-    } catch (e) {
-      console.error('PDF_FATAL_ERROR', e)
-      alert(String((e as any)?.message ?? e))
+  // SYNCHRONOUS test handler (no async, no await - CRITICAL for .open() to work)
+  const handleTestPdf = () => {
+    if (!pdfMakeInstance) {
+      alert('PDF engine not ready yet. Please wait a moment and try again.')
+      return
     }
+
+    console.log('TEST_PDF_CLICK')
+    
+    // MUST be called synchronously (same call stack as click)
+    pdfMakeInstance.createPdf(testPdfDoc).open()
+    
+    console.log('TEST_PDF_OPENED')
   }
 
   return (
@@ -184,15 +229,11 @@ function Dashboard() {
           </button>
           <button
             onClick={handleDownloadAllPdfs}
-            disabled={downloadingAll}
+            disabled={!pdfMakeInstance}
             className={styles.actionButton}
             style={{ minWidth: '180px' }}
           >
-            {downloadingAll && downloadProgress
-              ? `Opening ${downloadProgress.current} / ${downloadProgress.total}`
-              : downloadingAll
-              ? 'Preparing...'
-              : 'Open All PDFs'}
+            Open All PDFs
           </button>
           <LanguageToggle />
         </div>
@@ -326,10 +367,10 @@ function Dashboard() {
                   <button
                     onClick={() => handleDownloadPdf(row.school_code)}
                     className={styles.actionButton}
-                    disabled={downloadingPdf === row.school_code}
+                    disabled={!pdfMakeInstance}
                     title={getLabel(language, 'downloadPdf')}
                   >
-                    {downloadingPdf === row.school_code ? getLabel(language, 'generating') : getLabel(language, 'downloadPdf')}
+                    {getLabel(language, 'downloadPdf')}
                   </button>
                 </td>
               </tr>
