@@ -31,10 +31,10 @@ export const labels = {
     
     // Actions
     viewReport: 'View Report',
-    downloadPdf: 'Download PDF',
-    generating: 'Generating...',
+    downloadPdf: 'Open PDF',
+    generating: 'Opening...',
     backToDashboard: 'Back to Dashboard',
-    downloadPdfReport: 'Download PDF Report',
+    downloadPdfReport: 'Open PDF Report',
     
     // Data
     noData: 'No data',
@@ -93,10 +93,10 @@ export const labels = {
     
     // Actions
     viewReport: 'रिपोर्ट देखें',
-    downloadPdf: 'पीडीएफ डाउनलोड करें',
-    generating: 'तैयार हो रहा है...',
+    downloadPdf: 'पीडीएफ खोलें',
+    generating: 'खोला जा रहा है...',
     backToDashboard: 'डैशबोर्ड पर वापस जाएं',
-    downloadPdfReport: 'पीडीएफ रिपोर्ट डाउनलोड करें',
+    downloadPdfReport: 'पीडीएफ रिपोर्ट खोलें',
     
     // Data
     noData: 'कोई डेटा नहीं',

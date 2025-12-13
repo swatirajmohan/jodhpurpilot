@@ -1,6 +1,6 @@
 /**
- * Single PDF Download
- * Downloads a PDF for a single school
+ * Single PDF Open
+ * Opens a PDF for a single school in a new tab
  */
 
 import { loadPdfMake } from './loadPdfMake'
@@ -36,13 +36,6 @@ interface Aggregates {
   }
 }
 
-function sanitizeFileName(name: string): string {
-  return name
-    .replace(/[^a-zA-Z0-9\s]/g, '')
-    .replace(/\s+/g, '_')
-    .substring(0, 50)
-}
-
 export async function downloadSchoolPdf(schoolCode: string, lang: PdfLang = 'en'): Promise<void> {
   const schools = schoolsData as School[]
   const school = schools.find((s) => s.school_code === schoolCode)
@@ -71,11 +64,7 @@ export async function downloadSchoolPdf(schoolCode: string, lang: PdfLang = 'en'
   // Load pdfMake
   const pdfMake = await loadPdfMake()
 
-  // Yield once so UI updates
-  await new Promise(requestAnimationFrame)
-
-  // Direct download (no blob, no buffer, no timeout wrapper)
-  const filename = `${school.school_code}_${sanitizeFileName(school.school_name)}_report_${lang}.pdf`
-  pdfMake.createPdf(safeDoc).download(filename)
+  // Open PDF in new tab (browsers allow this, block downloads)
+  pdfMake.createPdf(safeDoc).open()
 }
 

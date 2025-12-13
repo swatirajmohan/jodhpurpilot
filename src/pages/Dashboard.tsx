@@ -113,8 +113,8 @@ function Dashboard() {
 
   // Handle PDF download
   const handleDownloadPdf = async (school_code: string) => {
-    setDownloadingPdf(school_code)
     try {
+      setDownloadingPdf(school_code)
       await downloadSchoolPdf(school_code, language)
     } catch (e) {
       console.error('PDF_FATAL_ERROR', e)
@@ -125,18 +125,11 @@ function Dashboard() {
     }
   }
 
-  // Handle download all PDFs
+  // Handle open all PDFs
   const handleDownloadAllPdfs = async () => {
-    setDownloadingAll(true)
-    setDownloadProgress(null)
-
-    // Safety timeout: force reset after 2 minutes
-    const safetyTimer = setTimeout(() => {
-      setDownloadingAll(false)
-      setDownloadProgress(null)
-    }, 120000)
-
     try {
+      setDownloadingAll(true)
+      setDownloadProgress(null)
       await downloadAllPdfs(language, (current, total) => {
         setDownloadProgress({ current, total })
       })
@@ -145,7 +138,6 @@ function Dashboard() {
       alert(String((e as any)?.message ?? e))
     } finally {
       // CRITICAL: Always reset UI state
-      clearTimeout(safetyTimer)
       setDownloadingAll(false)
       setDownloadProgress(null)
     }
@@ -168,13 +160,10 @@ function Dashboard() {
       console.log('🧹 Sanitising docDefinition...')
       const safeDoc = sanitiseDocDefinition(docDefinition)
       
-      // Yield so UI updates
-      await new Promise(requestAnimationFrame)
+      console.log('🔓 Opening PDF...')
+      pdfMake.createPdf(safeDoc).open()
       
-      console.log('💾 Downloading...')
-      pdfMake.createPdf(safeDoc).download("test.pdf")
-      
-      console.log('✅ PDF test successful!')
+      console.log('✅ PDF opened successfully!')
     } catch (e) {
       console.error('PDF_FATAL_ERROR', e)
       alert(String((e as any)?.message ?? e))
@@ -200,10 +189,10 @@ function Dashboard() {
             style={{ minWidth: '180px' }}
           >
             {downloadingAll && downloadProgress
-              ? `Generating ${downloadProgress.current} / ${downloadProgress.total}`
+              ? `Opening ${downloadProgress.current} / ${downloadProgress.total}`
               : downloadingAll
               ? 'Preparing...'
-              : 'Download All PDFs'}
+              : 'Open All PDFs'}
           </button>
           <LanguageToggle />
         </div>
