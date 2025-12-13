@@ -151,6 +151,7 @@ function Dashboard() {
       // Transform data to target language
       const transformedPayload = transformPdfPayload(payload)
       console.log('SENDING PDF DATA (after transform):', transformedPayload)
+      console.log('PDF_PAYLOAD_SAMPLE', language, transformedPayload.competencies?.[0]?.competency_name)
       
       // Call backend to generate PDF
       const blob = await generatePdfFromBackend(transformedPayload)

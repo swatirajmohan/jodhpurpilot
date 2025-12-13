@@ -99,6 +99,32 @@
       color: #2e7d32;
     }
     
+    /* Priority distribution table cells */
+    .priorityCell {
+      padding: 10px 8px;
+    }
+    
+    .priorityHigh {
+      background-color: #fde2e2;
+      color: #b91c1c;
+      font-weight: 700;
+      text-align: center;
+    }
+    
+    .priorityMedium {
+      background-color: #fff4cc;
+      color: #92400e;
+      font-weight: 700;
+      text-align: center;
+    }
+    
+    .priorityLow {
+      background-color: #d1fae5;
+      color: #065f46;
+      font-weight: 700;
+      text-align: center;
+    }
+    
     .page-break {
       page-break-before: always;
     }
@@ -285,12 +311,12 @@
       const math = priorityCounts[grade]['Mathematics'];
       html += `<tr>
         <td>${grade}</td>
-        <td>${eng.High || 0}</td>
-        <td>${eng.Medium || 0}</td>
-        <td>${eng.Low || 0}</td>
-        <td>${math.High || 0}</td>
-        <td>${math.Medium || 0}</td>
-        <td>${math.Low || 0}</td>
+        <td class="priorityCell priorityHigh">${eng.High || 0}</td>
+        <td class="priorityCell priorityMedium">${eng.Medium || 0}</td>
+        <td class="priorityCell priorityLow">${eng.Low || 0}</td>
+        <td class="priorityCell priorityHigh">${math.High || 0}</td>
+        <td class="priorityCell priorityMedium">${math.Medium || 0}</td>
+        <td class="priorityCell priorityLow">${math.Low || 0}</td>
       </tr>`;
     });
     
@@ -320,12 +346,12 @@
       const soc = priorityCounts[grade]['Social Science'];
       html += `<tr>
         <td>${grade}</td>
-        <td>${sci.High || 0}</td>
-        <td>${sci.Medium || 0}</td>
-        <td>${sci.Low || 0}</td>
-        <td>${soc.High || 0}</td>
-        <td>${soc.Medium || 0}</td>
-        <td>${soc.Low || 0}</td>
+        <td class="priorityCell priorityHigh">${sci.High || 0}</td>
+        <td class="priorityCell priorityMedium">${sci.Medium || 0}</td>
+        <td class="priorityCell priorityLow">${sci.Low || 0}</td>
+        <td class="priorityCell priorityHigh">${soc.High || 0}</td>
+        <td class="priorityCell priorityMedium">${soc.Medium || 0}</td>
+        <td class="priorityCell priorityLow">${soc.Low || 0}</td>
       </tr>`;
     });
     

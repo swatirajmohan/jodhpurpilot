@@ -3,7 +3,8 @@
  * Translates subjects, competencies, and priority bands
  */
 
-import { translateSubject, translateCompetency, translatePriority } from '../i18n/dataTranslations';
+import { translateSubject, translatePriority } from '../i18n/dataTranslations';
+import { COMPETENCY_HI_MAP } from '../i18n/competencyHi';
 
 interface Aggregates {
   school_code: string;
@@ -60,10 +61,13 @@ function transformAggregates(aggregates: Aggregates | null, lang: 'en' | 'hi'): 
  * Transform competencies array to target language
  */
 function transformCompetencies(competencies: Competency[], lang: 'en' | 'hi'): Competency[] {
+  if (lang === 'en') return competencies;
+  
+  // For Hindi, use simple map lookup
   return competencies.map(comp => ({
     ...comp,
     subject: translateSubject(comp.subject, lang),
-    competency_name: translateCompetency(comp.competency_name, lang),
+    competency_name: COMPETENCY_HI_MAP[comp.competency_name] ?? comp.competency_name,
     priority_band: translatePriority(comp.priority_band, lang)
   }));
 }
