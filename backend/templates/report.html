@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Assessment Report</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Noto Sans', 'Noto Sans Devanagari', Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.4;
+      color: #333;
+      padding: 20px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #2c3e50;
+      padding-bottom: 15px;
+    }
+    
+    .header h1 {
+      font-size: 20pt;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    
+    .school-info {
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-left: 4px solid #3498db;
+    }
+    
+    .school-info p {
+      margin: 5px 0;
+      font-size: 11pt;
+    }
+    
+    .section {
+      margin-bottom: 25px;
+      page-break-inside: avoid;
+    }
+    
+    .section-title {
+      font-size: 14pt;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    
+    th {
+      background-color: #3498db;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+    }
+    
+    td {
+      text-align: center;
+    }
+    
+    .subject-col {
+      text-align: left;
+      font-weight: 600;
+    }
+    
+    .priority-high {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+    
+    .priority-medium {
+      background-color: #fff9c4;
+      color: #f57f17;
+    }
+    
+    .priority-low {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+    
+    .grade-section {
+      margin-top: 20px;
+      page-break-before: always;
+    }
+    
+    .grade-section h3 {
+      font-size: 13pt;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      padding: 8px;
+      background: #ecf0f1;
+    }
+    
+    .no-data {
+      color: #999;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1 id="report-title"></h1>
+  </div>
+  
+  <div class="school-info">
+    <p><strong id="label-school-name"></strong> <span id="school-name">{{SCHOOL_NAME}}</span></p>
+    <p><strong id="label-school-code"></strong> <span id="school-code">{{SCHOOL_CODE}}</span></p>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title" id="label-subject-averages"></h2>
+    <table>
+      <thead>
+        <tr>
+          <th id="th-subject"></th>
+          <th id="th-average"></th>
+        </tr>
+      </thead>
+      <tbody id="averages-table"></tbody>
+    </table>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title" id="label-priority-distribution"></h2>
+    <table>
+      <thead>
+        <tr>
+          <th id="th-grade"></th>
+          <th colspan="3" id="th-english"></th>
+          <th colspan="3" id="th-mathematics"></th>
+          <th colspan="3" id="th-science"></th>
+          <th colspan="3" id="th-social-science"></th>
+        </tr>
+        <tr>
+          <th></th>
+          <th>H</th>
+          <th>M</th>
+          <th>L</th>
+          <th>H</th>
+          <th>M</th>
+          <th>L</th>
+          <th>H</th>
+          <th>M</th>
+          <th>L</th>
+          <th>H</th>
+          <th>M</th>
+          <th>L</th>
+        </tr>
+      </thead>
+      <tbody id="priority-table"></tbody>
+    </table>
+  </div>
+  
+  <div id="competency-sections"></div>
+  
+  <script>
+    const data = {{DATA_JSON}};
+    const { school, aggregates, competencies, lang } = data;
+    
+    // Labels
+    const labels = {
+      en: {
+        reportTitle: 'School Assessment Report Card',
+        schoolName: 'School Name:',
+        schoolCode: 'School Code:',
+        subjectAverages: 'Subject-wise Average Scores',
+        priorityDistribution: 'Competency Priority Distribution by Grade',
+        subject: 'Subject',
+        average: 'Average Score',
+        grade: 'Grade',
+        overall: 'Overall',
+        english: 'English',
+        mathematics: 'Mathematics',
+        science: 'Science',
+        socialScience: 'Social Science',
+        competency: 'Competency',
+        score: 'Score',
+        priority: 'Priority',
+        high: 'High',
+        medium: 'Medium',
+        low: 'Low',
+        noData: 'No data'
+      },
+      hi: {
+        reportTitle: 'स्कूल मूल्यांकन रिपोर्ट कार्ड',
+        schoolName: 'स्कूल का नाम:',
+        schoolCode: 'स्कूल कोड:',
+        subjectAverages: 'विषयवार औसत अंक',
+        priorityDistribution: 'ग्रेड के अनुसार दक्षता प्राथमिकता वितरण',
+        subject: 'विषय',
+        average: 'औसत अंक',
+        grade: 'कक्षा',
+        overall: 'समग्र',
+        english: 'अंग्रेज़ी',
+        mathematics: 'गणित',
+        science: 'विज्ञान',
+        socialScience: 'सामाजिक विज्ञान',
+        competency: 'दक्षता',
+        score: 'अंक',
+        priority: 'प्राथमिकता',
+        high: 'उच्च',
+        medium: 'मध्यम',
+        low: 'निम्न',
+        noData: 'कोई डेटा नहीं'
+      }
+    };
+    
+    const t = (key) => labels[lang][key] || labels.en[key] || key;
+    
+    // Set labels
+    document.getElementById('report-title').textContent = t('reportTitle');
+    document.getElementById('label-school-name').textContent = t('schoolName');
+    document.getElementById('label-school-code').textContent = t('schoolCode');
+    document.getElementById('label-subject-averages').textContent = t('subjectAverages');
+    document.getElementById('label-priority-distribution').textContent = t('priorityDistribution');
+    document.getElementById('th-subject').textContent = t('subject');
+    document.getElementById('th-average').textContent = t('average');
+    document.getElementById('th-grade').textContent = t('grade');
+    document.getElementById('th-english').textContent = t('english');
+    document.getElementById('th-mathematics').textContent = t('mathematics');
+    document.getElementById('th-science').textContent = t('science');
+    document.getElementById('th-social-science').textContent = t('socialScience');
+    
+    // Render averages
+    const avgTable = document.getElementById('averages-table');
+    if (aggregates) {
+      const subjects = [
+        { key: 'overall_avg', label: 'overall' },
+        { key: 'English', label: 'english' },
+        { key: 'Mathematics', label: 'mathematics' },
+        { key: 'Science', label: 'science' },
+        { key: 'Social Science', label: 'socialScience' }
+      ];
+      
+      subjects.forEach(({ key, label }) => {
+        const value = key === 'overall_avg' 
+          ? aggregates.overall_avg 
+          : aggregates.subject_avg_map?.[key];
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="subject-col">${t(label)}</td>
+          <td>${value != null ? value.toFixed(1) : t('noData')}</td>
+        `;
+        avgTable.appendChild(row);
+      });
+    }
+    
+    // Render priority distribution
+    const priorityTable = document.getElementById('priority-table');
+    if (competencies && Array.isArray(competencies)) {
+      [6, 7, 8].forEach(grade => {
+        const gradeComps = competencies.filter(c => c.grade_level === grade);
+        
+        const getPriority = (subject) => {
+          const subjectComps = gradeComps.filter(c => c.subject === subject);
+          const high = subjectComps.filter(c => c.priority_band === 'High').length;
+          const medium = subjectComps.filter(c => c.priority_band === 'Medium').length;
+          const low = subjectComps.filter(c => c.priority_band === 'Low').length;
+          return { high, medium, low };
+        };
+        
+        const eng = getPriority('English');
+        const math = getPriority('Mathematics');
+        const sci = getPriority('Science');
+        const soc = getPriority('Social Science');
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${t('grade')} ${grade}</strong></td>
+          <td>${eng.high}</td>
+          <td>${eng.medium}</td>
+          <td>${eng.low}</td>
+          <td>${math.high}</td>
+          <td>${math.medium}</td>
+          <td>${math.low}</td>
+          <td>${sci.high}</td>
+          <td>${sci.medium}</td>
+          <td>${sci.low}</td>
+          <td>${soc.high}</td>
+          <td>${soc.medium}</td>
+          <td>${soc.low}</td>
+        `;
+        priorityTable.appendChild(row);
+      });
+    }
+    
+    // Render detailed competency sections
+    const compSections = document.getElementById('competency-sections');
+    if (competencies && Array.isArray(competencies)) {
+      const grades = [6, 7, 8];
+      const subjects = ['English', 'Mathematics', 'Science', 'Social Science'];
+      
+      grades.forEach(grade => {
+        const gradeDiv = document.createElement('div');
+        gradeDiv.className = 'grade-section';
+        gradeDiv.innerHTML = `<h3>${t('grade')} ${grade}</h3>`;
+        
+        subjects.forEach(subject => {
+          const subjectComps = competencies
+            .filter(c => c.grade_level === grade && c.subject === subject)
+            .sort((a, b) => {
+              const priorityOrder = { High: 0, Medium: 1, Low: 2 };
+              return priorityOrder[a.priority_band] - priorityOrder[b.priority_band] || a.score_10 - b.score_10;
+            });
+          
+          if (subjectComps.length > 0) {
+            const subjectLabel = subject === 'Social Science' ? 'socialScience' : subject.toLowerCase();
+            const table = `
+              <div class="section">
+                <h4>${t(subjectLabel)}</h4>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>${t('competency')}</th>
+                      <th>${t('score')}</th>
+                      <th>${t('priority')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${subjectComps.map(c => `
+                      <tr>
+                        <td class="subject-col">${c.competency_name}</td>
+                        <td>${c.score_10 != null ? c.score_10.toFixed(1) : '-'}</td>
+                        <td class="priority-${c.priority_band.toLowerCase()}">${t(c.priority_band.toLowerCase())}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            `;
+            gradeDiv.innerHTML += table;
+          }
+        });
+        
+        compSections.appendChild(gradeDiv);
+      });
+    }
+  </script>
+</body>
+</html>
+
