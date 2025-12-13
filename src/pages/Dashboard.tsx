@@ -129,16 +129,26 @@ function Dashboard() {
       const allScoreRows = scoreRowsData as any[]
       const competencies = allScoreRows.filter((row: any) => row.school_code === school_code)
       
-      // Call backend to generate PDF
-      const blob = await generatePdfFromBackend({
+      // Build payload
+      const payload = {
         school: {
           school_code: school.school_code,
           school_name: school.school_name
         },
-        aggregates: school.aggregates,
+        aggregates: school.aggregates || null,
         competencies,
         lang: language
-      })
+      }
+      
+      // STEP 8: Frontend sanity check
+      console.log('SENDING PDF DATA:', payload)
+      
+      if (!payload.school || !payload.competencies || payload.competencies.length === 0) {
+        throw new Error('Incomplete PDF data - refusing to send')
+      }
+      
+      // Call backend to generate PDF
+      const blob = await generatePdfFromBackend(payload)
       
       console.log('PDF_BLOB_RECEIVED', blob.size)
       
