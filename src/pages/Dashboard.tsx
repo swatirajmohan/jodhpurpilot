@@ -4,7 +4,9 @@ import { Aggregates, School } from '../types'
 import ScoreChip from '../components/ScoreChip'
 import schoolsData from '../data/schools.json'
 import aggregatesData from '../data/aggregates.json'
-import { generatePdfFromBackend, downloadBlob } from '../utils/pdfBackend'
+import { generatePdfFromBackend } from '../utils/pdfBackend'
+import { downloadBlob } from '../utils/download'
+import { downloadAllPdfsAsZip } from '../utils/downloadAllPdfsAsZip'
 import scoreRowsData from '../data/score_rows.json'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getLabel } from '../i18n/labels'
@@ -110,12 +112,12 @@ function Dashboard() {
   }
 
   // Handle PDF download
-  // Handle single PDF download via backend
+  // Handle single PDF download - must be async to use fetch
   const handleDownloadPdf = async (school_code: string) => {
     setDownloadingPdf(school_code)
     
     try {
-      console.log('PDF_BACKEND_CALL', school_code, language)
+      console.log('PDF_DOWNLOAD_START', school_code, language)
       
       // Find school data
       const school = tableData.find(s => s.school_code === school_code)
@@ -127,7 +129,7 @@ function Dashboard() {
       const allScoreRows = scoreRowsData as any[]
       const competencies = allScoreRows.filter((row: any) => row.school_code === school_code)
       
-      // Call backend
+      // Call backend to generate PDF
       const blob = await generatePdfFromBackend({
         school: {
           school_code: school.school_code,
@@ -138,63 +140,29 @@ function Dashboard() {
         lang: language
       })
       
-      // Download
-      const filename = `${school.school_code}_${school.school_name.replace(/[^a-zA-Z0-9]/g, '_')}_report.pdf`
+      console.log('PDF_BLOB_RECEIVED', blob.size)
+      
+      // Download using robust blob download
+      const filename = `${school.school_code}_${language}.pdf`
       downloadBlob(blob, filename)
       
-      console.log('PDF_DOWNLOADED')
+      console.log('PDF_DOWNLOAD_TRIGGERED')
     } catch (error) {
       console.error('PDF_ERROR', error)
-      alert(`Failed to generate PDF: ${(error as Error).message}`)
+      alert(`Failed to download PDF: ${(error as Error).message}`)
     } finally {
       setDownloadingPdf(null)
     }
   }
 
-  // Handle bulk PDF download via backend
+  // Handle bulk PDF download as ZIP
   const handleDownloadAllPdfs = async () => {
     setDownloadingAll(true)
     
     try {
-      console.log('BULK_PDF_START', filteredData.length)
-      
-      const allScoreRows = scoreRowsData as any[]
-      let success = 0
-      let failed = 0
-      
-      // Download sequentially
-      for (let i = 0; i < filteredData.length; i++) {
-        const school = filteredData[i]
-        
-        try {
-          console.log(`BULK_${i + 1}/${filteredData.length}`, school.school_code)
-          
-          const competencies = allScoreRows.filter((row: any) => row.school_code === school.school_code)
-          
-          const blob = await generatePdfFromBackend({
-            school: {
-              school_code: school.school_code,
-              school_name: school.school_name
-            },
-            aggregates: school.aggregates,
-            competencies,
-            lang: language
-          })
-          
-          const filename = `${school.school_code}_${school.school_name.replace(/[^a-zA-Z0-9]/g, '_')}_report.pdf`
-          downloadBlob(blob, filename)
-          
-          success++
-          
-          // Small delay between downloads
-          await new Promise(resolve => setTimeout(resolve, 500))
-        } catch (error) {
-          console.error('BULK_PDF_FAIL', school.school_code, error)
-          failed++
-        }
-      }
-      
-      alert(`Downloaded ${success} PDFs successfully. ${failed > 0 ? `Failed: ${failed}` : ''}`)
+      await downloadAllPdfsAsZip(language, (progress) => {
+        console.log(`Progress: ${progress.current}/${progress.total}, Failures: ${progress.failures.length}`)
+      })
     } catch (error) {
       console.error('BULK_ERROR', error)
       alert(`Bulk download error: ${(error as Error).message}`)
@@ -260,7 +228,7 @@ function Dashboard() {
             className={styles.actionButton}
             style={{ minWidth: '180px' }}
           >
-            {downloadingAll ? 'Downloading...' : 'Download All PDFs'}
+            {downloadingAll ? 'Creating ZIP...' : 'Download All PDFs'}
           </button>
           <LanguageToggle />
         </div>
