@@ -6,6 +6,7 @@
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { generatePdfFromBackend } from './pdfBackend';
+import { transformPdfPayload } from './transformPdfData';
 import schoolsData from '../data/schools.json';
 import aggregatesData from '../data/aggregates.json';
 import scoreRowsData from '../data/score_rows.json';
@@ -68,16 +69,22 @@ export async function downloadAllPdfsAsZip(
       const schoolAggregates = allAggregates.find(a => a.school_code === school.school_code);
       const competencies = allScoreRows.filter((row: any) => row.school_code === school.school_code);
       
-      // Call backend to generate PDF
-      const blob = await generatePdfFromBackend({
+      // Build payload
+      const payload = {
         school: {
           school_code: school.school_code,
           school_name: school.school_name
         },
-        aggregates: schoolAggregates,
+        aggregates: schoolAggregates || null,
         competencies,
         lang
-      });
+      };
+      
+      // Transform to target language
+      const transformedPayload = transformPdfPayload(payload);
+      
+      // Call backend to generate PDF
+      const blob = await generatePdfFromBackend(transformedPayload);
       
       // Add to ZIP
       const filename = `${school.school_code}_${lang}.pdf`;

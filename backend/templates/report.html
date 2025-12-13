@@ -183,13 +183,12 @@
       return Number(val).toFixed(1);
     }
     
-    function getPriorityClass(priority) {
-      if (!priority) return '';
-      const p = priority.toLowerCase();
-      if (p === 'high' || p === 'उच्च') return 'priority-high';
-      if (p === 'medium' || p === 'मध्यम') return 'priority-medium';
-      if (p === 'low' || p === 'निम्न') return 'priority-low';
-      return '';
+    // Get priority class based on NUMERIC SCORE (not string)
+    function getPriorityClass(score) {
+      if (score === null || score === undefined) return '';
+      if (score < 5) return 'priority-high';    // Red
+      if (score < 7) return 'priority-medium';  // Amber/Yellow
+      return 'priority-low';                     // Green
     }
     
     function translatePriority(priority) {
@@ -350,13 +349,12 @@
           
           if (subjectComps.length === 0) return;
           
-          // Sort: High, Medium, Low, then by score
-          const priorityOrder = { 'High': 1, 'Medium': 2, 'Low': 3 };
+          // Sort by NUMERIC score (ascending: lower scores = higher priority)
+          // This works consistently across all languages
           subjectComps.sort((a, b) => {
-            const pA = priorityOrder[a.priority_band] || 4;
-            const pB = priorityOrder[b.priority_band] || 4;
-            if (pA !== pB) return pA - pB;
-            return (a.score_10 || 0) - (b.score_10 || 0);
+            const scoreA = a.score_10 ?? 999;
+            const scoreB = b.score_10 ?? 999;
+            return scoreA - scoreB;
           });
           
           const subjectLabel = {
@@ -378,7 +376,8 @@
             <tbody>`;
           
           subjectComps.forEach(comp => {
-            const priorityClass = getPriorityClass(comp.priority_band);
+            // Use NUMERIC score for color, not priority string
+            const priorityClass = getPriorityClass(comp.score_10);
             html += `<tr>
               <td class="left-align">${comp.competency_name || '-'}</td>
               <td>${formatScore(comp.score_10)}</td>

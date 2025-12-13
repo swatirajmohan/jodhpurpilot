@@ -7,6 +7,7 @@ import aggregatesData from '../data/aggregates.json'
 import { generatePdfFromBackend } from '../utils/pdfBackend'
 import { downloadBlob } from '../utils/download'
 import { downloadAllPdfsAsZip } from '../utils/downloadAllPdfsAsZip'
+import { transformPdfPayload } from '../utils/transformPdfData'
 import scoreRowsData from '../data/score_rows.json'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getLabel } from '../i18n/labels'
@@ -141,14 +142,18 @@ function Dashboard() {
       }
       
       // STEP 8: Frontend sanity check
-      console.log('SENDING PDF DATA:', payload)
+      console.log('SENDING PDF DATA (before transform):', payload)
       
       if (!payload.school || !payload.competencies || payload.competencies.length === 0) {
         throw new Error('Incomplete PDF data - refusing to send')
       }
       
+      // Transform data to target language
+      const transformedPayload = transformPdfPayload(payload)
+      console.log('SENDING PDF DATA (after transform):', transformedPayload)
+      
       // Call backend to generate PDF
-      const blob = await generatePdfFromBackend(payload)
+      const blob = await generatePdfFromBackend(transformedPayload)
       
       console.log('PDF_BLOB_RECEIVED', blob.size)
       
