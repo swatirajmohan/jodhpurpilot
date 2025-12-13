@@ -51,6 +51,8 @@ export async function downloadAllPdfs(
   schools.forEach((school, index) => {
     setTimeout(() => {
       try {
+        console.log(`BULK_PDF_${index + 1}`, school.school_code, lang)
+
         // Report progress
         if (onProgress) {
           onProgress(index + 1, schools.length)
@@ -74,6 +76,8 @@ export async function downloadAllPdfs(
 
         // Open PDF in new tab
         pdfMake.createPdf(safeDoc).open()
+
+        console.log(`BULK_OPEN_${index + 1}`, school.school_code)
       } catch (error) {
         console.error('BULK_PDF_FAIL', school.school_code, error)
       }

@@ -37,6 +37,8 @@ interface Aggregates {
 }
 
 export async function downloadSchoolPdf(schoolCode: string, lang: PdfLang = 'en'): Promise<void> {
+  console.log('PDF_CLICK', schoolCode, lang)
+
   const schools = schoolsData as School[]
   const school = schools.find((s) => s.school_code === schoolCode)
 
@@ -58,13 +60,21 @@ export async function downloadSchoolPdf(schoolCode: string, lang: PdfLang = 'en'
     lang,
   })
 
+  console.log('DOC_READY', !!docDefinition, (docDefinition as any)?.content?.length)
+
   // Sanitise docDefinition to prevent crashes
   const safeDoc = sanitiseDocDefinition(docDefinition)
+
+  console.log('DOC_SANITISED', !!safeDoc)
 
   // Load pdfMake
   const pdfMake = await loadPdfMake()
 
+  console.log('PDFMAKE_READY', !!pdfMake, typeof pdfMake?.createPdf)
+
   // Open PDF in new tab (browsers allow this, block downloads)
   pdfMake.createPdf(safeDoc).open()
+
+  console.log('OPEN_CALLED')
 }
 
