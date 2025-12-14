@@ -7,7 +7,7 @@ import aggregatesData from '../data/aggregates.json'
 import { generatePdfFromBackend } from '../utils/pdfBackend'
 import { downloadBlob } from '../utils/download'
 import { downloadAllPdfsAsZip } from '../utils/downloadAllPdfsAsZip'
-import { transformPdfPayload } from '../utils/transformPdfData'
+import { transformPdfPayload, PdfPayload } from '../utils/transformPdfData'
 import scoreRowsData from '../data/score_rows.json'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getLabel } from '../i18n/labels'
@@ -143,7 +143,7 @@ function Dashboard() {
       const competencies = allScoreRows.filter((row: any) => row.school_code === school_code)
       
       // Build payload for full school report
-      const payload = {
+      const payload: PdfPayload = {
         school: {
           school_code: school.school_code,
           school_name: school.school_name
@@ -209,7 +209,7 @@ function Dashboard() {
       }
       
       // Build payload for grade-specific report
-      const payload = {
+      const payload: PdfPayload = {
         school: {
           school_code: school.school_code,
           school_name: school.school_name
@@ -302,7 +302,7 @@ function Dashboard() {
           }
           
           // Build payload for grade-specific report
-          const payload = {
+          const payload: PdfPayload = {
             school: {
               school_code: school.school_code,
               school_name: school.school_name
