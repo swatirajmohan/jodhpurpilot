@@ -265,26 +265,56 @@
       return Number(val).toFixed(1);
     }
     
-    // Get priority class based on NUMERIC SCORE (not string)
-    function getPriorityClass(score) {
-      if (score === null || score === undefined) return '';
-      if (score < 5) return 'priority-high';    // Red
-      if (score < 7) return 'priority-medium';  // Amber/Yellow
-      return 'priority-low';                     // Green
+    // Get priority class based on priority band enum OR numeric score
+    function getPriorityClass(priorityBand, score) {
+      // Try band first (more reliable)
+      if (priorityBand) {
+        const band = priorityBand.toLowerCase();
+        if (band === 'high' || band === 'उच्च') return 'priority-high';
+        if (band === 'medium' || band === 'मध्यम') return 'priority-medium';
+        if (band === 'low' || band === 'निम्न') return 'priority-low';
+      }
+      // Fallback to score
+      if (score !== null && score !== undefined) {
+        if (score < 5) return 'priority-high';
+        if (score < 7) return 'priority-medium';
+        return 'priority-low';
+      }
+      return '';
     }
     
     function translatePriority(priority) {
       if (!priority || priority === '-') return '-';
       const p = priority.toLowerCase();
-      if (p === 'high') return lang === 'hi' ? 'उच्च' : 'High';
-      if (p === 'medium') return lang === 'hi' ? 'मध्यम' : 'Medium';
-      if (p === 'low') return lang === 'hi' ? 'निम्न' : 'Low';
+      if (p === 'high' || p === 'उच्च') return lang === 'hi' ? 'उच्च' : 'High';
+      if (p === 'medium' || p === 'मध्यम') return lang === 'hi' ? 'मध्यम' : 'Medium';
+      if (p === 'low' || p === 'निम्न') return lang === 'hi' ? 'निम्न' : 'Low';
       return priority;
     }
     
     // Extract report parameters
     const reportType = data.reportType || 'full'; // 'full' or 'grade'
     const gradeLevel = data.gradeLevel || null; // 6, 7, 8, or null
+    
+    // DEBUG: Log data structure
+    console.log('TEMPLATE_DEBUG:', {
+      reportType,
+      gradeLevel,
+      lang,
+      competenciesCount: competencies?.length || 0,
+      sampleComp: competencies?.[0],
+      sampleSubject: competencies?.[0]?.subject,
+      samplePriority: competencies?.[0]?.priority_band
+    });
+    
+    // DEBUG: Check for data consistency between languages
+    if (reportType === 'grade' && gradeLevel && competencies && competencies.length === 0) {
+      console.error('CRITICAL: Grade report has ZERO competencies', {
+        school: school.school_code,
+        grade: gradeLevel,
+        lang
+      });
+    }
     
     // Determine title
     let pageTitle = t.title;
@@ -342,13 +372,14 @@
       html += `<h2>${t.priorityDist}</h2>`;
       
       // Calculate priority counts by grade and subject
+      // IMPORTANT: Use English keys for data access, not translated keys
       const priorityCounts = {};
       const grades = [6, 7, 8];
-      const subjects = ['English', 'Mathematics', 'Science', 'Social Science'];
+      const subjectsEN = ['English', 'Mathematics', 'Science', 'Social Science'];
       
       grades.forEach(grade => {
         priorityCounts[grade] = {};
-        subjects.forEach(subject => {
+        subjectsEN.forEach(subject => {
           priorityCounts[grade][subject] = { High: 0, Medium: 0, Low: 0 };
         });
       });
@@ -356,11 +387,17 @@
       if (competencies && Array.isArray(competencies)) {
         competencies.forEach(comp => {
           const grade = comp.grade_level;
-          const subject = comp.subject;
-          const priority = comp.priority_band;
+          const subject = comp.subject; // Should always be English key
+          const priority = comp.priority_band; // Should always be High/Medium/Low
           
-          if (priorityCounts[grade] && priorityCounts[grade][subject] && priority) {
-            priorityCounts[grade][subject][priority] = (priorityCounts[grade][subject][priority] || 0) + 1;
+          // Normalize priority band (handle both English and Hindi just in case)
+          let normalizedPriority = priority;
+          if (priority === 'उच्च') normalizedPriority = 'High';
+          if (priority === 'मध्यम') normalizedPriority = 'Medium';
+          if (priority === 'निम्न') normalizedPriority = 'Low';
+          
+          if (priorityCounts[grade] && priorityCounts[grade][subject] && normalizedPriority) {
+            priorityCounts[grade][subject][normalizedPriority] = (priorityCounts[grade][subject][normalizedPriority] || 0) + 1;
           }
         });
       }
@@ -443,12 +480,18 @@
       const gradesToRender = (reportType === 'grade' && gradeLevel) 
         ? [gradeLevel] 
         : grades;
-      const subjects = ['English', 'Mathematics', 'Science', 'Social Science'];
+      // Use English subject keys for data filtering (not translated keys)
+      const subjectsEN = ['English', 'Mathematics', 'Science', 'Social Science'];
       
       gradesToRender.forEach((grade, gradeIdx) => {
         const gradeComps = competencies.filter(c => c.grade_level === grade);
         
-        if (gradeComps.length === 0) return;
+        console.log(`TEMPLATE: Grade ${grade} has ${gradeComps.length} competencies`);
+        
+        if (gradeComps.length === 0) {
+          console.warn(`TEMPLATE: No competencies for grade ${grade}`);
+          return;
+        }
         
         // Page break logic: skip for first grade in grade-specific reports, or after grade 6 in full reports
         if (reportType === 'grade') {
@@ -462,10 +505,13 @@
           html += `<h2>${t.grade} ${grade}</h2>`;
         }
         
-        subjects.forEach(subject => {
-          const subjectComps = gradeComps.filter(c => c.subject === subject);
+        subjectsEN.forEach(subjectEN => {
+          // Filter using English subject key
+          const subjectComps = gradeComps.filter(c => c.subject === subjectEN);
           
           if (subjectComps.length === 0) return;
+          
+          console.log(`TEMPLATE: Grade ${grade}, Subject ${subjectEN}: ${subjectComps.length} comps`);
           
           // Sort by NUMERIC score (ascending: lower scores = higher priority)
           subjectComps.sort((a, b) => {
@@ -474,12 +520,13 @@
             return scoreA - scoreB;
           });
           
+          // Translate subject label for display
           const subjectLabel = {
             'English': t.english,
             'Mathematics': t.mathematics,
             'Science': t.science,
             'Social Science': t.socialScience
-          }[subject] || subject;
+          }[subjectEN] || subjectEN;
           
           html += `<h3>${subjectLabel}</h3>`;
           html += `<table>
@@ -493,12 +540,12 @@
             <tbody>`;
           
           subjectComps.forEach(comp => {
-            // Use NUMERIC score for color, not priority string
-            const priorityClass = getPriorityClass(comp.score_10);
-            // Translate competency name
-            const translatedCompetency = translateCompetency(comp.competency_name || '-');
+            // Use priority band and score for color
+            const priorityClass = getPriorityClass(comp.priority_band, comp.score_10);
+            // Translate competency name (backend already translated)
+            const displayCompetency = comp.competency_name || '-';
             html += `<tr>
-              <td class="left-align">${translatedCompetency}</td>
+              <td class="left-align">${displayCompetency}</td>
               <td>${formatScore(comp.score_10)}</td>
               <td class="${priorityClass}">${translatePriority(comp.priority_band)}</td>
             </tr>`;

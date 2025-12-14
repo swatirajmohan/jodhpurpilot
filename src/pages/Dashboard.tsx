@@ -103,6 +103,15 @@ function Dashboard() {
     setFilteredData(sorted)
   }
 
+  // Check if a school has data for a specific grade
+  const hasGradeData = (school_code: string, grade: 6 | 7 | 8): boolean => {
+    const allScoreRows = scoreRowsData as any[]
+    const gradeData = allScoreRows.filter(
+      (row: any) => row.school_code === school_code && row.grade_level === grade
+    )
+    return gradeData.length > 0
+  }
+
   // Navigate to school detail page
   const handleViewReport = (school_code: string) => {
     navigate(`/school/${school_code}`)
@@ -405,37 +414,55 @@ function Dashboard() {
                   </button>
                 </td>
                 <td className={styles.actionCell}>
-                  <button
-                    onClick={() => handleDownloadGradePdf(row.school_code, 6)}
-                    className={styles.actionButton}
-                    disabled={downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 6}
-                    title="Download Grade 6 Report"
-                    style={{ fontSize: '11px', padding: '6px 10px' }}
-                  >
-                    {downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 6 ? '...' : 'G6'}
-                  </button>
+                  {hasGradeData(row.school_code, 6) ? (
+                    <button
+                      onClick={() => handleDownloadGradePdf(row.school_code, 6)}
+                      className={styles.actionButton}
+                      disabled={downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 6}
+                      title="Download Grade 6 Report"
+                      style={{ fontSize: '11px', padding: '6px 10px' }}
+                    >
+                      {downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 6 ? '...' : 'G6'}
+                    </button>
+                  ) : (
+                    <span style={{ fontSize: '10px', color: '#999' }}>
+                      {language === 'hi' ? 'डेटा उपलब्ध नहीं' : 'No data'}
+                    </span>
+                  )}
                 </td>
                 <td className={styles.actionCell}>
-                  <button
-                    onClick={() => handleDownloadGradePdf(row.school_code, 7)}
-                    className={styles.actionButton}
-                    disabled={downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 7}
-                    title="Download Grade 7 Report"
-                    style={{ fontSize: '11px', padding: '6px 10px' }}
-                  >
-                    {downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 7 ? '...' : 'G7'}
-                  </button>
+                  {hasGradeData(row.school_code, 7) ? (
+                    <button
+                      onClick={() => handleDownloadGradePdf(row.school_code, 7)}
+                      className={styles.actionButton}
+                      disabled={downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 7}
+                      title="Download Grade 7 Report"
+                      style={{ fontSize: '11px', padding: '6px 10px' }}
+                    >
+                      {downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 7 ? '...' : 'G7'}
+                    </button>
+                  ) : (
+                    <span style={{ fontSize: '10px', color: '#999' }}>
+                      {language === 'hi' ? 'डेटा उपलब्ध नहीं' : 'No data'}
+                    </span>
+                  )}
                 </td>
                 <td className={styles.actionCell}>
-                  <button
-                    onClick={() => handleDownloadGradePdf(row.school_code, 8)}
-                    className={styles.actionButton}
-                    disabled={downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 8}
-                    title="Download Grade 8 Report"
-                    style={{ fontSize: '11px', padding: '6px 10px' }}
-                  >
-                    {downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 8 ? '...' : 'G8'}
-                  </button>
+                  {hasGradeData(row.school_code, 8) ? (
+                    <button
+                      onClick={() => handleDownloadGradePdf(row.school_code, 8)}
+                      className={styles.actionButton}
+                      disabled={downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 8}
+                      title="Download Grade 8 Report"
+                      style={{ fontSize: '11px', padding: '6px 10px' }}
+                    >
+                      {downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 8 ? '...' : 'G8'}
+                    </button>
+                  ) : (
+                    <span style={{ fontSize: '10px', color: '#999' }}>
+                      {language === 'hi' ? 'डेटा उपलब्ध नहीं' : 'No data'}
+                    </span>
+                  )}
                 </td>
               </tr>
             ))}
