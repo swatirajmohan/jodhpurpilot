@@ -31,6 +31,7 @@ function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [downloadingPdf, setDownloadingPdf] = useState<string | null>(null)
+  const [downloadingGradePdf, setDownloadingGradePdf] = useState<{ school: string; grade: number } | null>(null)
   const [downloadingAll, setDownloadingAll] = useState(false)
 
   // Load data on mount
@@ -112,8 +113,7 @@ function Dashboard() {
     navigate(`/school/${school_code}`)
   }
 
-  // Handle PDF download
-  // Handle single PDF download - must be async to use fetch
+  // Handle PDF download (full school report)
   const handleDownloadPdf = async (school_code: string) => {
     setDownloadingPdf(school_code)
     
@@ -130,7 +130,7 @@ function Dashboard() {
       const allScoreRows = scoreRowsData as any[]
       const competencies = allScoreRows.filter((row: any) => row.school_code === school_code)
       
-      // Build payload
+      // Build payload for full school report
       const payload = {
         school: {
           school_code: school.school_code,
@@ -138,7 +138,8 @@ function Dashboard() {
         },
         aggregates: school.aggregates || null,
         competencies,
-        lang: language
+        lang: language,
+        reportType: 'full' // Full school report
       }
       
       // STEP 8: Frontend sanity check
@@ -159,7 +160,7 @@ function Dashboard() {
       console.log('PDF_BLOB_RECEIVED', blob.size)
       
       // Download using robust blob download
-      const filename = `${school.school_code}_${language}.pdf`
+      const filename = `${school.school_code}_full_${language}.pdf`
       downloadBlob(blob, filename)
       
       console.log('PDF_DOWNLOAD_TRIGGERED')
@@ -168,6 +169,67 @@ function Dashboard() {
       alert(`Failed to download PDF: ${(error as Error).message}`)
     } finally {
       setDownloadingPdf(null)
+    }
+  }
+
+  // Handle grade-specific PDF download
+  const handleDownloadGradePdf = async (school_code: string, gradeLevel: 6 | 7 | 8) => {
+    setDownloadingGradePdf({ school: school_code, grade: gradeLevel })
+    
+    try {
+      console.log('GRADE_PDF_DOWNLOAD_START', school_code, gradeLevel, language)
+      
+      // Find school data
+      const school = tableData.find(s => s.school_code === school_code)
+      if (!school) {
+        throw new Error('School not found')
+      }
+      
+      // Get competencies for this school and grade
+      const allScoreRows = scoreRowsData as any[]
+      const competencies = allScoreRows.filter(
+        (row: any) => row.school_code === school_code && row.grade_level === gradeLevel
+      )
+      
+      if (competencies.length === 0) {
+        alert(`No data available for Grade ${gradeLevel}`)
+        return
+      }
+      
+      // Build payload for grade-specific report
+      const payload = {
+        school: {
+          school_code: school.school_code,
+          school_name: school.school_name
+        },
+        aggregates: school.aggregates || null,
+        competencies, // Already filtered to this grade
+        lang: language,
+        reportType: 'grade', // Grade-specific report
+        gradeLevel // Specify which grade
+      }
+      
+      console.log('SENDING GRADE PDF DATA (before transform):', payload)
+      
+      // Transform data to target language
+      const transformedPayload = transformPdfPayload(payload)
+      console.log('SENDING GRADE PDF DATA (after transform):', transformedPayload)
+      
+      // Call backend to generate PDF
+      const blob = await generatePdfFromBackend(transformedPayload)
+      
+      console.log('GRADE_PDF_BLOB_RECEIVED', blob.size)
+      
+      // Download using robust blob download
+      const filename = `${school.school_code}_grade${gradeLevel}_${language}.pdf`
+      downloadBlob(blob, filename)
+      
+      console.log('GRADE_PDF_DOWNLOAD_TRIGGERED')
+    } catch (error) {
+      console.error('GRADE_PDF_ERROR', error)
+      alert(`Failed to download Grade ${gradeLevel} PDF: ${(error as Error).message}`)
+    } finally {
+      setDownloadingGradePdf(null)
     }
   }
 
@@ -187,57 +249,12 @@ function Dashboard() {
     }
   }
 
-  // FORCE PDF DOWNLOAD TEST
-  const handleTestPdf = async () => {
-    console.log("FRONTEND: CLICKED");
-
-    const payload = {
-      test: true,
-      timestamp: Date.now()
-    };
-
-    console.log("FRONTEND: SENDING PAYLOAD", payload);
-
-    try {
-      const res = await fetch("http://localhost:3001/generate-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      console.log("FRONTEND: RESPONSE STATUS", res.status);
-
-      const blob = await res.blob();
-      console.log("FRONTEND: BLOB SIZE", blob.size);
-
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "proof.pdf";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-      
-      console.log("FRONTEND: DOWNLOAD TRIGGERED");
-    } catch (error) {
-      console.error("FRONTEND: ERROR", error);
-      alert(`Error: ${error}`);
-    }
-  }
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>{getLabel(language, 'dashboardTitle')}</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <button
-            onClick={handleTestPdf}
-            className={styles.actionButton}
-            style={{ minWidth: '180px', backgroundColor: '#4CAF50', color: 'white' }}
-          >
-            FORCE PDF DOWNLOAD
-          </button>
           <button
             onClick={handleDownloadAllPdfs}
             disabled={downloadingAll}
@@ -280,6 +297,9 @@ function Dashboard() {
               <th colSpan={5}>{getLabel(language, 'grade8Average')}</th>
               <th rowSpan={2}>{getLabel(language, 'viewReport')}</th>
               <th rowSpan={2}>{getLabel(language, 'downloadPdf')}</th>
+              <th rowSpan={2}>Grade 6 PDF</th>
+              <th rowSpan={2}>Grade 7 PDF</th>
+              <th rowSpan={2}>Grade 8 PDF</th>
             </tr>
             <tr>
               {/* Grade 6 sub-columns */}
@@ -379,9 +399,42 @@ function Dashboard() {
                     onClick={() => handleDownloadPdf(row.school_code)}
                     className={styles.actionButton}
                     disabled={downloadingPdf === row.school_code}
-                    title={getLabel(language, 'downloadPdf')}
+                    title="Download Full School Report"
                   >
                     {downloadingPdf === row.school_code ? getLabel(language, 'generating') : getLabel(language, 'downloadPdf')}
+                  </button>
+                </td>
+                <td className={styles.actionCell}>
+                  <button
+                    onClick={() => handleDownloadGradePdf(row.school_code, 6)}
+                    className={styles.actionButton}
+                    disabled={downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 6}
+                    title="Download Grade 6 Report"
+                    style={{ fontSize: '11px', padding: '6px 10px' }}
+                  >
+                    {downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 6 ? '...' : 'G6'}
+                  </button>
+                </td>
+                <td className={styles.actionCell}>
+                  <button
+                    onClick={() => handleDownloadGradePdf(row.school_code, 7)}
+                    className={styles.actionButton}
+                    disabled={downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 7}
+                    title="Download Grade 7 Report"
+                    style={{ fontSize: '11px', padding: '6px 10px' }}
+                  >
+                    {downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 7 ? '...' : 'G7'}
+                  </button>
+                </td>
+                <td className={styles.actionCell}>
+                  <button
+                    onClick={() => handleDownloadGradePdf(row.school_code, 8)}
+                    className={styles.actionButton}
+                    disabled={downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 8}
+                    title="Download Grade 8 Report"
+                    style={{ fontSize: '11px', padding: '6px 10px' }}
+                  >
+                    {downloadingGradePdf?.school === row.school_code && downloadingGradePdf?.grade === 8 ? '...' : 'G8'}
                   </button>
                 </td>
               </tr>
