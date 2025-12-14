@@ -33,6 +33,9 @@ function Dashboard() {
   const [downloadingPdf, setDownloadingPdf] = useState<string | null>(null)
   const [downloadingGradePdf, setDownloadingGradePdf] = useState<{ school: string; grade: number } | null>(null)
   const [downloadingAll, setDownloadingAll] = useState(false)
+  const [downloadingGrade6All, setDownloadingGrade6All] = useState(false)
+  const [downloadingGrade7All, setDownloadingGrade7All] = useState(false)
+  const [downloadingGrade8All, setDownloadingGrade8All] = useState(false)
 
   // Load data on mount
   useEffect(() => {
@@ -258,19 +261,137 @@ function Dashboard() {
     }
   }
 
+  // Handle grade-specific bulk PDF downloads
+  const downloadAllGradePdfs = async (grade: 6 | 7 | 8) => {
+    // Set appropriate loading state
+    if (grade === 6) setDownloadingGrade6All(true)
+    else if (grade === 7) setDownloadingGrade7All(true)
+    else if (grade === 8) setDownloadingGrade8All(true)
+    
+    try {
+      console.log(`Starting bulk Grade ${grade} PDF download`)
+      
+      // Filter schools that have data for this grade
+      const eligibleSchools = tableData.filter(school => hasGradeData(school.school_code, grade))
+      
+      console.log(`Found ${eligibleSchools.length} schools with Grade ${grade} data`)
+      
+      if (eligibleSchools.length === 0) {
+        alert(`No schools found with Grade ${grade} data`)
+        return
+      }
+      
+      let downloadedCount = 0
+      let skippedCount = 0
+      
+      // Sequential download with delay
+      for (const school of eligibleSchools) {
+        try {
+          console.log(`Downloading Grade ${grade} PDF for ${school.school_code}`)
+          
+          // Get competencies for this school and grade
+          const allScoreRows = scoreRowsData as any[]
+          const competencies = allScoreRows.filter(
+            (row: any) => row.school_code === school.school_code && row.grade_level === grade
+          )
+          
+          if (competencies.length === 0) {
+            console.log(`Skipping ${school.school_code} - no competencies found`)
+            skippedCount++
+            continue
+          }
+          
+          // Build payload for grade-specific report
+          const payload = {
+            school: {
+              school_code: school.school_code,
+              school_name: school.school_name
+            },
+            aggregates: school.aggregates || null,
+            competencies,
+            lang: language,
+            reportType: 'grade',
+            gradeLevel: grade
+          }
+          
+          // Transform and download
+          const transformedPayload = transformPdfPayload(payload)
+          const blob = await generatePdfFromBackend(transformedPayload)
+          
+          const filename = `${school.school_code}_grade${grade}_${language}.pdf`
+          downloadBlob(blob, filename)
+          
+          downloadedCount++
+          console.log(`Downloaded: ${filename}`)
+          
+          // Small delay to avoid browser blocking
+          await new Promise(resolve => setTimeout(resolve, 250))
+          
+        } catch (error) {
+          console.error(`Error downloading Grade ${grade} PDF for ${school.school_code}:`, error)
+          skippedCount++
+        }
+      }
+      
+      // Show summary alert
+      const message = language === 'hi' 
+        ? `${downloadedCount} पीडीएफ डाउनलोड किए गए, ${skippedCount} स्कूल छोड़े गए`
+        : `Downloaded ${downloadedCount} PDFs, Skipped ${skippedCount} schools`
+      
+      alert(message)
+      console.log(`Grade ${grade} bulk download complete: ${downloadedCount} downloaded, ${skippedCount} skipped`)
+      
+    } catch (error) {
+      console.error(`GRADE_${grade}_BULK_ERROR`, error)
+      const errorMsg = language === 'hi'
+        ? `कक्षा ${grade} पीडीएफ डाउनलोड में त्रुटि: ${(error as Error).message}`
+        : `Grade ${grade} bulk download error: ${(error as Error).message}`
+      alert(errorMsg)
+    } finally {
+      // Reset loading state
+      if (grade === 6) setDownloadingGrade6All(false)
+      else if (grade === 7) setDownloadingGrade7All(false)
+      else if (grade === 8) setDownloadingGrade8All(false)
+    }
+  }
+
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>{getLabel(language, 'dashboardTitle')}</h1>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
           <button
             onClick={handleDownloadAllPdfs}
             disabled={downloadingAll}
             className={styles.actionButton}
-            style={{ minWidth: '180px' }}
+            style={{ minWidth: '160px' }}
           >
-            {downloadingAll ? 'Creating ZIP...' : 'Download All PDFs'}
+            {downloadingAll ? (language === 'hi' ? 'ZIP बना रहे हैं...' : 'Creating ZIP...') : getLabel(language, 'downloadAllPdfs')}
+          </button>
+          <button
+            onClick={() => downloadAllGradePdfs(6)}
+            disabled={downloadingGrade6All}
+            className={styles.actionButton}
+            style={{ minWidth: '160px' }}
+          >
+            {downloadingGrade6All ? getLabel(language, 'generating') : getLabel(language, 'downloadAllGrade6')}
+          </button>
+          <button
+            onClick={() => downloadAllGradePdfs(7)}
+            disabled={downloadingGrade7All}
+            className={styles.actionButton}
+            style={{ minWidth: '160px' }}
+          >
+            {downloadingGrade7All ? getLabel(language, 'generating') : getLabel(language, 'downloadAllGrade7')}
+          </button>
+          <button
+            onClick={() => downloadAllGradePdfs(8)}
+            disabled={downloadingGrade8All}
+            className={styles.actionButton}
+            style={{ minWidth: '160px' }}
+          >
+            {downloadingGrade8All ? getLabel(language, 'generating') : getLabel(language, 'downloadAllGrade8')}
           </button>
           <LanguageToggle />
         </div>
@@ -315,20 +436,20 @@ function Dashboard() {
               <th>{getLabel(language, 'overall')}</th>
               <th>{getLabel(language, 'english')}</th>
               <th>{getLabel(language, 'mathematics')}</th>
-              <th>{getLabel(language, 'socialScience')}</th>
               <th>{getLabel(language, 'science')}</th>
+              <th>{getLabel(language, 'socialScience')}</th>
               {/* Grade 7 sub-columns */}
               <th>{getLabel(language, 'overall')}</th>
               <th>{getLabel(language, 'english')}</th>
               <th>{getLabel(language, 'mathematics')}</th>
-              <th>{getLabel(language, 'socialScience')}</th>
               <th>{getLabel(language, 'science')}</th>
+              <th>{getLabel(language, 'socialScience')}</th>
               {/* Grade 8 sub-columns */}
               <th>{getLabel(language, 'overall')}</th>
               <th>{getLabel(language, 'english')}</th>
               <th>{getLabel(language, 'mathematics')}</th>
-              <th>{getLabel(language, 'socialScience')}</th>
               <th>{getLabel(language, 'science')}</th>
+              <th>{getLabel(language, 'socialScience')}</th>
             </tr>
           </thead>
           <tbody>
@@ -354,10 +475,10 @@ function Dashboard() {
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.Mathematics ?? null} />
                 </td>
                 <td>
-                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.['Social Science'] ?? null} />
+                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.Science ?? null} />
                 </td>
                 <td>
-                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.Science ?? null} />
+                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[6]?.['Social Science'] ?? null} />
                 </td>
 
                 {/* Grade 7 columns */}
@@ -371,10 +492,10 @@ function Dashboard() {
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.Mathematics ?? null} />
                 </td>
                 <td>
-                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.['Social Science'] ?? null} />
+                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.Science ?? null} />
                 </td>
                 <td>
-                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.Science ?? null} />
+                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[7]?.['Social Science'] ?? null} />
                 </td>
 
                 {/* Grade 8 columns */}
@@ -388,10 +509,10 @@ function Dashboard() {
                   <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.Mathematics ?? null} />
                 </td>
                 <td>
-                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.['Social Science'] ?? null} />
+                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.Science ?? null} />
                 </td>
                 <td>
-                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.Science ?? null} />
+                  <ScoreChip value={row.aggregates.grade_subject_avg_map?.[8]?.['Social Science'] ?? null} />
                 </td>
 
                 {/* Action buttons */}

@@ -35,6 +35,10 @@ export const labels = {
     generating: 'Generating...',
     backToDashboard: 'Back to Dashboard',
     downloadPdfReport: 'Download PDF Report',
+    downloadAllPdfs: 'Download All PDFs',
+    downloadAllGrade6: 'Download All Grade 6 PDFs',
+    downloadAllGrade7: 'Download All Grade 7 PDFs',
+    downloadAllGrade8: 'Download All Grade 8 PDFs',
     
     // Data
     noData: 'No data',
@@ -70,7 +74,7 @@ export const labels = {
   },
   hi: {
     // Dashboard
-    dashboardTitle: 'जोधपुर स्कूल मूल्यांकन डैशबोर्ड',
+    dashboardTitle: 'जोधपुर स्कूल आकलन डैशबोर्ड',
     searchPlaceholder: 'स्कूल के नाम या कोड से खोजें...',
     showingResults: 'दिखाया जा रहा है',
     of: 'में से',
@@ -85,7 +89,7 @@ export const labels = {
     grade8Average: 'कक्षा 8 औसत',
     
     // Subjects
-    overall: 'समग्र',
+    overall: 'कुल',
     english: 'अंग्रेज़ी',
     mathematics: 'गणित',
     science: 'विज्ञान',
@@ -97,12 +101,16 @@ export const labels = {
     generating: 'तैयार हो रहा है...',
     backToDashboard: 'डैशबोर्ड पर वापस जाएं',
     downloadPdfReport: 'पीडीएफ रिपोर्ट डाउनलोड करें',
+    downloadAllPdfs: 'सभी पीडीएफ डाउनलोड करें',
+    downloadAllGrade6: 'कक्षा 6 के सभी पीडीएफ',
+    downloadAllGrade7: 'कक्षा 7 के सभी पीडीएफ',
+    downloadAllGrade8: 'कक्षा 8 के सभी पीडीएफ',
     
     // Data
-    noData: 'कोई डेटा नहीं',
+    noData: 'डेटा उपलब्ध नहीं',
     
     // School Report
-    reportTitle: 'स्कूल मूल्यांकन रिपोर्ट कार्ड',
+    reportTitle: 'स्कूल आकलन रिपोर्ट कार्ड',
     subjectwiseAverages: 'विषयवार औसत अंक',
     priorityDistribution: 'ग्रेड के अनुसार दक्षता प्राथमिकता वितरण',
     subject: 'विषय',
