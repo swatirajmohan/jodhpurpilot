@@ -47,3 +47,4 @@ export const COMPETENCY_HI_MAP: Record<string, string> = {
   'Understanding Local governance': 'स्थानीय शासन की समझ'
 };
 
+

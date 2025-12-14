@@ -49,3 +49,4 @@ This will create `src/pdf/customVfs.ts` with base64-encoded fonts.
 
 Placeholder files have been created. Replace them with real TTF files before running `npm run build:vfs`.
 
+

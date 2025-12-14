@@ -103,3 +103,4 @@ export function getCompetencyLabel(language: Language, competencyName: string): 
   return competencyLabels[language][competencyName] || competencyName
 }
 
+

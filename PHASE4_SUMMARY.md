@@ -358,3 +358,4 @@ The School Report Card view is fully functional and displays all competency-leve
 
 The current implementation is already modular and ready for PDF generation!
 
+

@@ -155,10 +155,49 @@
       throw new Error("School data invalid");
     }
     
+    // Competency translation map for Hindi
+    const competencyTranslations = {
+      "Writing Clear and Organized Ideas": "स्पष्ट और सुव्यवस्थित लेखन",
+      "Building Correct Sentences and Using Proper Grammar": "सही वाक्य निर्माण और व्याकरण का प्रयोग",
+      "Vocabulary": "शब्दावली",
+      "Reading Comprehension": "पठन बोध",
+      "Understanding Stories and Poems": "कहानियों और कविताओं की समझ",
+      "Lines and Angles": "रेखाएँ और कोण",
+      "Perimeter and Area": "परिमाप और क्षेत्रफल",
+      "Solving Problems with Numbers": "संख्याओं से समस्याएँ हल करना",
+      "Understanding Shapes and Measurement": "आकृतियाँ और मापन की समझ",
+      "Understanding and Using Number Properties": "संख्याओं के गुणों की समझ और उपयोग",
+      "Understanding and Ordering Numbers": "संख्याओं की समझ और क्रमबद्ध करना",
+      "Representing and Interpreting Data": "डेटा का प्रतिनिधित्व और व्याख्या",
+      "Solving Problems with Algebra (Unknowns)": "बीजगणित से समस्याएँ हल करना",
+      "Working with Fractions and Decimals": "भिन्न और दशमलव के साथ काम करना",
+      "Applying Science to Everyday Life": "रोजमर्रा की जिंदगी में विज्ञान का प्रयोग",
+      "Making Healthy Food Choices and Identifying Food Components": "स्वस्थ भोजन विकल्प और खाद्य घटकों की पहचान",
+      "Understanding Living Organisms and Life Processes": "जीवित जीवों और जीवन प्रक्रियाओं की समझ",
+      "Understanding Properties and Changes of Materials": "पदार्थों के गुण और परिवर्तन की समझ",
+      "Understanding how magnets work": "चुंबक कैसे काम करते हैं",
+      "Ensuring Healthy Plant Growth and Food Safety": "स्वस्थ पौधों की वृद्धि और खाद्य सुरक्षा",
+      "Measuring Physical Properties": "भौतिक गुणों को मापना",
+      "Understanding Heat and Its Transfer": "गर्मी और इसके स्थानांतरण की समझ",
+      "Understanding how materials and weather affect us": "पदार्थ और मौसम हमें कैसे प्रभावित करते हैं",
+      "Appreciating India's Cultural and Historical Heritage": "भारत की सांस्कृतिक और ऐतिहासिक विरासत की सराहना",
+      "Appreciating Rajasthan's Culture and History": "राजस्थान की संस्कृति और इतिहास की सराहना",
+      "Exploring Historical Places and Events": "ऐतिहासिक स्थानों और घटनाओं की खोज",
+      "Understanding Community Rules and Rights": "समुदाय के नियम और अधिकार की समझ",
+      "Understanding Early Civilizations": "प्रारंभिक सभ्यताओं की समझ",
+      "Understanding Natural Environment & Resources": "प्राकृतिक पर्यावरण और संसाधनों की समझ",
+      "Analyzing Social Change & Justice": "सामाजिक परिवर्तन और न्याय का विश्लेषण",
+      "Exploring Livelihoods in Our Region": "हमारे क्षेत्र में आजीविका की खोज",
+      "Understanding Constitutional Rights & Duties": "संवैधानिक अधिकार और कर्तव्यों की समझ",
+      "Understanding Economic Development": "आर्थिक विकास की समझ",
+      "Understanding Local governance": "स्थानीय शासन की समझ"
+    };
+    
     // Translations
     const labels = {
       en: {
         title: "School Assessment Report Card",
+        gradeTitle: "Grade {grade} Report Card",
         schoolCode: "School Code",
         subjectAvg: "Subject-wise Average Scores",
         subject: "Subject",
@@ -176,10 +215,15 @@
         competency: "Competency",
         score: "Score",
         priority: "Priority",
-        noData: "No data"
+        noData: "No data",
+        legendTitle: "Priority Scale",
+        legendHigh: "0–4.9 → High Priority",
+        legendMedium: "5.0–6.9 → Medium Priority",
+        legendLow: "7.0–10 → Low Priority"
       },
       hi: {
-        title: "विद्यालय मूल्यांकन रिपोर्ट कार्ड",
+        title: "कक्षा रिपोर्ट कार्ड",
+        gradeTitle: "कक्षा {grade} रिपोर्ट कार्ड",
         schoolCode: "विद्यालय कोड",
         subjectAvg: "विषयवार औसत अंक",
         subject: "विषय",
@@ -197,11 +241,23 @@
         competency: "दक्षता",
         score: "अंक",
         priority: "प्राथमिकता",
-        noData: "डेटा उपलब्ध नहीं"
+        noData: "डेटा उपलब्ध नहीं",
+        legendTitle: "प्राथमिकता स्केल",
+        legendHigh: "0–4.9 → उच्च प्राथमिकता",
+        legendMedium: "5.0–6.9 → मध्यम प्राथमिकता",
+        legendLow: "7.0–10 → निम्न प्राथमिकता"
       }
     };
     
     const t = labels[lang] || labels.en;
+    
+    // Helper to translate competency names
+    function translateCompetency(name) {
+      if (lang === 'hi' && competencyTranslations[name]) {
+        return competencyTranslations[name];
+      }
+      return name; // Fallback to English if not found
+    }
     
     // Helper functions
     function formatScore(val) {
@@ -226,149 +282,185 @@
       return priority;
     }
     
+    // Extract report parameters
+    const reportType = data.reportType || 'full'; // 'full' or 'grade'
+    const gradeLevel = data.gradeLevel || null; // 6, 7, 8, or null
+    
+    // Determine title
+    let pageTitle = t.title;
+    if (reportType === 'grade' && gradeLevel) {
+      pageTitle = t.gradeTitle.replace('{grade}', gradeLevel);
+    }
+    
     // Build HTML
     let html = `
-      <h1>${t.title}</h1>
+      <h1>${pageTitle}</h1>
       <div class="school-info">
         <div class="school-name">${school.school_name}</div>
         <div class="school-code">${t.schoolCode}: ${school.school_code}</div>
       </div>
     `;
     
-    // Subject-wise averages
-    html += `<h2>${t.subjectAvg}</h2>`;
-    html += `<table>
-      <thead>
-        <tr>
-          <th>${t.subject}</th>
-          <th>${t.avgScore}</th>
-        </tr>
-      </thead>
-      <tbody>`;
+    // Add priority scale legend
+    html += `
+      <div style="background-color: #f9f9f9; border: 1px solid #ddd; padding: 12px; margin-bottom: 20px; border-radius: 4px;">
+        <strong>${t.legendTitle}:</strong><br/>
+        <span style="color: #c62828;">●</span> ${t.legendHigh}<br/>
+        <span style="color: #f57f17;">●</span> ${t.legendMedium}<br/>
+        <span style="color: #2e7d32;">●</span> ${t.legendLow}
+      </div>
+    `;
     
-    if (aggregates) {
-      html += `<tr><td class="left-align"><strong>${t.overall}</strong></td><td>${formatScore(aggregates.overall_avg)}</td></tr>`;
+    // Only render summary tables for full school reports
+    if (reportType === 'full') {
+      // Subject-wise averages
+      html += `<h2>${t.subjectAvg}</h2>`;
+      html += `<table>
+        <thead>
+          <tr>
+            <th>${t.subject}</th>
+            <th>${t.avgScore}</th>
+          </tr>
+        </thead>
+        <tbody>`;
       
-      const subjectMap = aggregates.subject_avg_map || {};
-      html += `<tr><td class="left-align">${t.english}</td><td>${formatScore(subjectMap.English)}</td></tr>`;
-      html += `<tr><td class="left-align">${t.mathematics}</td><td>${formatScore(subjectMap.Mathematics)}</td></tr>`;
-      html += `<tr><td class="left-align">${t.science}</td><td>${formatScore(subjectMap.Science)}</td></tr>`;
-      html += `<tr><td class="left-align">${t.socialScience}</td><td>${formatScore(subjectMap['Social Science'])}</td></tr>`;
-    } else {
-      html += `<tr><td colspan="2">${t.noData}</td></tr>`;
-    }
-    
-    html += `</tbody></table>`;
-    
-    // Competency Priority Distribution
-    html += `<h2>${t.priorityDist}</h2>`;
-    
-    // Calculate priority counts by grade and subject
-    const priorityCounts = {};
-    const grades = [6, 7, 8];
-    const subjects = ['English', 'Mathematics', 'Science', 'Social Science'];
-    
-    grades.forEach(grade => {
-      priorityCounts[grade] = {};
-      subjects.forEach(subject => {
-        priorityCounts[grade][subject] = { High: 0, Medium: 0, Low: 0 };
-      });
-    });
-    
-    if (competencies && Array.isArray(competencies)) {
-      competencies.forEach(comp => {
-        const grade = comp.grade_level;
-        const subject = comp.subject;
-        const priority = comp.priority_band;
+      if (aggregates) {
+        html += `<tr><td class="left-align"><strong>${t.overall}</strong></td><td>${formatScore(aggregates.overall_avg)}</td></tr>`;
         
-        if (priorityCounts[grade] && priorityCounts[grade][subject] && priority) {
-          priorityCounts[grade][subject][priority] = (priorityCounts[grade][subject][priority] || 0) + 1;
-        }
+        const subjectMap = aggregates.subject_avg_map || {};
+        html += `<tr><td class="left-align">${t.english}</td><td>${formatScore(subjectMap.English)}</td></tr>`;
+        html += `<tr><td class="left-align">${t.mathematics}</td><td>${formatScore(subjectMap.Mathematics)}</td></tr>`;
+        html += `<tr><td class="left-align">${t.science}</td><td>${formatScore(subjectMap.Science)}</td></tr>`;
+        html += `<tr><td class="left-align">${t.socialScience}</td><td>${formatScore(subjectMap['Social Science'])}</td></tr>`;
+      } else {
+        html += `<tr><td colspan="2">${t.noData}</td></tr>`;
+      }
+      
+      html += `</tbody></table>`;
+      
+      // Competency Priority Distribution
+      html += `<h2>${t.priorityDist}</h2>`;
+      
+      // Calculate priority counts by grade and subject
+      const priorityCounts = {};
+      const grades = [6, 7, 8];
+      const subjects = ['English', 'Mathematics', 'Science', 'Social Science'];
+      
+      grades.forEach(grade => {
+        priorityCounts[grade] = {};
+        subjects.forEach(subject => {
+          priorityCounts[grade][subject] = { High: 0, Medium: 0, Low: 0 };
+        });
       });
+      
+      if (competencies && Array.isArray(competencies)) {
+        competencies.forEach(comp => {
+          const grade = comp.grade_level;
+          const subject = comp.subject;
+          const priority = comp.priority_band;
+          
+          if (priorityCounts[grade] && priorityCounts[grade][subject] && priority) {
+            priorityCounts[grade][subject][priority] = (priorityCounts[grade][subject][priority] || 0) + 1;
+          }
+        });
+      }
+      
+      // Table 1: English + Mathematics
+      html += `<table style="margin-bottom: 15px;">
+        <thead>
+          <tr>
+            <th rowspan="2">${t.grade}</th>
+            <th colspan="3">${t.english}</th>
+            <th colspan="3">${t.mathematics}</th>
+          </tr>
+          <tr>
+            <th>${t.high}</th>
+            <th>${t.medium}</th>
+            <th>${t.low}</th>
+            <th>${t.high}</th>
+            <th>${t.medium}</th>
+            <th>${t.low}</th>
+          </tr>
+        </thead>
+        <tbody>`;
+      
+      grades.forEach(grade => {
+        const eng = priorityCounts[grade]['English'];
+        const math = priorityCounts[grade]['Mathematics'];
+        html += `<tr>
+          <td>${grade}</td>
+          <td class="priorityCell priorityHigh">${eng.High || 0}</td>
+          <td class="priorityCell priorityMedium">${eng.Medium || 0}</td>
+          <td class="priorityCell priorityLow">${eng.Low || 0}</td>
+          <td class="priorityCell priorityHigh">${math.High || 0}</td>
+          <td class="priorityCell priorityMedium">${math.Medium || 0}</td>
+          <td class="priorityCell priorityLow">${math.Low || 0}</td>
+        </tr>`;
+      });
+      
+      html += `</tbody></table>`;
+      
+      // Table 2: Science + Social Science
+      html += `<table>
+        <thead>
+          <tr>
+            <th rowspan="2">${t.grade}</th>
+            <th colspan="3">${t.science}</th>
+            <th colspan="3">${t.socialScience}</th>
+          </tr>
+          <tr>
+            <th>${t.high}</th>
+            <th>${t.medium}</th>
+            <th>${t.low}</th>
+            <th>${t.high}</th>
+            <th>${t.medium}</th>
+            <th>${t.low}</th>
+          </tr>
+        </thead>
+        <tbody>`;
+      
+      grades.forEach(grade => {
+        const sci = priorityCounts[grade]['Science'];
+        const soc = priorityCounts[grade]['Social Science'];
+        html += `<tr>
+          <td>${grade}</td>
+          <td class="priorityCell priorityHigh">${sci.High || 0}</td>
+          <td class="priorityCell priorityMedium">${sci.Medium || 0}</td>
+          <td class="priorityCell priorityLow">${sci.Low || 0}</td>
+          <td class="priorityCell priorityHigh">${soc.High || 0}</td>
+          <td class="priorityCell priorityMedium">${soc.Medium || 0}</td>
+          <td class="priorityCell priorityLow">${soc.Low || 0}</td>
+        </tr>`;
+      });
+      
+      html += `</tbody></table>`;
     }
-    
-    // Table 1: English + Mathematics
-    html += `<table style="margin-bottom: 15px;">
-      <thead>
-        <tr>
-          <th rowspan="2">${t.grade}</th>
-          <th colspan="3">${t.english}</th>
-          <th colspan="3">${t.mathematics}</th>
-        </tr>
-        <tr>
-          <th>${t.high}</th>
-          <th>${t.medium}</th>
-          <th>${t.low}</th>
-          <th>${t.high}</th>
-          <th>${t.medium}</th>
-          <th>${t.low}</th>
-        </tr>
-      </thead>
-      <tbody>`;
-    
-    grades.forEach(grade => {
-      const eng = priorityCounts[grade]['English'];
-      const math = priorityCounts[grade]['Mathematics'];
-      html += `<tr>
-        <td>${grade}</td>
-        <td class="priorityCell priorityHigh">${eng.High || 0}</td>
-        <td class="priorityCell priorityMedium">${eng.Medium || 0}</td>
-        <td class="priorityCell priorityLow">${eng.Low || 0}</td>
-        <td class="priorityCell priorityHigh">${math.High || 0}</td>
-        <td class="priorityCell priorityMedium">${math.Medium || 0}</td>
-        <td class="priorityCell priorityLow">${math.Low || 0}</td>
-      </tr>`;
-    });
-    
-    html += `</tbody></table>`;
-    
-    // Table 2: Science + Social Science
-    html += `<table>
-      <thead>
-        <tr>
-          <th rowspan="2">${t.grade}</th>
-          <th colspan="3">${t.science}</th>
-          <th colspan="3">${t.socialScience}</th>
-        </tr>
-        <tr>
-          <th>${t.high}</th>
-          <th>${t.medium}</th>
-          <th>${t.low}</th>
-          <th>${t.high}</th>
-          <th>${t.medium}</th>
-          <th>${t.low}</th>
-        </tr>
-      </thead>
-      <tbody>`;
-    
-    grades.forEach(grade => {
-      const sci = priorityCounts[grade]['Science'];
-      const soc = priorityCounts[grade]['Social Science'];
-      html += `<tr>
-        <td>${grade}</td>
-        <td class="priorityCell priorityHigh">${sci.High || 0}</td>
-        <td class="priorityCell priorityMedium">${sci.Medium || 0}</td>
-        <td class="priorityCell priorityLow">${sci.Low || 0}</td>
-        <td class="priorityCell priorityHigh">${soc.High || 0}</td>
-        <td class="priorityCell priorityMedium">${soc.Medium || 0}</td>
-        <td class="priorityCell priorityLow">${soc.Low || 0}</td>
-      </tr>`;
-    });
-    
-    html += `</tbody></table>`;
     
     // Grade-wise detailed competency tables
     if (competencies && Array.isArray(competencies)) {
-      grades.forEach((grade, gradeIdx) => {
+      // Determine which grades to render
+      const grades = [6, 7, 8];
+      const gradesToRender = (reportType === 'grade' && gradeLevel) 
+        ? [gradeLevel] 
+        : grades;
+      const subjects = ['English', 'Mathematics', 'Science', 'Social Science'];
+      
+      gradesToRender.forEach((grade, gradeIdx) => {
         const gradeComps = competencies.filter(c => c.grade_level === grade);
         
         if (gradeComps.length === 0) return;
         
-        if (gradeIdx > 0) {
+        // Page break logic: skip for first grade in grade-specific reports, or after grade 6 in full reports
+        if (reportType === 'grade') {
+          // No page break needed for grade-specific reports (single grade only)
+        } else if (gradeIdx > 0) {
           html += '<div class="page-break"></div>';
         }
         
-        html += `<h2>${t.grade} ${grade}</h2>`;
+        // Only show grade header for full reports (already in title for grade reports)
+        if (reportType === 'full') {
+          html += `<h2>${t.grade} ${grade}</h2>`;
+        }
         
         subjects.forEach(subject => {
           const subjectComps = gradeComps.filter(c => c.subject === subject);
@@ -376,7 +468,6 @@
           if (subjectComps.length === 0) return;
           
           // Sort by NUMERIC score (ascending: lower scores = higher priority)
-          // This works consistently across all languages
           subjectComps.sort((a, b) => {
             const scoreA = a.score_10 ?? 999;
             const scoreB = b.score_10 ?? 999;
@@ -404,8 +495,10 @@
           subjectComps.forEach(comp => {
             // Use NUMERIC score for color, not priority string
             const priorityClass = getPriorityClass(comp.score_10);
+            // Translate competency name
+            const translatedCompetency = translateCompetency(comp.competency_name || '-');
             html += `<tr>
-              <td class="left-align">${comp.competency_name || '-'}</td>
+              <td class="left-align">${translatedCompetency}</td>
               <td>${formatScore(comp.score_10)}</td>
               <td class="${priorityClass}">${translatePriority(comp.priority_band)}</td>
             </tr>`;
